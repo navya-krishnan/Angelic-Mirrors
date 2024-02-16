@@ -1,7 +1,259 @@
 <%-include('header')-%>
 
-<div class="container" style="background-color: black; height: 100px; margin-top: 40px;">
-    <h2>Navya</h2>
+<style>
+    .container {
+        background-color: black;
+        display: flex;
+        align-items: center;
+        padding: 0 10px; /* Adjust padding for smaller screens */
+    }
+
+    h1 {
+        font-size: 2vw; /* Relative font size */
+        color: white;
+        padding-left: 5%;
+        margin: 1%; /* Remove margin to prevent extra space */
+    }
+
+    .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .nav-links h6 {
+        color: white;
+        padding-left: 2%; /* Adjust padding for smaller screens */
+        margin: 0; /* Remove margin to prevent extra space */
+    }
+
+    .user-icons {
+        display: flex;
+        margin-left: auto; /* Move to the right on larger screens */
+    }
+
+    .user-icons img {
+        width: 50px;
+        height: auto; /* Maintain aspect ratio */
+        margin-top: 10px;
+        margin-left: 10px; /* Add some space between icons */
+    }
+
+    button {
+        border-radius: 30px;
+        font-size: medium;
+        background-color: white;
+        width: 120px;
+        height: 40px;
+        margin-left: auto; /* Move to the right on larger screens */
+        margin-right: 20px;
+    }
+
+
+    /* Media queries */
+    @media only screen and (max-width: 768px) {
+        .container {
+            height: auto; /* Adjust height for smaller screens */
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 4vw; /* Adjust font size for smaller screens */
+            padding-left: 0;
+            text-align: center; /* Center align text */
+        }
+
+        .nav-links {
+            margin: 20px 0; /* Add some space above and below */
+            justify-content: center; /* Center align links */
+        }
+
+        .nav-links h6 {
+            padding: 0 2%; /* Adjust padding */
+        }
+
+        .user-icons {
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        button {
+            margin: 20px 0;
+            align-self: center; /* Center align button */
+        }
+    }
+</style>
+
+<!-- Header -->
+<div class="container" style="background-color: black; height: 10%; margin-top: 5%; display: flex; justify-content: space-between; align-items: center;">
+    <nav class="navbar navbar-expand-lg navbar-dark " style="margin-left: 30px; ">
+        <a class="navbar-brand" href="#">ANGELIC <br> MIRRORS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav" style="margin-left: 40px;">
+            <li class="nav-item active">
+              <a class="nav-link" href="">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">Shop</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">About</a>
+            </li>
+          </ul>
+        </div>
+    </nav>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark " style="margin-right: 30px;">
+        <button class="btn btn-outline-dark px-2" type="submit" style="border-radius: 30px; font-size: medium; background-color: white; width: 200px; height: 40px; margin-left: 40px; ">
+            <img src="/image/search.jpg" style="width: 20px; height: 20px;">Search</button>
+        <div class="user-icons" style="display: flex;" style="padding-top: 40px;">
+            <img src="/image/profile.jpg" style="width: 50px; height: 50px;">
+            <img src="/image/wishlist.png" style="width: 50px; height: 30px; margin-top: 20px;">
+            <img src="/image/cart.jpg" style="width: 50px; height: 50px;">
+            <img src="/image/product.png" style="width: 50px; height: 50px;">
+        </div>
+    </nav>
 </div>
 
-<%-include('footer')-%>
+<!-- Body -->
+<img src="/image/home 1.jpg" alt="" style="margin-left: 5%; margin-top: 2%; width: 90%; height: 10%;">
+<div class="image-text" style="display: flex; ">
+    <div class="image" style="flex: 1;">
+        <img src="/image/home 4.jpg" alt="" style="width: 80%; object-fit: cover; margin-left: 10%;">
+    </div>
+    <div class="text" style="flex: 1; text-align: center; margin-top: 25%;">
+        <h4>Mirrors that mirror your taste ;<br>
+            find the perfect reflection <br>
+           of you in our curated selection.</h4>
+    </div>
+</div>
+
+<div class="image-text" style="display: flex; ">
+    <div class="text" style="flex: 1; text-align: center; margin-top: 25%;">
+        <h4>Elevate your space with <br>
+            mirrors that not only <br>
+            reflect light but <br>
+            also your distinct <br>
+            personality.</h4>
+    </div>
+    <div class="image" style="flex: 1; margin-right: 10%;">
+        <img src="/image/home3.jpg" alt="" style="width: 113%; object-fit: cover;">
+    </div>
+</div>
+
+
+<div class="image-text" style="display: flex; ">
+    <div class="image" style="flex: 1; ">
+        <img src="/image/home 2.jpg" alt="" style="width: 80%; object-fit: cover; margin-left: 10%;height: 100%;">
+    </div>
+    <div class="text" style="flex: 1; text-align: center; margin-top: 25%;">
+        <h4>A Symphony of Reflections: <br>
+            Our Mirror Collection; <br>
+            Where Beauty Meets <br>
+            Brilliance.</h4>
+    </div>
+</div>
+
+<!-- Footer -->
+<!-- Remove the container if you want to extend the Footer to full width. -->
+<div class="container my-5">
+  <!-- Footer -->
+  <footer
+          class="text-center text-lg-start text-white"
+          style="background-color: #ffffff"
+          >
+    <!-- Grid container -->
+    <div class="container p-4 pb-0">
+      <!-- Section: Links -->
+      <section class="">
+        <!--Grid row-->
+        <div class="row">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+            <h6 class="text-uppercase mb-4 font-weight-bold">
+              ANGELIC <br> MIRRORS
+            </h6>
+            <p>
+              Discover the 
+              Reflection of Perfection: 
+              Collect Your Favourite 
+              Mirrors Right Here!
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <hr class="w-100 clearfix d-md-none" />
+
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3" style="padding-left: 190px">
+            <h6 class="text-uppercase mb-4 font-weight-bold">LINK</h6>
+            <p>
+              <a class="text-white" style="font-size:x-small;">HOME</a>
+            </p>
+            <p>
+              <a class="text-white" style="font-size:x-small ">SHOP</a>
+            </p>
+            <p>
+              <a class="text-white" style="font-size:x-small;">CONTACT</a>
+            </p>
+            <p>
+              <a class="text-white"  style="font-size:x-small;">ABOUT</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <hr class="w-100 clearfix d-md-none" />
+
+          <!-- Grid column -->
+          <hr class="w-100 clearfix d-md-none" />
+
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3" style="padding-left: 210px">
+            <h6 class="text-uppercase mb-4 font-weight-bold">HELP</h6>
+            <p>
+              <a class="text-white" style="font-size:x-small;">PAYMENTS</a>
+            </p>
+            <p>
+              <a class="text-white" style="font-size:x-small ">RETURNS</a>
+            </p>
+            <p>
+              <a class="text-white" style="font-size:x-small;">FAQ</a>
+            </p>
+            <p>
+              <a class="text-white"  style="font-size:x-small;">T & C</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3" style="padding-left: 190px">
+            <h6 class="text-uppercase mb-4 font-weight-bold">SOCIAL</h6>
+            <p>
+              <a class="text-white" style="font-size:x-small;">FACEBOOK</a>
+            </p>
+            <p>
+              <a class="text-white" style="font-size:x-small ">WHAT'SAPP</a>
+            </p>
+            <p>
+              <a class="text-white" style="font-size:x-small;">INSTAGRAM</a>
+            </p>
+            <p>
+              <a class="text-white"  style="font-size:x-small;">YOUTUBE</a>
+            </p>
+          </div>
+        <!--Grid row-->
+      </section>
+      <!-- Section: Links -->
+    </div>
+    <!-- Grid container -->
+    
+
+  </footer>
+  <!-- Footer -->
+</div>
+<!-- End of .container -->
