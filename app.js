@@ -3,6 +3,7 @@ const app = express()
 const bodyParser  = require('body-parser')
 const path = require('path')
 const mongoose = require("mongoose")
+const nocache = require('nocache')
 const session = require('express-session')
 const adminRouter = require('./routes/adminRoutes')
 const userRouter = require('./routes/userRoutes')
@@ -34,6 +35,8 @@ mongoose.connect("mongodb://127.0.0.1:27017/angelicMirror")
 // Parsing
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}));
+
+app.use(nocache())
 
 // setting the view engines
 app.set('view engine','ejs')

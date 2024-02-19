@@ -19,28 +19,35 @@ const transporter = nodemailer.createTransport({
 
 //login
 const userLogin = (req,res)=>{
-    res.render('userLogin')
+    res.render('shop')
 }
 
 const postLogin = async(req,res)=>{
-   try {
-    console.log(req.body,'boooooo');
-    const enteredEmail = req.body.email
-    const enteredPassword = req.body.password
-    const user = await userDatabase.findOne({email:enteredEmail})
-    if(user && enteredEmail && enteredPassword){
-        console.log("Login successfull");
-        res.render('home')
-    }else{
-        console.log("Invalid");
-        res.redirect('/userLogin')
-    }
-   } catch (error) {
-        console.log(error);
-        res.status(500).send("Error occured")
-   } 
-}
-
+    try {
+     console.log(req.body);
+     const enteredEmail = req.body.email;
+     const enteredPassword = req.body.password;
+     const user = await userDatabase.findOne({ email: enteredEmail });
+     if (user) {
+         const isPasswordValid = await bcrypt.compare(enteredPassword, user.password);
+         if (isPasswordValid) {
+             console.log("Login successful");
+             // Here you might want to set some session variables to indicate the user is logged in
+             res.redirect('/home');
+         } else {
+             console.log("Invalid password");
+             res.redirect('/');
+         }
+     } else {
+         console.log("User not found");
+         res.redirect('/');
+     }
+    } catch (error) {
+         console.log(error);
+         res.status(500).send("Error occurred");
+    } 
+ }
+ 
 
 //home
 const home = async(req,res)=>{
@@ -49,7 +56,7 @@ const home = async(req,res)=>{
         if(user){
             res.render('home')
         }else{
-            res.redirect('/login')
+            res.redirect('/userLogin')
         }
     }
 }
@@ -112,9 +119,16 @@ const postSignup = async (req, res) => {
             return res.redirect('/userSignup');
         }
 
-        //hashed password
-        const hashPass = 10
-        const hashedPassword = await bcrypt.hash(password, hashPass);
+        // Number of rounds for hashing
+        const saltRounds = 10;
+
+        console.log('Received password:', password);
+        console.log('Salt rounds:', saltRounds);
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        console.log('Hashed password:', hashedPassword);
 
         const details = {
             email: email,
@@ -129,18 +143,16 @@ const postSignup = async (req, res) => {
             console.log("User already exists");
             req.session.errorMessage = "User already exists";
             return res.redirect('/userSignup');
-        }else{
-                await userDatabase.insertMany(details);
-                // console.log("User signup successful");
-                req.session.succesMessage = "Signup Successful"
-                res.redirect('/userLogin');
-            }
+        } else {
+            await userDatabase.insertMany(details);
+            req.session.succesMessage = "Signup Successful"
+            res.redirect('/');
+        }
     } catch (error) {
         console.log(error);
         res.status(500).send('Error occurred');
     }
 };
-
 
 //forgot password
 const forgot = async(req,res)=>{
@@ -168,6 +180,10 @@ const postForgotPassword = async (req, res) => {
         res.status(500).send('Error occurred');
     }
 }
+
+//shop
+
+
 
 module.exports = {
     userLogin,
