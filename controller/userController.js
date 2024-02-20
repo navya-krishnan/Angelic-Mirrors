@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
 
 //login
 const userLogin = (req,res)=>{
-    res.render('shop')
+    res.render('userLogin')
 }
 
 const postLogin = async(req,res)=>{
@@ -33,7 +33,7 @@ const postLogin = async(req,res)=>{
          if (isPasswordValid) {
              console.log("Login successful");
              // Here you might want to set some session variables to indicate the user is logged in
-             res.redirect('/home');
+             res.render('home');
          } else {
              console.log("Invalid password");
              res.redirect('/');
