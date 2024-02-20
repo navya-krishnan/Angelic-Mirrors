@@ -1,25 +1,12 @@
 const app = require('express')
-const userDatabase =  require('../model/mongodb')
+const userDatabase =  require('../../model/mongodb')
 const nodemailer = require('nodemailer')
 const crypto = require('crypto')
 const bcrypt = require('bcrypt')
 
-
-//nodemailer set up
-// Create a Nodemailer transporter object
-const transporter = nodemailer.createTransport({
-    service: 'Gmail', // Change to your email service provider
-    auth: {
-        user: 'knavya941@gmail.com', // Your email address
-        pass: 'navyanavya' // Your email password or application-specific password
-    }
-});
-
-
-
 //login
 const userLogin = (req,res)=>{
-    res.render('userLogin')
+    res.render('user/home')
 }
 
 const postLogin = async(req,res)=>{
@@ -47,18 +34,20 @@ const postLogin = async(req,res)=>{
          res.status(500).send("Error occurred");
     } 
  }
- 
 
-//home
-const home = async(req,res)=>{
-    if(req.session.user){
-        let user = await userDatabase.findOne({email:enteredEmail})
-        if(user){
-            res.render('home')
-        }else{
-            res.redirect('/userLogin')
-        }
-    }
+ //home
+// const home = async(req,res)=>{
+//     if(req.session.user){
+//         let user = await userDatabase.findOne({email:enteredEmail})
+//         if(user){
+//             res.render('home')
+//         }else{
+//             res.redirect('/userLogin')
+//         }
+//     }
+// }
+const home = (req,res)=>{
+    res.render('user/home')
 }
 
 const userLogout = async(req,res)=>{
@@ -73,30 +62,6 @@ const userLogout = async(req,res)=>{
         }
     })
 }
-
-
-// Send forgot password email
-function sendResetEmail(email, resetToken) {
-    // Define email options
-    const mailOptions = {
-        from: 'knavya941@gmail.com', // Sender address (your email address)
-        to: email, // Recipient's email address
-        subject: 'Reset Your Password', // Subject line
-        text: `To reset your password, click on the following link: http://yourwebsite.com/reset-password?token=${resetToken}` // Plain text body
-        // You can also use HTML body if you prefer
-        // html: `<p>To reset your password, click on the following link: <a href="http://yourwebsite.com/reset-password?token=${resetToken}">Reset Password</a></p>`
-    };
-
-    // Send email
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.error('Error sending forgot password email:', error);
-        } else {
-            console.log('Forgot password email sent:', info.response);
-        }
-    });
-}
-
 
 //user signup
 const signup = (req,res)=>{
@@ -154,6 +119,52 @@ const postSignup = async (req, res) => {
     }
 };
 
+
+
+
+//nodemailer set up
+// Create a Nodemailer transporter object
+const transporter = nodemailer.createTransport({
+    service: 'Gmail', // Change to your email service provider
+    auth: {
+        user: 'knavya941@gmail.com', // Your email address
+        pass: 'navyanavya' // Your email password or application-specific password
+    }
+});
+
+
+
+
+ 
+
+
+
+
+// Send forgot password email
+function sendResetEmail(email, resetToken) {
+    // Define email options
+    const mailOptions = {
+        from: 'knavya941@gmail.com', // Sender address (your email address)
+        to: email, // Recipient's email address
+        subject: 'Reset Your Password', // Subject line
+        text: `To reset your password, click on the following link: http://yourwebsite.com/reset-password?token=${resetToken}` // Plain text body
+        // You can also use HTML body if you prefer
+        // html: `<p>To reset your password, click on the following link: <a href="http://yourwebsite.com/reset-password?token=${resetToken}">Reset Password</a></p>`
+    };
+
+    // Send email
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending forgot password email:', error);
+        } else {
+            console.log('Forgot password email sent:', info.response);
+        }
+    });
+}
+
+
+
+
 //forgot password
 const forgot = async(req,res)=>{
     res.render("forgotPassword")
@@ -180,8 +191,6 @@ const postForgotPassword = async (req, res) => {
         res.status(500).send('Error occurred');
     }
 }
-
-//shop
 
 
 

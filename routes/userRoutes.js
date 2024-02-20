@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const userController = require('../controller/userController')
+const userController = require('../controller/userController/userContoller')
 
-router.get('/',userController.userLogin)
+router.get('/userlogin',userController.userLogin)
 router.post('/',userController.postLogin)
 
-router.get('/home',userController.home)
+router.get('/',userController.home)
 router.get('/logout',userController.userLogout)
 
 router.get('/userSignup',userController.signup)
