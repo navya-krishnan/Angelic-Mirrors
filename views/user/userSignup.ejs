@@ -79,7 +79,7 @@
             <img src="/image/adminleft.jpg" alt="" class="leftimage">
             <div class="rightimage-container">
                 <img src="/image/adminright.jpg" alt="" class="rightimage">
-                <form action="/forgototp" method="post" onsubmit="return validate()" style="padding-top: 0;">
+                <form action="/userSignup" method="post" onsubmit="return validate()" style="padding-top: 0;">
                     <h2 style="font-style:italic; text-decoration: underline;">Create Account</h2>
 
                     <div class="form-outline form-white mb-4">
@@ -104,7 +104,7 @@
 
                     <button class="btn btn-outline-dark btn-lg px-5 " type="submit" style="border-radius: 30px; font-size: medium;">Sign Up</button><br><br>
                     <h6 style="font-size: small;">Already have an account..!</h6>
-                    <a href="/" >Log In</a>
+                    <a href="/userLogin" >Log In</a>
                 </form>
             </div>
         </div>
@@ -153,7 +153,7 @@
             return false
         }
 
-        if(password.length < 6){
+        if(password.length < 3){
             document.getElementById("passwordError").textContent = "Password should contain atleast 6 characters..!";
             return false
         }
@@ -163,7 +163,7 @@
             return false
         }
 
-        if(confrimPassword.length < 6){
+        if(confrimPassword.length < 3){
             document.getElementById("confirmPasswordError").textContent = "Password should contain atleast 6 characters..!";
             return false
         }

@@ -79,22 +79,22 @@
             <div class="rightimage-container">
                 <img src="/image/adminright.jpg" class="rightimage">
                 <div class="form-container">
-                    <form action="">
+                    <form action="/postSignupOtp" method="post">
                         <h2 style="text-decoration: underline;">Verify Email Id..!</h2>
                         <h6>Enter OTP send to your mail..!</h6>
 
                         <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2"> 
-                            <input class="m-2 text-center form-control rounded" type="text" id="first" maxlength="1" style="border-color: black; width: 35px;"/> 
-                            <input class="m-2 text-center form-control rounded" type="text" id="second" maxlength="1" style="border-color: black; width: 35px;"/> 
-                            <input class="m-2 text-center form-control rounded" type="text" id="third" maxlength="1" style="border-color: black; width: 35px;"/> 
-                            <input class="m-2 text-center form-control rounded" type="text" id="fourth" maxlength="1" style="border-color: black; width: 35px;"/> 
-                            <input class="m-2 text-center form-control rounded" type="text" id="fifth" maxlength="1" style="border-color: black; width: 35px;"/> 
-                            <input class="m-2 text-center form-control rounded" type="text" id="sixth" maxlength="1" style="border-color: black; width: 35px;"/> 
+                            <input class="m-2 text-center form-control rounded" type="text" id="first" name="digit1" maxlength="1" style="border-color: black; width: 35px;"/> 
+                            <input class="m-2 text-center form-control rounded" type="text" id="second" name="digit2" maxlength="1" style="border-color: black; width: 35px;"/> 
+                            <input class="m-2 text-center form-control rounded" type="text" id="third" name="digit3" maxlength="1" style="border-color: black; width: 35px;"/> 
+                            <input class="m-2 text-center form-control rounded" type="text" id="fourth" name="digit4" maxlength="1" style="border-color: black; width: 35px;"/> 
+                            <input class="m-2 text-center form-control rounded" type="text" id="fifth" name="digit5" maxlength="1" style="border-color: black; width: 35px;"/> 
+                            <input class="m-2 text-center form-control rounded" type="text" id="sixth" name="digit6" maxlength="1" style="border-color: black; width: 35px;"/> 
                         </div> 
                         <div id="countdowntimer">00:30</div>
                         <button class="btn btn-outline-dark btn-lg px-5 " type="submit" style="border-radius: 30px; background-color: white; font-size: medium; font-weight: bold;">Verify OTP</button>
                         <h6 style="font-size: small; padding-top: 10px; text-decoration: underline;">Don't receive OTP..?</h6>
-                        <a href="" style="color: black; font-weight: bold;">RESEND</a><br>
+                        <a href="/otp" style="color: black; font-weight: bold;">RESEND</a><br>
                         <a href="/" style="color:black; font-size: small; ">Back To Login..!</a>
                     </form>
                 </div>

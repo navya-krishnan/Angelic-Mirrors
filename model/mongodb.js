@@ -1,9 +1,8 @@
 const mongoose = require("mongoose")
 
 const angelicMirrorSchema = new mongoose.Schema({
-    name : {
+    username : {
         type : String,
-        required : true,
     },
     password :{
         type : String,

@@ -8,6 +8,7 @@ const session = require('express-session')
 const adminRouter = require('./routes/adminRoutes')
 const userRouter = require('./routes/userRoutes')
 const angelicMirror = require("./model/mongodb")
+const flash = require('connect-flash');
 require('dotenv').config();
 
 // Set up session middleware
@@ -23,6 +24,8 @@ app.use(session({
     saveUninitialized: true
  }));
 
+// Set up flash middleware
+app.use(flash());
 
 // connecting the mongodb server
 mongoose.connect("mongodb://127.0.0.1:27017/angelicMirror")

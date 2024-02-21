@@ -1,15 +1,27 @@
-const app = require('express')
 const userDatabase =  require('../../model/mongodb')
 const nodemailer = require('nodemailer')
-const crypto = require('crypto')
 const bcrypt = require('bcrypt')
 
-//login
-const userLogin = (req,res)=>{
+//home
+const home = (req,res)=>{
     res.render('user/home')
 }
 
+//login
+const userLogin = async(req,res)=>{
+    try {
+        if(req.session.user){
+            res.redirect('user/home')
+        }
+        res.render('user/userLogin')
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("error occured")
+    }
+}
+console.log("gsdhgdsm");
 const postLogin = async(req,res)=>{
+    console.log("hgh");
     try {
      console.log(req.body);
      const enteredEmail = req.body.email;
@@ -20,7 +32,7 @@ const postLogin = async(req,res)=>{
          if (isPasswordValid) {
              console.log("Login successful");
              // Here you might want to set some session variables to indicate the user is logged in
-             res.render('home');
+             res.redirect('user/home');
          } else {
              console.log("Invalid password");
              res.redirect('/');
@@ -35,20 +47,6 @@ const postLogin = async(req,res)=>{
     } 
  }
 
- //home
-// const home = async(req,res)=>{
-//     if(req.session.user){
-//         let user = await userDatabase.findOne({email:enteredEmail})
-//         if(user){
-//             res.render('home')
-//         }else{
-//             res.redirect('/userLogin')
-//         }
-//     }
-// }
-const home = (req,res)=>{
-    res.render('user/home')
-}
 
 const userLogout = async(req,res)=>{
     req.session.destroy(function(err){
@@ -58,7 +56,7 @@ const userLogout = async(req,res)=>{
         }else{
             console.log("Logout successfull");
             res.status(200)
-            res.redirect('/')
+            res.redirect('/user/home')
         }
     })
 }
@@ -66,132 +64,82 @@ const userLogout = async(req,res)=>{
 //user signup
 const signup = (req,res)=>{
     if(req.session.user){
-        res.render('userSignup')
+        res.render('user/userSignup')
     }else{
         const errorMessage = req.session.errorMessage;
         req.session.errorMessage = null; // Clear the error message
-        res.render('userSignup', { errorMessage });
+        res.render('user/userSignup', { errorMessage });
     }
 }
 
 const postSignup = async (req, res) => {
     try {
-        const { email, password, name } = req.body;
+        const username = req.body.username;
+        const email = req.body.email;
+        const password = req.body.password;
 
-        // Check if email and password are provided
-        if (!email || !password) {
-            req.session.errorMessage = "Email and password are required";
-            return res.redirect('/userSignup');
-        }
-
-        // Number of rounds for hashing
-        const saltRounds = 10;
-
-        console.log('Received password:', password);
-        console.log('Salt rounds:', saltRounds);
-
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-        console.log('Hashed password:', hashedPassword);
-
-        const details = {
-            email: email,
-            password: hashedPassword,
-            name: name
-        };
-
-        // Check if user already exists
-        const existingUser = await userDatabase.findOne({ email: email });
-
-        if (existingUser) {
-            console.log("User already exists");
-            req.session.errorMessage = "User already exists";
-            return res.redirect('/userSignup');
+        const checkEmail = await userDatabase.find({ email: email });
+        if (checkEmail.length > 0) {
+            console.log('User already exists');
+            req.flash("error", "User Already Exists..!");
+            return res.redirect("/userSignup");
         } else {
-            await userDatabase.insertMany(details);
-            req.session.succesMessage = "Signup Successful"
-            res.redirect('/');
+            console.log('Generating OTP');
+            const otp = generateotp();
+            console.log('Generated OTP:', otp);
+
+            const text = `Hello ${username}... This mail is from Angelic Mirrors... Enter the otp ${otp} to confirm your mail id...`;
+
+            const mailOption = {
+                from: "knavya941@gmail.com",
+                to: email,
+                subject: "OTP Verification",
+                text: text
+            };
+
+            transporter.sendMail(mailOption, async (error, info) => {
+                if (error) {
+                    console.log("Error while sending OTP:", error);
+                    req.flash("error", "Error while sending otp..! Try Again..!");
+                    return res.redirect('/userSignup');
+                } else {
+                    console.log("OTP sent:", info.response);
+                    req.session.userDetails = {
+                        username,
+                        email,
+                        password
+                    };
+
+                    console.log('OTP:', otp);
+                    req.session.otp = otp;
+                    req.session.expireTime = new Date(expireTIme);
+                    console.log("Redirecting to OTP page");
+                    return res.redirect('/otp');
+                }
+            });
         }
     } catch (error) {
-        console.log(error);
-        res.status(500).send('Error occurred');
+        console.log("Error in signup:", error);
+        req.flash("error", "Error occurred during signup");
+        return res.status(500).send("Error occurred during signup");
     }
 };
 
+//generating otp
+let expireTIme;
+const generateotp = ()=>{
+    const now = new Date();
+    expireTIme = new Date(now.getTime()+1*60000)
+    return Math.floor(100000 + Math.random()*900000).toString();
+};
 
-
-
-//nodemailer set up
-// Create a Nodemailer transporter object
 const transporter = nodemailer.createTransport({
-    service: 'Gmail', // Change to your email service provider
-    auth: {
-        user: 'knavya941@gmail.com', // Your email address
-        pass: 'navyanavya' // Your email password or application-specific password
+    service : "Gmail",
+    auth : {
+        user : "knavya941@gmail.com",
+        pass : "rmfz wobs bwdn ncuj"
     }
 });
-
-
-
-
- 
-
-
-
-
-// Send forgot password email
-function sendResetEmail(email, resetToken) {
-    // Define email options
-    const mailOptions = {
-        from: 'knavya941@gmail.com', // Sender address (your email address)
-        to: email, // Recipient's email address
-        subject: 'Reset Your Password', // Subject line
-        text: `To reset your password, click on the following link: http://yourwebsite.com/reset-password?token=${resetToken}` // Plain text body
-        // You can also use HTML body if you prefer
-        // html: `<p>To reset your password, click on the following link: <a href="http://yourwebsite.com/reset-password?token=${resetToken}">Reset Password</a></p>`
-    };
-
-    // Send email
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.error('Error sending forgot password email:', error);
-        } else {
-            console.log('Forgot password email sent:', info.response);
-        }
-    });
-}
-
-
-
-
-//forgot password
-const forgot = async(req,res)=>{
-    res.render("forgotPassword")
-}
-
-const postForgotPassword = async (req, res) => {
-    try {
-        const enteredEmail = req.body.email;
-        const user = await userDatabase.findOne({ email: enteredEmail });
-
-        if (user) {
-            // Generate and store a unique token for this password reset request
-            const resetToken = await generateResetToken(user._id); // You need to implement this function
-
-            // Send an email to the user with the reset link containing the token
-            sendResetEmail(user.email, resetToken); // You need to implement this function
-
-            res.render('forgotPasswordSuccess'); // Render a success message
-        } else {
-            res.render('forgototp', { error: 'User not found' });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error occurred');
-    }
-}
-
 
 
 module.exports = {
@@ -199,8 +147,6 @@ module.exports = {
     postLogin,
     home,
     userLogout,
-    forgot,
-    postForgotPassword,
     signup,
     postSignup
 }
