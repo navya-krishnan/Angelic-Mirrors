@@ -19,7 +19,8 @@ const userLogin = async(req,res)=>{
         res.status(500).send("error occured")
     }
 }
-console.log("gsdhgdsm");
+
+
 const postLogin = async(req,res)=>{
     console.log("hgh");
     try {

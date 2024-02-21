@@ -4,7 +4,7 @@ const adminControllers = require('../controller/adminController/adminLogin');
 
 
 router.get('/adminlogin',adminControllers.getAdminLogin)
-// router.post('/adminlogin',adminControllers.postAdminLogin)
+// router.post('/admin/adminlogin',adminControllers.postAdminLogin)
 
 module.exports =  router
 
