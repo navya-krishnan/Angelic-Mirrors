@@ -8,6 +8,7 @@ const session = require('express-session')
 const adminRouter = require('./routes/adminRoutes')
 const userRouter = require('./routes/userRoutes')
 const angelicMirror = require("./model/mongodb")
+const adminLog = require('./model/admin')
 const flash = require('connect-flash');
 require('dotenv').config();
 
@@ -46,7 +47,7 @@ app.set('view engine','ejs')
 app.set('views',path.join(__dirname,'views'))
 app.use(express.static('public'))
 
-app.use('/',adminRouter)
+app.use('/admin',adminRouter)
 app.use('/',userRouter)
 
 app.listen(5000,()=>{

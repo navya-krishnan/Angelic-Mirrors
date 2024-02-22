@@ -1,7 +1,16 @@
 <%-include('header')-%>
+<style>
+    .borderless-button {
+    border: none; /* Remove default button border */
+    outline: none; /* Remove default focus outline */
+    background-color: transparent; /* Make background transparent */
+    padding: 0; /* Remove padding if necessary */
+    /* Add any additional styling as needed */
+}
+</style>
 
 <!-- header -->
-<div class="container" style="background-color: black; height: 10%; margin-top: 5%; display: flex;  align-items: center; padding-left: 5%;">
+<div class="container" style="background-color: black; height: 10%; margin-top: 0%; display: flex;  align-items: center; padding-left: 5%;">
     <img src="/image/dashboard.jpg" style="height: 5%; width: 5%; ">
     <h1 style="color: white; padding-left: 0%; margin-top: 1%; font-size: larger;">User Management</h1>
     <img src="/image/profileadmin.png" style="width: 3%; height: 3%; margin-left: 75%;">
@@ -10,7 +19,7 @@
 <!-- body -->
 <div class="container" style="background-color: black; height: fit-content; margin-top: 3%; display: flex;  align-items: center; padding-left: 5%; padding-top: 3%; padding-bottom: 3%;">
     
-    <div class="card" style="width: 25%; height: 50%; display: flex;">
+    <div class="card" style="width: 25%; height: 50%; display: flex; margin-bottom: 27%;">
 
             <div class="card-body">
                 <div class="inner-card" style="display: flex;">
@@ -33,29 +42,31 @@
                     <h5 style="padding-left: 5%; padding-top: 2%;">Category <br> Management</h5>
                 </div>
 
-                <div class="inner-card" style="display: flex;">
+                <!-- <div class="inner-card" style="display: flex;">
                     <img src="/image/ordermanage.png" style="height: 15%; width: 15%; padding-top: 5%;">
                     <h5 style="padding-left: 5%; padding-top: 2%;">Order <br> Management</h5>
-                </div>
+                </div> -->
 
-                <div class="inner-card" style="display: flex;">
+                <!-- <div class="inner-card" style="display: flex;">
                     <img src="/image/bannermanage.png" style="height: 15%; width: 15%; padding-top: 5%;">
                     <h5 style="padding-left: 5%; padding-top: 2%;">Banner <br> Management</h5>
-                </div>
+                </div> -->
 
-                <div class="inner-card" style="display: flex;">
+                <!-- <div class="inner-card" style="display: flex;">
                     <img src="/image/couponmanage.jpg" style="height: 15%; width: 15%; padding-top: 5%;">
                     <h5 style="padding-left: 5%; padding-top: 2%;">Coupon <br> Management</h5>
-                </div>
+                </div> -->
 
-                <div class="inner-card" style="display: flex;">
+                <!-- <div class="inner-card" style="display: flex;">
                     <img src="/image/sales.png" style="height: 15%; width: 15%; padding-top: 5%;">
                     <h5 style="padding-left: 5%; padding-top: 2%;">Sales <br> Report</h5>
-                </div>
+                </div> -->
 
                 <div class="inner-card" style="display: flex;">
                     <img src="/image/logoutadmin.png" style="height: 15%; width: 15%;">
-                    <h5 style="padding-left: 5%; padding-top: 2%;">Logout</h5>
+                    <form action="/admin/adminLogout" method="post">
+                        <button class="borderless-button" type="submit" style="font-size: large; font-weight: 500; margin-left: 16%; padding-top: 2%;">Logout</button>
+                    </form>                
                 </div>
 
             </div>
@@ -63,25 +74,48 @@
 
         <div class="card" style="width: 80%; margin-left: 5%; margin-bottom: 20%;">
             <div class="card-body" style="border: 2px solid black; padding-top: 4%; display: flex; flex-direction: column; align-items: center; margin-top: 3%; margin-left: 5%; width: 90%;">
-                <button class="btn btn-outline-dark px-2" type="submit" style="border-radius: 30px; font-size: medium; background-color: black; color: white; width: 200px; height: 40px; margin-left: 60%;">
+                <!-- <button class="btn btn-outline-dark px-2" type="submit" style="border-radius: 30px; font-size: medium; background-color: black; color: white; width: 200px; height: 40px; margin-left: 60%;">
                     <img src="/image/searchadmin.png" style="width: 20px; height: 20px;">Search User
-                </button>
+                </button> -->
             
                 <div class="card" style="width: 100%; margin-top: 3%; border: 2px solid black; ">
-                    <table class="table align-items-center mb-0">
+                    <table class="table table-bordered">
                         <thead>
-                            <tr style="text-align: center;">
-                                <th class="text-uppercase text-dark text-xxs font-weight-bolder opacity-7">
-                                    Id</th>
-                                <th class="text-uppercase text-dark text-xxs font-weight-bolder opacity-7">
-                                    Name</th>
-                                <th class="text-uppercase text-dark text-xxs font-weight-bolder opacity-7">
-                                    Email</th>
-                                <th class="text-uppercase text-dark text-xxs font-weight-bolder opacity-7">
-                                    Actions</th>
-                            </tr>
+                          <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Action</th>
+                          </tr>
                         </thead>
-                    </table>
+                        <tbody>
+                          <% users.forEach((user,i)=> {%>
+
+                            <tr>
+                                <td>
+                                    <%= i+1 %>
+                                </td>
+                                <td>
+                                    <%= user.username %>
+                                </td>
+                                <td>
+                                    <%= user.email %>
+                                </td>
+                                <td>
+                                   <% if(user.block) {%>
+                                        <a href="/admin/blockUser?email=<%= user.email %>">
+                                            <button class="btn btn-success">Block</button>
+                                        </a>
+                                    <%} else {%>
+                                        <a href="/admin/blockUser?email=<%= user.email %>">
+                                            <button class="btn btn-danger">Unblock</button>
+                                        </a>
+                                    <%}%>
+                                </td>
+                            </tr>
+                          <%})%>
+                        </tbody>
+                      </table>
                 </div>
             </div>
             

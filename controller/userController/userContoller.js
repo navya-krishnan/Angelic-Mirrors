@@ -11,7 +11,7 @@ const home = (req,res)=>{
 const userLogin = async(req,res)=>{
     try {
         if(req.session.user){
-            res.redirect('user/home')
+            res.redirect('/')
         }
         res.render('user/userLogin')
     } catch (error) {
@@ -33,7 +33,7 @@ const postLogin = async(req,res)=>{
          if (isPasswordValid) {
              console.log("Login successful");
              // Here you might want to set some session variables to indicate the user is logged in
-             res.redirect('user/home');
+             res.redirect('/');
          } else {
              console.log("Invalid password");
              res.redirect('/');
@@ -48,7 +48,7 @@ const postLogin = async(req,res)=>{
     } 
  }
 
-
+//logout
 const userLogout = async(req,res)=>{
     req.session.destroy(function(err){
         if(err){
@@ -57,7 +57,7 @@ const userLogout = async(req,res)=>{
         }else{
             console.log("Logout successfull");
             res.status(200)
-            res.redirect('/user/home')
+            res.redirect('/')
         }
     })
 }

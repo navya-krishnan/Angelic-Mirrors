@@ -11,6 +11,10 @@ const angelicMirrorSchema = new mongoose.Schema({
     email :{
         type : String,
         required : true,
+    },
+    block :{
+        type : Boolean,
+        default : true
     }
 })
 

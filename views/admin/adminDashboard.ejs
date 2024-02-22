@@ -1,4 +1,13 @@
 <%-include('header')-%>
+<style>
+    .borderless-button {
+    border: none; /* Remove default button border */
+    outline: none; /* Remove default focus outline */
+    background-color: transparent; /* Make background transparent */
+    padding: 0; /* Remove padding if necessary */
+    /* Add any additional styling as needed */
+}
+</style>
 
 <!-- header -->
 <div class="container" style="background-color: black; height: 10%; margin-top: 5%; display: flex;  align-items: center; padding-left: 5%;">
@@ -20,7 +29,10 @@
 
                 <div class="inner-card" style="display: flex;">
                     <img src="/image/usermanage.png" style="height: 15%; width: 15%; padding-top: 5%;">
-                    <h5 style="padding-left: 5%; padding-top: 2%;">User <br> Management</h5>
+                    <!-- <h5 style="padding-left: 5%; padding-top: 2%;">User <br> Management</h5> -->
+                    <form action="/admin/userManagement" method="get">
+                        <button class="borderless-button" type="submit" style="font-size: large; font-weight: 500; margin-left: 16%; padding-top: 2%; text-align: left;">User <br> Management</button>
+                    </form>  
                 </div>
 
                 <div class="inner-card" style="display: flex;">
@@ -33,31 +45,32 @@
                     <h5 style="padding-left: 5%; padding-top: 2%;">Category <br> Management</h5>
                 </div>
 
-                <div class="inner-card" style="display: flex;">
+                <!-- <div class="inner-card" style="display: flex;">
                     <img src="/image/ordermanage.png" style="height: 15%; width: 15%; padding-top: 5%;">
                     <h5 style="padding-left: 5%; padding-top: 2%;">Order <br> Management</h5>
-                </div>
+                </div> -->
 
-                <div class="inner-card" style="display: flex;">
+                <!-- <div class="inner-card" style="display: flex;">
                     <img src="/image/bannermanage.png" style="height: 15%; width: 15%; padding-top: 5%;">
                     <h5 style="padding-left: 5%; padding-top: 2%;">Banner <br> Management</h5>
-                </div>
+                </div> -->
 
-                <div class="inner-card" style="display: flex;">
+                <!-- <div class="inner-card" style="display: flex;">
                     <img src="/image/couponmanage.jpg" style="height: 15%; width: 15%; padding-top: 5%;">
                     <h5 style="padding-left: 5%; padding-top: 2%;">Coupon <br> Management</h5>
-                </div>
+                </div> -->
 
-                <div class="inner-card" style="display: flex;">
+                <!-- <div class="inner-card" style="display: flex;">
                     <img src="/image/sales.png" style="height: 15%; width: 15%; padding-top: 5%;">
                     <h5 style="padding-left: 5%; padding-top: 2%;">Sales <br> Report</h5>
-                </div>
+                </div> -->
 
                 <div class="inner-card" style="display: flex;">
                     <img src="/image/logoutadmin.png" style="height: 15%; width: 15%;">
-                    <h5 style="padding-left: 5%; padding-top: 2%;">Logout</h5>
+                    <form action="/admin/adminLogout" method="post">
+                        <button class="borderless-button" type="submit" style="font-size: large; font-weight: 500; margin-left: 16%; padding-top: 2%;">Logout</button>
+                    </form>                
                 </div>
-
             </div>
     </div>
 
