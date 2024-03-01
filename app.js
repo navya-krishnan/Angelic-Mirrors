@@ -1,6 +1,5 @@
 const express = require("express")
 const app = express()
-const bodyParser  = require('body-parser')
 const path = require('path')
 const mongoose = require("mongoose")
 const nocache = require('nocache')
@@ -10,6 +9,7 @@ const userRouter = require('./routes/userRoutes')
 const angelicMirror = require("./model/mongodb")
 const adminLog = require('./model/admin')
 const flash = require('connect-flash');
+const multer = require('multer')
 require('dotenv').config();
 
 // Set up session middleware
@@ -23,33 +23,33 @@ app.use(session({
     secret: secretKey,
     resave: false,
     saveUninitialized: true
- }));
+}));
 
 // Set up flash middleware
 app.use(flash());
 
 // connecting the mongodb server
 mongoose.connect("mongodb://127.0.0.1:27017/angelicMirror")
-.then(()=>{
-    console.log("Mongodb is connected properly");
-}).catch(()=>{
-    console.log("Mongodb is not connected properly");
-})
+    .then(() => {
+        console.log("Mongodb is connected properly");
+    }).catch(() => {
+        console.log("Mongodb is not connected properly");
+    })
 
 // Parsing
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 
 app.use(nocache())
 
 // setting the view engines
-app.set('view engine','ejs')
-app.set('views',path.join(__dirname,'views'))
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'))
 app.use(express.static('public'))
 
-app.use('/admin',adminRouter)
-app.use('/',userRouter)
+app.use('/admin', adminRouter)
+app.use('/', userRouter)
 
-app.listen(5000,()=>{
+app.listen(5000, () => {
     console.log("Connected")
 })

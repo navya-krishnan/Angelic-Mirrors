@@ -1,18 +1,27 @@
 const express = require('express')
 const router = express.Router()
+
 const userController = require('../controller/userController/userContoller')
 const otpController = require('../controller/userController/otpController')
+const shopController = require('../controller/userController/shopController')
 
-router.get('/userlogin',userController.userLogin)
-router.post('/userlogin',userController.postLogin)
+const userBlockMiddleware = require('../middleware/userControl')
+const userSessionMiddleware = require('../middleware/userSession')
 
-router.get('/',userController.home)
-router.get('/logout',userController.userLogout)
+router.get('/userLogin', userController.userLogin)
+router.post('/userLogin', userController.postLogin)
 
-router.get('/userSignup',userController.signup)
-router.post('/userSignup',userController.postSignup)
+router.get('/', userBlockMiddleware.block,userController.home)
+router.get('/logout', userController.userLogout)
 
-router.get('/otp',otpController.getsignupOtp)
-router.post('/postSignupOtp',otpController.postSignupOtp)
+router.get('/userSignup', userController.signup)
+router.post('/userSignup', userController.postSignup) 
+
+router.get('/otp', otpController.getsignupOtp)
+router.post('/postSignupOtp', otpController.postSignupOtp)
+router.get('/resendOtp',userController.getResendOtp)
+
+router.get('/shop',  userBlockMiddleware.block,userSessionMiddleware.isUser, shopController.getShop)
+router.get('/singleProduct/:proId',  userSessionMiddleware.isUser, shopController.getSingleProduct)
 
 module.exports = router

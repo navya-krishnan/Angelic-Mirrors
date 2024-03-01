@@ -3,12 +3,10 @@ const adminDatabase = require('../../model/admin')
 //dashboard
 const getDashboard = async(req,res)=>{
     try {
-        if(!req.session.isAdminLoggedIn){
-            console.log('gfhg');
-            res.redirect('/admin')
-        }else{
-            console.log('vcvb');
+        if(req.session.admin){
             res.render('admin/adminDashboard')
+        }else{
+            res.render('admin/adminLogin')
         }
     } catch (error) {
         console.log(error);

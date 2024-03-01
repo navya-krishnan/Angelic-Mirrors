@@ -1,139 +1,152 @@
 <%-include('header')-%>
 
-<style>
-    body {
-        background-color: black;
-        background-size: cover;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .image {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: 100px;
-        padding-top: 50px;
-    }
-
-    .rightimage-container {
-        position: relative;
-        width: 100%;
-        max-width: 400px;
-    }
-
-    .leftimage,
-    .rightimage {
-        width: 400px;
-        height: 500px;
-        object-fit: cover;
-    }
-
-    .rightimage-container form {
-        position: absolute;
-        top: 50%;
-        right: 0; /* Adjust right position */
-        transform: translate(50%, -50%);
-        text-align: center;
-        padding: 20px;
-        background-color: rgba(255, 255, 255, 0.5);
-        border-radius: 10px;
-        width: 80%;
-        margin-right: 50%;
-    }
-
-    input.form-control {
-        margin-bottom: 10px;
-    }
-
-    input::placeholder {
-        font-size: 60%;
-    }
-
-    /* Media query for screens smaller than 768px */
-    @media (max-width: 767.98px) {
+    <style>
         body {
-            margin: 10px;
+            background-image: url('/image/loginbg1.jpg');
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         .image {
-            margin-left: 25%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 100px;
+            padding-top: 50px;
         }
 
         .rightimage-container {
-            max-width: none;
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .leftimage,
+        .rightimage {
+            width: 400px;
+            height: 500px;
+            object-fit: cover;
         }
 
         .rightimage-container form {
-            width: 90%;
+            position: absolute;
+            top: 50%;
+            right: 0;
+            /* Adjust right position */
+            transform: translate(50%, -50%);
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            width: 80%;
+            margin-right: 50%;
         }
-    }
-</style>
 
-<section class="vh-100 gradient-custom">
-    <div class="container">
-        <div class="image bg-transparent text-dark">
-            <img src="/image/adminleft.jpg" class="leftimage">
-            <div class="rightimage-container">
-                <img src="/image/adminright.jpg" class="rightimage">
-                <div class="form-container">
-                    <form action="/postSignupOtp" method="post">
-                        <h2 style="text-decoration: underline;">Verify Email Id..!</h2>
-                        <h6>Enter OTP send to your mail..!</h6>
+        input.form-control {
+            margin-bottom: 10px;
+        }
 
-                        <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2"> 
-                            <input class="m-2 text-center form-control rounded" type="text" id="first" name="digit1" maxlength="1" style="border-color: black; width: 35px;"/> 
-                            <input class="m-2 text-center form-control rounded" type="text" id="second" name="digit2" maxlength="1" style="border-color: black; width: 35px;"/> 
-                            <input class="m-2 text-center form-control rounded" type="text" id="third" name="digit3" maxlength="1" style="border-color: black; width: 35px;"/> 
-                            <input class="m-2 text-center form-control rounded" type="text" id="fourth" name="digit4" maxlength="1" style="border-color: black; width: 35px;"/> 
-                            <input class="m-2 text-center form-control rounded" type="text" id="fifth" name="digit5" maxlength="1" style="border-color: black; width: 35px;"/> 
-                            <input class="m-2 text-center form-control rounded" type="text" id="sixth" name="digit6" maxlength="1" style="border-color: black; width: 35px;"/> 
-                        </div> 
-                        <div id="countdowntimer">00:30</div>
-                        <button class="btn btn-outline-dark btn-lg px-5 " type="submit" style="border-radius: 30px; background-color: white; font-size: medium; font-weight: bold;">Verify OTP</button>
-                        <h6 style="font-size: small; padding-top: 10px; text-decoration: underline;">Don't receive OTP..?</h6>
-                        <a href="/otp" style="color: black; font-weight: bold;">RESEND</a><br>
-                        <a href="/" style="color:black; font-size: small; ">Back To Login..!</a>
-                    </form>
+        input::placeholder {
+            font-size: 60%;
+        }
+
+        /* Media query for screens smaller than 768px */
+        @media (max-width: 767.98px) {
+            body {
+                margin: 10px;
+            }
+
+            .image {
+                margin-left: 25%;
+            }
+
+            .rightimage-container {
+                max-width: none;
+            }
+
+            .rightimage-container form {
+                width: 90%;
+            }
+        }
+    </style>
+
+    <section class="vh-100 gradient-custom">
+        <div class="container">
+            <div class="image bg-transparent text-dark">
+                <!-- <img src="/image/adminleft.jpg" class="leftimage"> -->
+                <div class="rightimage-container">
+                    <img src="/image/adminright.jpg" class="rightimage">
+                    <div class="form-container">
+                        <form action="/postSignupOtp" method="post">
+                            <h2 style="text-decoration: underline;">Verify Email Id..!</h2>
+                            <h6>Enter OTP send to your mail..!</h6>
+
+                            <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+                                <input class="m-2 text-center form-control rounded" type="text" id="first" name="digit1"
+                                    maxlength="1" style="border-color: black; width: 35px;" />
+                                <input class="m-2 text-center form-control rounded" type="text" id="second"
+                                    name="digit2" maxlength="1" style="border-color: black; width: 35px;" />
+                                <input class="m-2 text-center form-control rounded" type="text" id="third" name="digit3"
+                                    maxlength="1" style="border-color: black; width: 35px;" />
+                                <input class="m-2 text-center form-control rounded" type="text" id="fourth"
+                                    name="digit4" maxlength="1" style="border-color: black; width: 35px;" />
+                                <input class="m-2 text-center form-control rounded" type="text" id="fifth" name="digit5"
+                                    maxlength="1" style="border-color: black; width: 35px;" />
+                                <input class="m-2 text-center form-control rounded" type="text" id="sixth" name="digit6"
+                                    maxlength="1" style="border-color: black; width: 35px;" />
+                            </div>
+                            <div id="countdowntimer">00:30</div>
+                            <button class="btn btn-outline-dark btn-lg px-5 " type="submit"
+                                style="border-radius: 30px; background-color: white; font-size: medium; font-weight: bold;">Verify
+                                OTP</button>
+                            <h6 style="font-size: small; padding-top: 10px; text-decoration: underline;">Don't receive
+                                OTP..?</h6>
+                            <a href="/resendOtp" style="color: black; font-weight: bold;">RESEND</a><br>
+                            <a href="/" style="color:black; font-size: small; ">Back To Login..!</a>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
+        crossorigin="anonymous"></script>
 
-<script>
-    // Initialize timeleft with the total number of seconds for the timer
-    var timeleft =  1/2 *  60; // For  30 minutes
+    <script>
+        // Initialize timeleft with the total number of seconds for the timer
+        var timeleft = 1 / 2 * 60; // For  30 minutes
 
-    var downloadTimer = setInterval(function() {
-        var minutes = Math.floor(timeleft /  60);
-        var seconds = timeleft %  60;
+        var downloadTimer = setInterval(function () {
+            var minutes = Math.floor(timeleft / 60);
+            var seconds = timeleft % 60;
 
-        // Pad with leading zeros if less than  10
-        minutes = minutes <  10 ? "0" + minutes : minutes;
-        seconds = seconds <  10 ? "0" + seconds : seconds;
+            // Pad with leading zeros if less than  10
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
 
-        // Display updated time left
-        document.getElementById("countdowntimer").textContent = minutes + ":" + seconds;
+            // Display updated time left
+            document.getElementById("countdowntimer").textContent = minutes + ":" + seconds;
 
-        // Decrease time left by one second
-        timeleft--;
+            // Decrease time left by one second
+            timeleft--;
 
-        // Clear interval when time runs out
-        if (timeleft <=  0) {
-            clearInterval(downloadTimer);
-            document.getElementById("countdowntimer").textContent = "Expired";
-        }
-    },  1000);
-</script>
+            // Clear interval when time runs out
+            if (timeleft <= 0) {
+                clearInterval(downloadTimer);
+                document.getElementById("countdowntimer").textContent = "Expired";
+            }
+        }, 1000);
+    </script>
 
 
-<%-include('footer')-%>
-
+    <%-include('footer')-%>

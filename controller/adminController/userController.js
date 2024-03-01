@@ -1,16 +1,15 @@
-const userDatabase =  require('../../model/mongodb')
+const userDatabase = require('../../model/mongodb')
 
 //get user
-const getUserManage =async(req,res)=>{
+const getUserManage = async (req, res) => {
     try {
-        if(req.session.admin){
-    
+        if (req.session.admin) {
 
             const users = await userDatabase.find()
 
-            res.render('admin/userManagement',{users})
-         
-        }else{
+            res.render('admin/userManagement', { users })
+
+        } else {
             res.redirect('/admin')
         }
     } catch (error) {
@@ -20,28 +19,30 @@ const getUserManage =async(req,res)=>{
 }
 
 //block user
-const getBlockUser = async(req,res)=>{
+const getBlockUser = async (req, res) => {
     try {
-        const users = await userDatabase.findOne({email : req.query.email})
+        const users = await userDatabase.findOne({ email: req.query.email })
         const blocked = users.block;
-        if(blocked){
+        if (blocked) {
             await userDatabase.updateOne(
-                {email : req.query.email},
-                {$set : {block : false}}
+                { email: req.query.email },
+                { $set: { block: false } }
             )
-        }else{
+        } else {
             await userDatabase.updateOne(
-                {email : req.query.email},
-                {$set : {block : true}}
+                { email: req.query.email },
+                { $set: { block: true } }
             )
         }
         res.redirect('/admin/userManagement')
     } catch (error) {
-        
+        console.log(error);
+        res.status(500).send("Error occurred");
+
     }
 }
 
-module.exports =  {
+module.exports = {
     getUserManage,
     getBlockUser
 }

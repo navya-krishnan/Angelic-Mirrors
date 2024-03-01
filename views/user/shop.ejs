@@ -1,323 +1,325 @@
-<%-include('header')-%>
-  <style>
-    body {
-      background-color: white;
-      /* Set the background color of the body to white */
-      margin: 0;
-      /* Reset default margin */
-      padding: 0;
-      /* Reset default padding */
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description"
+		content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
+
+	<!-- title -->
+	<title>Angelic Mirrors</title>
+
+	<!-- favicon -->
+	<link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
+	<!-- google font -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+	<!-- fontawesome -->
+	<link rel="stylesheet" href="assets/css/all.min.css">
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+	<!-- owl carousel -->
+	<link rel="stylesheet" href="assets/css/owl.carousel.css">
+	<!-- magnific popup -->
+	<link rel="stylesheet" href="assets/css/magnific-popup.css">
+	<!-- animate css -->
+	<link rel="stylesheet" href="assets/css/animate.css">
+	<!-- mean menu css -->
+	<link rel="stylesheet" href="assets/css/meanmenu.min.css">
+	<!-- main style -->
+	<link rel="stylesheet" href="assets/css/main.css">
+	<!-- responsive -->
+	<link rel="stylesheet" href="assets/css/responsive.css">
+
+
+	<style>
+		 .breadcrumb {
+        background-color: transparent; /* Remove background color */
+		margin-bottom: -100px;
+		
     }
+	</style>
 
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      /* height: 100%;
-      width: 100%; */
-      /* Adjust the height as needed */
-    }
+</head>
 
-    .inner-container {
-      background-color: black;
-      /* Set the background color of the inner container to black */
-      padding: 10px;
-      /* Add padding to the inner container */
-      color: white;
-      /* Set text color to white */
-    }
+<body>
 
-    h1 {
-      font-size: 2vw;
-      /* Relative font size */
-      color: white;
-      padding-left: 5%;
-      margin: 1%;
-      /* Remove margin to prevent extra space */
-    }
+	<!-- header -->
+	<div class="top-header-area" id="sticker">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-sm-12 text-center">
+					<div class="main-menu-wrap">
+						<!-- logo -->
+						<div class="site-logo">
+							<a href="/user/home">
+								<img src="/image/logo.png" alt="">
+							</a>
+						</div>
+						<!-- logo -->
 
-    .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-    }
+						<!-- menu start -->
+						<nav class="main-menu" style="margin-left:2% ;">
+							<ul>
+								<li class="current-list-item"><a href="/">Home</a>
+								</li>
+								<li><a href="about.html">About</a></li>
+								<li><a href="#">Pages</a>
+									<!-- <ul class="sub-menu">
+										<li><a href="404.html">404 page</a></li>
+										<li><a href="about.html">About</a></li>
+										<li><a href="cart.html">Cart</a></li>
+										<li><a href="checkout.html">Check Out</a></li>
+										<li><a href="contact.html">Contact</a></li>
+										<li><a href="news.html">News</a></li>
+										<li><a href="shop.html">Shop</a></li>
+									</ul> -->
+								</li>
 
-    .nav-links h6 {
-      color: white;
-      padding-left: 2%;
-      /* Adjust padding for smaller screens */
-      margin: 0;
-      /* Remove margin to prevent extra space */
-    }
+								<!-- <li><a href="contact.html">Contact</a></li> -->
+								<li><a href="/shop">Shop</a>
+									<!-- <ul class="sub-menu">
+										<li><a href="shop.html">Shop</a></li>
+										<li><a href="checkout.html">Check Out</a></li>
+										<li><a href="single-product.html">Single Product</a></li>
+										<li><a href="cart.html">Cart</a></li>
+									</ul> -->
+								</li>
+								<li>
+									<div class="header-icons">
+										<!-- <a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a> -->
 
-    .user-icons {
-      display: flex;
-      margin-left: auto;
-      /* Move to the right on larger screens */
-    }
+										<a href="/logout">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+												fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16"
+												style="color: white;">
+												<path fill-rule="evenodd"
+													d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
+												<path fill-rule="evenodd"
+													d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+											</svg>
+										</a>
+									</div>
+								</li>
+							</ul>
+						</nav>
+						<!-- <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+						<div class="mobile-menu"></div> -->
+						<!-- menu end -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end header -->
 
-    .user-icons img {
-      width: 50px;
-      height: auto;
-      /* Maintain aspect ratio */
-      margin-top: 10px;
-      margin-left: 10px;
-      /* Add some space between icons */
-    }
+	<!-- search area -->
+	<div class="search-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="close-btn"><i class="fas fa-window-close"></i></span>
+					<div class="search-bar">
+						<div class="search-bar-tablecell">
+							<h3>Search For:</h3>
+							<input type="text" placeholder="Keywords">
+							<button type="submit">Search <i class="fas fa-search"></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end search arewa -->
 
-    button {
-      border-radius: 30px;
-      width: 120px;
-      height: 40px;
-      margin-left: auto;
-      /* Move to the right on larger screens */
-      margin-right: 20px;
-    }
+	<!-- breadcrumb-section -->
+	<div class="breadcrumb-section breadcrumb-bg">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="breadcrumb-text">
+						<p class="subtitle">Decor your home</p>
+						<h1>Shop</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end breadcrumb section -->
 
+	<!-- products -->
+	<nav style="--bs-breadcrumb-divider: '';" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+		  <li class="breadcrumb-item"><a href="/">Home</a></li>
+		  <li class="breadcrumb-item active" aria-current="page">Shop</li>
+		</ol>
+	  </nav>
+	<div class="product-section mt-150 mb-150">
+		<div class="container">
+			
+			<div class="row">
+				<div class="col-md-12">
+					<div class="product-filters" >
+						<ul>
+							<li class="active" data-filter="*" me>All</li>
+							<!-- <li data-filter=".strawberry">Wall Mirrors</li>
+							<li data-filter=".berry">Floor Mirrors</li>
+							<li data-filter=".lemon">Makeup Mirrors</li> -->
+						</ul>
+					</div>
+				</div>
+			</div>
 
-    /* Media queries */
-    @media only screen and (max-width: 768px) {
-      .container {
-        height: auto;
-        /* Adjust height for smaller screens */
-        flex-direction: column;
-        padding: 10px;
-      }
+			<div class="row product-lists">
+				<%products.forEach((product,i)=>{%>
+					<div class="col-lg-4 col-md-6 text-center <%= product.category %>">
+						<div class="single-product-item">
+							<div class="product-image">
+								<a href="/singleProduct/<%= product._id %>">
+									<img src="/image/<%= product.product_image[0]%>" alt="Product image">
+								</a>
+							</div>
+							<h3>
+								<%= product.product_name %>
+							</h3>
+							<h4>
+								<%= product.product_category.category_name %>
+							</h4>
+							<p class="product-price">Rs.<%= product.product_price.toFixed(2) %>/-
+							</p>
 
-      h1 {
-        font-size: 4vw;
-        /* Adjust font size for smaller screens */
-        padding-left: 0;
-        text-align: center;
-        /* Center align text */
-      }
+							<a href="/product/<%= product._id %>" class="cart-btn">View Product</a>
+						</div>
+					</div>
+					<% }); %>
+			</div>
 
-      .nav-links {
-        margin: 20px 0;
-        /* Add some space above and below */
-        justify-content: center;
-        /* Center align links */
-      }
+			<!-- <div class="row">
+				<div class="col-lg-12 text-center">
+					<div class="pagination-wrap">
+						<ul>
+							<li><a href="#">Prev</a></li>
+							<li><a href="#">1</a></li>
+							<li><a class="active" href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">Next</a></li>
+						</ul>
+					</div>
+				</div>
+			</div> -->
+		</div>
+	</div>
+	<!-- end products -->
 
-      .nav-links h6 {
-        padding: 0 2%;
-        /* Adjust padding */
-      }
+	<!-- footer -->
+	<div class="footer-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box about-widget">
+						<h2 class="widget-title">About us</h2>
+						<p>Discover the
+							Reflection of Perfection:
+							Collect Your Favourite
+							Mirrors Right Here</p>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box get-in-touch">
+						<h2 class="widget-title">Get in Touch</h2>
+						<ul>
+							<li>angelicmirrors@gmail.com</li>
+							<li>+00 111 222 3333</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box pages">
+						<h2 class="widget-title">Pages</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="about.html">About</a></li>
+							<li><a href="services.html">Shop</a></li>
+							<li><a href="news.html">News</a></li>
+							<li><a href="contact.html">Contact</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box subscribe">
+						<h2 class="widget-title">Subscribe</h2>
+						<p>Subscribe to our mailing list to get the latest updates.</p>
+						<form action="index.html">
+							<input type="email" placeholder="Email">
+							<button type="submit"><i class="fas fa-paper-plane"></i></button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end footer -->
 
-      .user-icons {
-        margin: 20px 0;
-        justify-content: center;
-      }
+	<!-- copyright -->
+	<div class="copyright">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6 col-md-12">
+					<p>Copyrights &copy; 2024 - Angelic Mirrors</a>, All Rights Reserved.<br>
+					</p>
+				</div>
+				<div class="col-lg-6 text-right col-md-12">
+					<div class="social-icons">
+						<ul>
+							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end copyright -->
 
-      button {
-        margin: 20px 0;
-        align-self: center;
-        /* Center align button */
-      }
-    }
-  </style>
+	<style>
+		.product-image {
+			width: 200px;
+			/* Adjust as needed */
+			height: 200px;
+			/* Adjust as needed */
+			overflow: hidden;
+			position: relative;
+			margin: 0 75px;
+		}
+	</style>
 
-  <!-- header -->
-  <div class="container" style="background-color: #000000; position: relative;  width: 100%;">
-    <nav class="navbar navbar-expand-lg navbar-dark " style="margin-left: 30px; ">
-      <a class="navbar-brand" href="#" style="margin-left: 0%;">ANGELIC <br> MIRRORS</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav" style="margin-left: 50;">
-          <li class="nav-item active">
-            <a href="/home" class="nav-link" href="">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Shop</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+	<!-- jquery -->
+	<script src="assets/js/jquery-1.11.3.min.js"></script>
+	<!-- bootstrap -->
+	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+	<!-- count down -->
+	<script src="assets/js/jquery.countdown.js"></script>
+	<!-- isotope -->
+	<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+	<!-- waypoints -->
+	<script src="assets/js/waypoints.js"></script>
+	<!-- owl carousel -->
+	<script src="assets/js/owl.carousel.min.js"></script>
+	<!-- magnific popup -->
+	<script src="assets/js/jquery.magnific-popup.min.js"></script>
+	<!-- mean menu -->
+	<script src="assets/js/jquery.meanmenu.min.js"></script>
+	<!-- sticker js -->
+	<script src="assets/js/sticker.js"></script>
+	<!-- main js -->
+	<script src="assets/js/main.js"></script>
 
-    <nav class="navbar navbar-expand-lg navbar-dark " style="margin-right: 30px;">
-      <button class="btn btn-outline-dark px-2" type="submit"
-        style="border-radius: 30px; font-size: medium; background-color: white; width: 200px; height: 40px; margin-left: 40px; ">
-        <img src="/image/search.jpg" style="width: 20px; height: 20px;">Search</button>
-      <div class="user-icons" style="display: flex;" style="padding-top: 40px;">
-        <img src="/image/profile.jpg" style="width: 50px; height: 50px;">
-        <img src="/image/wishlist.png" style="width: 50px; height: 30px; margin-top: 20px;">
-        <img src="/image/cart.jpg" style="width: 50px; height: 50px;">
-        <img src="/image/product.png" style="width: 50px; height: 50px;">
-        <a href="/logout">
-          <img src="/image/logout.png" alt="Logout" style="width: 50px; height: 50px;">
-        </a>
-      </div>
-    </nav>
-  </div>
+</body>
 
-  <!-- body -->
-  <div class="container" style="padding-top: 5%;">
-    <div class="inner-container" style="width: 97%; ">
-
-      <div class="mainCard" style="display: flex; margin-top: 5%;">
-        <div class="card" style="width: 18rem; margin-left: 5%;">
-          <img class="card-img-top" src="/image/product 1.jpg" style="height: 60%;">
-          <div class="card-body">
-            <h5 class="card-title" style="font-weight: bold;">Floral Art Design</h5>
-            <p class="card-text" style=" font-weight: bold;"><img src="/image/rupee.jpg" style="height: 10%; width: 10%;">8,000</p>
-            <a href="#" class="btn btn-primary">Add to Wishlist</a>
-          </div>
-        </div>
-
-        <div class="card" style="width: 18rem; margin-left: 5%;">
-          <img class="card-img-top" src="/image/product 2.jpg" style="height: 60%;">
-          <div class="card-body">
-            <h5 class="card-title" style="font-weight: bold;">Osemy Design</h5>
-            <p class="card-text" style=" font-weight: bold;"><img src="/image/rupee.jpg" style="height: 10%; width: 10%;">10,000</p>
-            <a href="#" class="btn btn-primary">Add to Wishlist</a>
-          </div>
-        </div>
-
-        <div class="card" style="width: 18rem; margin-left: 5%;">
-          <img class="card-img-top" src="/image/product 3.jpg" style="height: 60%;">
-          <div class="card-body">
-            <h5 class="card-title" style="font-weight: bold;">Venetian Round Design</h5>
-            <p class="card-text" style=" font-weight: bold;"><img src="/image/rupee.jpg" style="height: 10%; width: 10%;">7,000</p>
-            <a href="#" class="btn btn-primary">Add to Wishlist</a>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="mainCard" style="display: flex; margin-top: 10%;">
-        <div class="card" style="width: 18rem; margin-left: 5%;">
-          <img class="card-img-top" src="/image/product 4.webp" style="height: 60%;">
-          <div class="card-body">
-            <h5 class="card-title" style="font-weight: bold;">Tri Fold Design</h5>
-            <p class="card-text" style=" font-weight: bold;"><img src="/image/rupee.jpg" style="height: 10%; width: 10%;">5,000</p>
-            <a href="#" class="btn btn-primary">Add to Wishlist</a>
-          </div>
-        </div>
-
-        <div class="card" style="width: 18rem; margin-left: 5%;">
-          <img class="card-img-top" src="/image/product 5.webp" style="height: 60%;">
-          <div class="card-body">
-            <h5 class="card-title" style="font-weight: bold;">Dutch Antique Design</h5>
-            <p class="card-text" style=" font-weight: bold;"><img src="/image/rupee.jpg" style="height: 10%; width: 10%;">6,500</p>
-            <a href="#" class="btn btn-primary">Add to Wishlist</a>
-          </div>
-        </div>
-
-        <div class="card" style="width: 18rem; margin-left: 5%;">
-          <img class="card-img-top" src="/image/product 6.webp" style="height: 60%;">
-          <div class="card-body">
-            <h5 class="card-title" style="font-weight: bold;">Half Moon Design</h5>
-            <p class="card-text" style=" font-weight: bold;"><img src="/image/rupee.jpg" style="height: 10%; width: 10%;">8,000</p>
-            <a href="#" class="btn btn-primary">Add to Wishlist</a>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <!-- Remove the container if you want to extend the Footer to full width. -->
-  <div class="container my-5">
-    <!-- Footer -->
-    <footer class="text-center text-lg-start text-white" style="background-color: #000000; position: absolute; margin-top: 20%; width: 100%;">
-      <!-- Grid container -->
-      <div class="container p-4 pb-0">
-        <!-- Section: Links -->
-        <section class="">
-          <!--Grid row-->
-          <div class="row">
-            <!-- Grid column -->
-            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-              <h6 class="text-uppercase mb-4 font-weight-bold">
-                ANGELIC <br> MIRRORS
-              </h6>
-              <p>
-                Discover the
-                Reflection of Perfection:
-                Collect Your Favourite
-                Mirrors Right Here!
-              </p>
-            </div>
-            <!-- Grid column -->
-
-            <hr class="w-100 clearfix d-md-none" />
-
-            <!-- Grid column -->
-            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3" style="padding-left: 190px">
-              <h6 class="text-uppercase mb-4 font-weight-bold">LINK</h6>
-              <p>
-                <a class="text-white" style="font-size:x-small;">HOME</a>
-              </p>
-              <p>
-                <a class="text-white" style="font-size:x-small ">SHOP</a>
-              </p>
-              <p>
-                <a class="text-white" style="font-size:x-small;">CONTACT</a>
-              </p>
-              <p>
-                <a class="text-white" style="font-size:x-small;">ABOUT</a>
-              </p>
-            </div>
-            <!-- Grid column -->
-
-            <hr class="w-100 clearfix d-md-none" />
-
-            <!-- Grid column -->
-            <hr class="w-100 clearfix d-md-none" />
-
-            <!-- Grid column -->
-            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3" style="padding-left: 210px">
-              <h6 class="text-uppercase mb-4 font-weight-bold">HELP</h6>
-              <p>
-                <a class="text-white" style="font-size:x-small;">PAYMENTS</a>
-              </p>
-              <p>
-                <a class="text-white" style="font-size:x-small ">RETURNS</a>
-              </p>
-              <p>
-                <a class="text-white" style="font-size:x-small;">FAQ</a>
-              </p>
-              <p>
-                <a class="text-white" style="font-size:x-small;">T & C</a>
-              </p>
-            </div>
-            <!-- Grid column -->
-
-            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3" style="padding-left: 190px">
-              <h6 class="text-uppercase mb-4 font-weight-bold">SOCIAL</h6>
-              <p>
-                <a class="text-white" style="font-size:x-small;">FACEBOOK</a>
-              </p>
-              <p>
-                <a class="text-white" style="font-size:x-small ">WHAT'SAPP</a>
-              </p>
-              <p>
-                <a class="text-white" style="font-size:x-small;">INSTAGRAM</a>
-              </p>
-              <p>
-                <a class="text-white" style="font-size:x-small;">YOUTUBE</a>
-              </p>
-            </div>
-            <!--Grid row-->
-        </section>
-        <!-- Section: Links -->
-      </div>
-      <!-- Grid container -->
-
-
-    </footer>
-    <!-- Footer -->
-  </div>
-  <!-- End of .container -->
-
-  <%-include('footer')-%>
+</html>
