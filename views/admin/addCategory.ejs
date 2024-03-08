@@ -75,14 +75,14 @@
                 </a>
 
                 <div class="navbar-nav w-100">
-                    <a href="/admin/adminDashboard" class="nav-item nav-link active"><i
+                    <a href="/admin/adminDashboard" class="nav-item nav-link"><i
                             class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="/admin/userManagement" class="nav-link"><i class="bi bi-people-fill"></i>User <span
                             style="margin-left: 25%;">
                             Management</span></a>
                     <a href="/admin/productManagement" class="nav-item nav-link"><i class="bi bi-bag-fill"></i>Product
                         <span style="margin-left: 25%;"> Management</span></a>
-                    <a href="/admin/categoryManagement" class="nav-item nav-link"><i
+                    <a href="/admin/categoryManagement" class="nav-item nav-link active"><i
                             class="bi bi-bookmark-check-fill"></i>Category
                         <span style="margin-left: 25%;"> Management</span></a>
                     <!-- <a href="/orderManagement" class="nav-item nav-link"><i class="bi bi-card-checklist"></i>Order <span
@@ -135,24 +135,32 @@
                     <h1
                         style="font-size: larger; font-weight: bold; text-align: center; text-decoration: underline; margin-top: 2%;">
                         Add Category</h1>
-                        
-                        <span style="color: red; text-align: center;"><%= error %></span>
+
+                    <span style="color: red; text-align: center;">
+                        <%= error %>
+                    </span>
                     <div class="card-body-inner">
                         <form action="/admin/addCategory" method="post" onsubmit="return validateForm()"
                             style="margin-top: 2%;">
 
-                            <label for="categoryName" class="form-label"
-                                style="font-size: large; font-weight: 700;">Category Name</label>
-                            <input type="text" name="categoryName" id="categoryName" class="form-control form-control-lg"
-                                placeholder="Enter the category..!" style="border: 1px solid black;" />
-                            <span id="nameError" style="color: red;"></span>
+                            <div>
+                                <label for="categoryName" class="form-label"
+                                    style="font-size: large; font-weight: 700;">Category Name</label>
+                                <input type="text" name="categoryName" id="categoryName"
+                                    class="form-control form-control-lg" placeholder="Enter the category..!"
+                                    style="border: 1px solid black;" />
+                                <span id="nameError" style="color: red;"></span>
+                            </div>
 
-                            <label for="categoryDescription" class="form-label"
-                                style="font-size: large; font-weight: 700; margin-top: 2%;">Category Description</label>
-                            <input type="text" name="categoryDescription" id="categoryDescription"
-                                class="form-control form-control-lg" placeholder="Enter description..!"
-                                style="border: 1px solid black;" />
-                            <span id="descriptionError" style="color: red;"></span>
+                            <div>
+                                <label for="categoryDescription" class="form-label"
+                                    style="font-size: large; font-weight: 700; margin-top: 2%;">Category
+                                    Description</label>
+                                <input type="text" name="categoryDescription" id="categoryDescription"
+                                    class="form-control form-control-lg" placeholder="Enter description..!"
+                                    style="border: 1px solid black;" />
+                                <span id="descriptionError" style="color: red;"></span>
+                            </div>
 
                             <a href="/admin/categoryManagement">
                                 <button class="btn btn-outline-dark px-2" type="submit"
@@ -193,15 +201,23 @@
             document.getElementById('nameError').textContent = ""
             document.getElementById('descriptionError').textContent = ""
 
-            var categoryName =  document.getElementById('categoryName').value.trim()
+            var categoryName = document.getElementById('categoryName').value.trim()
             var categoryDescription = document.getElementById('categoryDescription').value.trim()
 
-            if(categoryName === ""){
+            // Regular expression to check if the product name contains only letters
+            var lettersOnly = /^[a-zA-Z\s]+$/;
+
+            if (categoryName === "") {
                 document.getElementById('nameError').textContent = "Category Name required"
                 return false
             }
 
-            if(categoryDescription === ""){
+            if (!categoryName.match(lettersOnly)) {
+                document.getElementById('nameError').textContent = "Category name should contain only letters";
+                return false;
+            }
+
+            if (categoryDescription === "") {
                 document.getElementById('descriptionError').textContent = "Category Description required"
                 return false
             }

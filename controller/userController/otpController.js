@@ -1,10 +1,11 @@
-const userDatabase =  require('../../model/mongodb')
+const userDatabase =  require('../../model/user')
 const bcrypt = require('bcrypt')
 
 //signup otp
 const getsignupOtp = async(req,res)=>{
     try {
-        res.render('user/otp',{expireTime:req.session.expireTime})
+        const errorMessage = req.flash('errors')[0]
+        res.render('user/otp',{expireTime:req.session.expireTime,errorMessage})
     } catch (error) {
         console.log(error);
         res.status(500).send("Error rendering otp");
@@ -45,8 +46,8 @@ const postSignupOtp = async (req, res) => {
             res.redirect('/userLogin');
         } else {
             console.log('Invalid OTP or OTP expired');
-            req.flash("error", "Otp is not correct or expired");
-            res.redirect('/user/otp');
+            req.flash("errors", "Otp is not correct or expired");
+            res.redirect('/otp');
         }
     } catch (error) {
         console.log("Error in postSignupOtp:", error);

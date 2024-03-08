@@ -50,12 +50,13 @@
                 </a>
 
                 <div class="navbar-nav w-100">
-                    <a href="/admin/adminDashboard" class="nav-item nav-link active"><i
+                    <a href="/admin/adminDashboard" class="nav-link"><i
                             class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="/admin/userManagement" class="nav-link"><i class="bi bi-people-fill"></i>User <span
                             style="margin-left: 25%;">
                             Management</span></a>
-                    <a href="/admin/productManagement" class="nav-item nav-link"><i class="bi bi-bag-fill"></i>Product
+                    <a href="/admin/productManagement" class="nav-item nav-link active"><i
+                            class="bi bi-bag-fill"></i>Product
                         <span style="margin-left: 25%;"> Management</span></a>
                     <a href="/admin/categoryManagement" class="nav-item nav-link"><i
                             class="bi bi-bookmark-check-fill"></i>Category
@@ -118,27 +119,31 @@
                         <div class="table-responsive">
                             <table class="table table-bordered" style="border: #000;">
                                 <thead>
-                                    <tr style="color: black;">
+                                    <tr style="color: black;text-align: center;">
                                         <th scope="col">No.</th>
                                         <th scope="col">Name</th>
                                         <th scope="col">Category</th>
                                         <th scope="col">Price</th>
                                         <th scope="col">Stock</th>
-                                        <th scope="col">Image</th>
+                                        <th scope="col" style="width:10%;">Image</th>
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% product.forEach((products,i)=> {%>
-                                        <tr>
+                                    <% product.forEach((products, i) => { %>
+                                        <tr style="text-align: center;">
                                             <td>
-                                                <%= i+1 %>
+                                                <%= i + 1 %>
                                             </td>
                                             <td>
                                                 <%= products.product_name %>
                                             </td>
                                             <td>
-                                                <%= products.product_category.category_name %>
+                                                <% if (products.product_category) { %>
+                                                    <%= products.product_category.category_name %>
+                                                <% } else { %>
+                                                    No category
+                                                <% } %>
                                             </td>
                                             <td>
                                                 <%= products.product_price %>
@@ -147,36 +152,27 @@
                                                 <%= products.product_stock %>
                                             </td>
                                             <td>
-                                                <img src="/image/<%= products.product_image[0]%>" style="width: 50%;"
-                                                    alt="">
+                                                <div class="product-image">
+                                                    <img src="/image/<%= products.product_image[0] %>" alt="">
+                                                </div>
                                             </td>
                                             <td>
-                                                <a href="/admin/editProduct/<%=products._id%>">
+                                                <a href="/admin/editProduct/<%= products._id %>">
                                                     <button class="btn btn-info btn-sm me-2">Edit</button>
                                                 </a>
-
-                                                <% if(!products.unlist) { %>
+                                                <% if (!products.unlist) { %>
                                                     <a href="/admin/blockProduct?productId=<%= products._id %>">
                                                         <button class="btn btn-danger">List</button>
                                                     </a>
-                                                    <% } else { %>
-                                                        <a href="/admin/blockProduct?productId=<%= products._id %>">
-                                                            <button class="btn btn-success">Unlist</button>
-                                                        </a>
-                                                        <% } %>
-
+                                                <% } else { %>
+                                                    <a href="/admin/blockProduct?productId=<%= products._id %>">
+                                                        <button class="btn btn-success">Unlist</button>
+                                                    </a>
+                                                <% } %>
                                             </td>
-
-                                            <td>
-                                                <% if (products.product_category) { %>
-                                                    <%= products.product_category.category_name %>
-                                                        <% } else { %>
-                                                            No category available
-                                                            <% } %>
-                                            </td>
-
                                         </tr>
-                                        <%})%>
+                                    <% }) %>
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -203,6 +199,23 @@
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
+
+    <style>
+        .product-image {
+            width: 50%;
+            height: 50%;
+            overflow: hidden;
+            position: relative;
+            margin: 0 75px;
+            margin-left: 30%;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

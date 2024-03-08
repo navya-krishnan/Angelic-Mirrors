@@ -1,4 +1,4 @@
-const userDatabase = require('../../model/mongodb')
+const userDatabase = require('../../model/user')
 
 //get user
 const getUserManage = async (req, res) => {

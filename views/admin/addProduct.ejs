@@ -75,12 +75,12 @@
                 </a>
 
                 <div class="navbar-nav w-100">
-                    <a href="/admin/adminDashboard" class="nav-item nav-link active"><i
+                    <a href="/admin/adminDashboard" class="nav-item nav-link"><i
                             class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="/admin/userManagement" class="nav-link"><i class="bi bi-people-fill"></i>User <span
                             style="margin-left: 25%;">
                             Management</span></a>
-                    <a href="/admin/productManagement" class="nav-item nav-link"><i class="bi bi-bag-fill"></i>Product
+                    <a href="/admin/productManagement" class="nav-item nav-link active"><i class="bi bi-bag-fill"></i>Product
                         <span style="margin-left: 25%;"> Management</span></a>
                     <a href="/admin/categoryManagement" class="nav-item nav-link"><i
                             class="bi bi-bookmark-check-fill"></i>Category
@@ -136,52 +136,68 @@
                         style="font-size: larger; font-weight: bold; text-align: center; text-decoration: underline; margin-top: 2%;">
                         Add Product</h1>
                     <div class="card-body-inner">
-                        <span style="color: red; margin-left: 41%;"><%= error %></span>
+                        <span style="color: red; margin-left: 41%;">
+                            <%= error %>
+                        </span>
                         <form action="/admin/addProduct" method="post" enctype="multipart/form-data"
                             onsubmit="return validateForm()" style="margin-top: 2%;">
 
-                            <label for="productName" class="form-label"
-                                style="font-size: large; font-weight: 700;">Product Name</label>
-                            <input type="text" name="productName" id="productName" class="form-control form-control-lg"
-                                placeholder="Enter Product Name" style="border: 1px solid black;" />
-                            <span id="nameError" style="color: red;"></span>
+                            <div>
+                                <label for="productName" class="form-label"
+                                    style="font-size: large; font-weight: 700;">Product Name</label>
+                                <input type="text" name="productName" id="productName"
+                                    class="form-control form-control-lg" placeholder="Enter Product Name"
+                                    style="border: 1px solid black;" />
+                                <span id="nameError" style="color: red;"></span>
+                            </div>
 
-                            <label for="productCategory" class="form-label"
-                                style="font-size: large; font-weight: 700; margin-top: 2%;">Product Category</label>
-                            <select name="productCategory" id="productCategory" class="form-select form-select-lg"
-                                style="border: 1px solid black;">
-                                <% categories.forEach(category=> { %>
-                                    <option value="<%= category._id %>">
-                                        <%= category.category_name %>
-                                    </option>
-                                    <% }) %>
-                            </select>
+                            <div>
+                                <label for="productCategory" class="form-label"
+                                    style="font-size: large; font-weight: 700; margin-top: 2%;">Product Category</label>
+                                <select name="productCategory" id="productCategory" class="form-select form-select-lg"
+                                    style="border: 1px solid black;">
+                                    <% categories.forEach(category=> { %>
+                                        <option value="<%= category._id %>">
+                                            <%= category.category_name %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
 
-                            <label for="productPrice" class="form-label"
-                                style="font-size: large; font-weight: 700; margin-top: 2%;">Product Price</label>
-                            <input type="text" name="productPrice" id="productPrice"
-                                class="form-control form-control-lg" placeholder="Enter Product Price"
-                                style="border: 1px solid black;" />
-                            <span id="priceError" style="color: red;"></span>
+                            <div>
+                                <label for="productPrice" class="form-label"
+                                    style="font-size: large; font-weight: 700; margin-top: 2%;">Product Price</label>
+                                <input type="text" name="productPrice" id="productPrice"
+                                    class="form-control form-control-lg" placeholder="Enter Product Price"
+                                    style="border: 1px solid black;" />
+                                <span id="priceError" style="color: red;"></span>
+                            </div>
 
-                            <label for="productStock" class="form-label"
-                                style="font-size: large; font-weight: 700; margin-top: 2%;">Product Stock</label>
-                            <input type="text" name="productStock" id="productStock"
-                                class="form-control form-control-lg" placeholder="Enter Product Stock"
-                                style="border: 1px solid black;" />
-                            <span id="stockError" style="color: red;"></span>
+                            <div>
+                                <label for="productStock" class="form-label"
+                                    style="font-size: large; font-weight: 700; margin-top: 2%;">Product Stock</label>
+                                <input type="text" name="productStock" id="productStock"
+                                    class="form-control form-control-lg" placeholder="Enter Product Stock"
+                                    style="border: 1px solid black;" />
+                                <span id="stockError" style="color: red;"></span>
+                            </div>
 
-                            <label for="productImage" class="form-label"
-                                style="font-size: large; font-weight: 700; margin-top: 2%;">Product Image</label>
-                            <input multiple type="file" class="form-control" id="productImage" name="productImage"
-                                accept="image/jpeg, image/png, image/gif"
-                                style="border: 1px solid black; text-align: center;" required/>
-                            <span id="imageError" style="color: red;"></span>
+                            <div>
+                                <label for="productImage" class="form-label"
+                                    style="font-size: large; font-weight: 700; margin-top: 2%;">Product Image</label>
+                                <input multiple type="file" class="form-control" id="productImage" name="productImage"
+                                    accept="image/jpeg, image/png, image/gif"
+                                    style="border: 1px solid black; text-align: center;" />
+                                <span id="imageError" style="color: red;"></span>
+                            </div>
 
-                            <button class="btn btn-outline-dark px-2" type="submit"
-                                style="border-radius: 30px; font-size: medium; background-color: black; color: white; width: 200px; height: 40px; margin-left: 33%; margin-top: 3%;">
-                                <img src="/image/productadd.jpg" style="width: 30px; height: 30px;">Add Product
-                            </button>
+                            <div>
+                                <button class="btn btn-outline-dark px-2" type="submit"
+                                    style="border-radius: 30px; font-size: medium; background-color: black; color: white; width: 200px; height: 40px; margin-left: 33%; margin-top: 3%;">
+                                    <img src="/image/productadd.jpg" style="width: 30px; height: 30px;">Add Product
+                                </button>
+                            </div>
+
                             </a>
 
                         </form>
@@ -223,40 +239,55 @@
 
     <script>
 
-            function validateForm() {
-                document.getElementById('priceError').textContent = "";
-                document.getElementById('stockError').textContent = "";
-                document.getElementById('nameError').textContent = "";
-                document.getElementById('imageError').textContent = "";
+        function validateForm() {
+            document.getElementById('priceError').textContent = "";
+            document.getElementById('stockError').textContent = "";
+            document.getElementById('nameError').textContent = "";
+            document.getElementById('imageError').textContent = "";
 
-                var productName = document.getElementById("productName").value.trim();
-                var productPrice = parseFloat(document.getElementById("productPrice").value);
-                var productStock = parseInt(document.getElementById("productStock").value);
-                var productImage = document.getElementById("productImage").value;
+            var productName = document.getElementById("productName").value.trim();
+            var productPrice = parseFloat(document.getElementById("productPrice").value.trim());
+            var productStock = parseInt(document.getElementById("productStock").value.trim());
+            var productImage = document.getElementById("productImage").value;
 
-                if (productName === "") {
-                    document.getElementById('nameError').textContent = "Product name is required";
-                    return false;
-                }
-                if (existingProductNames.includes(productName)) {
-                    document.getElementById('nameError').textContent = "Product with this name already exists";
-                    return false;
-                }
-                if (isNaN(productPrice) || productPrice <= 0) {
-                    document.getElementById('priceError').textContent = "Enter a valid price";
-                    return false;
-                }
-                if (isNaN(productStock) || productStock < 0) {
-                    document.getElementById('stockError').textContent = "Enter a valid stock";
-                    return false;
-                }
-                if (productImage.trim() === "") {
-                    document.getElementById('imageError').textContent = "Product image is required";
-                    return false;
-                }
+            var lettersOnly = /^[a-zA-Z\s]+$/;
 
-                return true;
+            if (productName === "") {
+                document.getElementById('nameError').textContent = "Product name is required";
+                return false;
             }
+
+            if (!productName.match(lettersOnly)) {
+                document.getElementById('nameError').textContent = "Product name only contains letters";
+                return false;
+            }
+
+            if(productPrice === ""){
+                document.getElementById('priceError').textContent = "Enter price";
+                return false
+            }
+
+            if(productStock === ""){
+                document.getElementById('stockError').textContent = "Enter stock";
+                return false
+            }
+
+            
+            if (isNaN(productPrice) || productPrice <= 0) {
+                document.getElementById('priceError').textContent = "Enter a valid price";
+                return false;
+            }
+            if (isNaN(productStock) || productStock <= 0) {
+                document.getElementById('stockError').textContent = "Enter a valid stock";
+                return false;
+            }
+            if (productImage.trim() === "") {
+                document.getElementById('imageError').textContent = "Product image is required";
+                return false;
+            }
+
+            return true;
+        }
 
 
     </script>

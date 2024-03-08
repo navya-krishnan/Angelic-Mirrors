@@ -6,11 +6,14 @@ const nocache = require('nocache')
 const session = require('express-session')
 const adminRouter = require('./routes/adminRoutes')
 const userRouter = require('./routes/userRoutes')
-const angelicMirror = require("./model/mongodb")
+const angelicMirror = require("./model/user")
 const adminLog = require('./model/admin')
 const flash = require('connect-flash');
 const multer = require('multer')
 require('dotenv').config();
+
+
+
 
 // Set up session middleware
 const secretKey = process.env.SECRET_KEY;
@@ -22,19 +25,20 @@ if (!secretKey) {
 app.use(session({
     secret: secretKey,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
 }));
 
-// Set up flash middleware
 app.use(flash());
 
-// connecting the mongodb server
+
+
+// Connecting to MongoDB
 mongoose.connect("mongodb://127.0.0.1:27017/angelicMirror")
     .then(() => {
-        console.log("Mongodb is connected properly");
-    }).catch(() => {
-        console.log("Mongodb is not connected properly");
-    })
+        console.log("MongoDB is connected properly");
+    }).catch((err) => {
+        console.error("MongoDB connection error:", err);
+    });
 
 // Parsing
 app.use(express.json())

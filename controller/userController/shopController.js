@@ -1,58 +1,55 @@
-const categoryCollection = require('../../model/category')
-const productCollection = require('../../model/product')
+const categoryCollection = require('../../model/category');
+const productCollection = require('../../model/product');
 
-//shop
+// shop
 const getShop = async (req, res) => {
-    
-        try {
-            
-            if(req.session.user){
-                const allProducts = await productCollection.find().populate('product_category')
-                const products = allProducts.filter((product)=>product.unlist)
-
-                const allCategories = await categoryCollection.find()
-                const category = allCategories.filter((category)=>category.blocked)
-
-
-                res.render('user/shop',{
-                    products,       
-                    category
-                })
-            }else{
-                console.log("Shop is not correct");
-            }
-        } catch (error) {
-            console.log(error);
-            res.status(500).send("Error occurred");
-        }
-}
-
-//single product
-const getSingleProduct = async(req,res)=>{
     try {
         if(req.session.user){
-            const proId = req.params.proId
+            const allProducts = await productCollection.find().populate('product_category');
+            const products = allProducts.filter(product => product.product_category && product.product_category.blocked); // Check if product_category exists
 
-            const product = await productCollection.findById(proId).populate('product_category')
+            const allCategories = await categoryCollection.find();
+            const category = allCategories.filter(category => category.blocked);
 
-            const similarProducts = await productCollection.find({product_category:product.product_category}).populate('product_category')
-            console.log(similarProducts,'dhhd');
+            res.render('user/shop', {
+                products,
+                category
+            });
+            
+        } else {
+            console.log("Shop is not correct");
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Error occurred");
+    }
+};
 
-            res.render('user/singleProduct',{product,similarProducts})
+// single product
+const getSingleProduct = async (req, res) => {
+    try {
+        if(req.session.user){
+            const proId = req.params.proId;
+
+            const product = await productCollection.findById(proId).populate('product_category');
+
+            const similarProducts = await productCollection.find({ product_category: product.product_category }).populate('product_category');
+            
+            res.render('user/singleProduct', { product, similarProducts });
 
             if(!product){
-               return res.status(400).send("Product not found")
+                return res.status(400).send("Product not found");
             }
-        }else{
+        } else {
             console.log("Cannot get single product");
         }
     } catch (error) {
-            console.log(error);
-            res.status(500).send("Error occurred");
+        console.log(error);
+        res.status(500).send("Error occurred");
     }
-}
+};
 
 module.exports = {
     getShop,
     getSingleProduct
-}
+};

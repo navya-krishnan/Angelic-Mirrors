@@ -35,11 +35,13 @@
 
 
 	<style>
-		 .breadcrumb {
-        background-color: transparent; /* Remove background color */
-		margin-bottom: -100px;
+		.breadcrumb {
+			background-color: transparent;
+			/* Remove background color */
+			margin-bottom: -100px;
+
+		}
 		
-    }
 	</style>
 
 </head>
@@ -138,31 +140,31 @@
 	<!-- breadcrumb-section -->
 	<div class="breadcrumb-section breadcrumb-bg">
 		<div class="container">
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="breadcrumb-text">
 						<p class="subtitle">Decor your home</p>
 						<h1>Shop</h1>
 					</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 	<!-- end breadcrumb section -->
 
 	<!-- products -->
-	<nav style="--bs-breadcrumb-divider: '';" aria-label="breadcrumb">
+	<nav style="--bs-breadcrumb-divider: ''; margin-top: -20%;" aria-label="breadcrumb">
 		<ol class="breadcrumb">
 		  <li class="breadcrumb-item"><a href="/">Home</a></li>
-		  <li class="breadcrumb-item active" aria-current="page">Shop</li>
+		  <li class="breadcrumb-item active" aria-current="page">Library</li>
 		</ol>
 	  </nav>
-	<div class="product-section mt-150 mb-150">
+	<div class="product-section mt-150 mb-150" >
 		<div class="container">
-			
+
 			<div class="row">
 				<div class="col-md-12">
-					<div class="product-filters" >
+					<div class="product-filters">
 						<ul>
 							<li class="active" data-filter="*" me>All</li>
 							<!-- <li data-filter=".strawberry">Wall Mirrors</li>
@@ -188,10 +190,19 @@
 							<h4>
 								<%= product.product_category.category_name %>
 							</h4>
-							<p class="product-price">Rs.<%= product.product_price.toFixed(2) %>/-
+							<p class="product-price" style="font-weight:200; font-size: medium;">Rs.<%=
+									product.product_price.toFixed(2) %>/-
 							</p>
+							<div>
+								<%if(product.product_stock <=0 ){%>
+									<h4 style="color: red;">Out of Stock</h4>
+									<%}else{%>
+										<h4 style="color: green;">In Stock</h4>
+										<%}%>
+							</div>
 
-							<a href="/product/<%= product._id %>" class="cart-btn">View Product</a>
+							<a href="/singleProduct/<%= product._id %>" class="cart-btn" style="margin-top: 4%;">View
+								Product</a>
 						</div>
 					</div>
 					<% }); %>
@@ -298,6 +309,7 @@
 			margin: 0 75px;
 		}
 	</style>
+	
 
 	<!-- jquery -->
 	<script src="assets/js/jquery-1.11.3.min.js"></script>

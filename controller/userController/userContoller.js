@@ -1,88 +1,103 @@
-const userDatabase = require('../../model/mongodb')
-const nodemailer = require('nodemailer')
-const bcrypt = require('bcrypt')
+const userDatabase = require('../../model/user');
+const nodemailer = require('nodemailer');
+const bcrypt = require('bcrypt');
+const { block } = require('../../middleware/userControl');
 
 //home
 const home = (req, res) => {
-    let loggedIn = false
+    let loggedIn = false;
     if (req.session.user) {
-        loggedIn = true
+        loggedIn = true;
     }
-    res.render('user/home', { loggedIn })
-}
+    res.render('user/home', { loggedIn });
+};
 
 //login
 const userLogin = async (req, res) => {
     try {
+        const successMessage = req.flash('success')[0]
+        const errorMessage = req.flash('error')[0]
         if (req.session.user) {
-            res.redirect('/')
+            res.redirect('/');
+        } else {
+            res.render('user/userLogin', { successMessage: successMessage, errorMessage: errorMessage });
         }
-        res.render('user/userLogin')
     } catch (error) {
         console.log(error);
-        res.status(500).send("error occured")
+        res.status(500).send("error occured");
     }
-}
+};
 
 const postLogin = async (req, res) => {
     try {
-        console.log(req.body);
         const enteredEmail = req.body.email;
         const enteredPassword = req.body.password;
         const user = await userDatabase.findOne({ email: enteredEmail });
-        if (user) {
-            const isPasswordValid = await bcrypt.compare(enteredPassword, user.password);
-            if (isPasswordValid) {
-                console.log("Login successful");
-                req.session.user = user
-                res.redirect('/')
-            } else {
-                console.log("Invalid password");
-                res.redirect('/');
-            }
+
+        if (!user) {
+            req.flash("error", "User not found.");
+            return res.redirect('/userLogin');
+        }
+
+        if (user.blocked) {
+            // Set the specific error message for a blocked user
+            req.flash("error", "User is blocked. Please contact support for assistance.");
+            return res.redirect('/userLogin');
+        }
+
+        const isPasswordValid = await bcrypt.compare(enteredPassword, user.password);
+        if (isPasswordValid) {
+            req.session.user = user;
+            return res.redirect('/');
         } else {
-            console.log("User not found");
-            res.redirect('/');
+            req.flash("error", "Invalid password.");
+            return res.redirect('/userLogin');
         }
     } catch (error) {
         console.log(error);
-        res.status(500).send("Error occurred");
+        req.flash("error", "Error occurred during login.");
+        return res.status(500).send("Error occurred");
     }
-}
+};
+
+
 
 //logout
 const userLogout = async (req, res) => {
     req.session.destroy(function (err) {
         if (err) {
             console.log(err);
-            res.send("error occured")
+            res.send("error occured");
         } else {
             console.log("Logout successfull");
-            res.status(200)
-            res.redirect('/')
+            res.status(200);
+            res.redirect('/');
         }
-    })
-}
+    });
+};
 
 //user signup
 const signup = (req, res) => {
-    if (req.session.user) {
-        res.render('user/userSignup')
-    } else {
-        const errorMessage = req.session.errorMessage;
-        req.session.errorMessage = null; // Clear the error message
-        res.render('user/userSignup', { errorMessage });
+    try {
+        const errorMessage = req.flash('error')[0]; // Get the first error message
+        const successMessage = req.flash('success')[0]
+        if (req.session.user) {
+            res.render('user/userSignup');
+        } else {
+            res.render('user/userSignup', { errorMessage ,successMessage});
+        }
+    } catch (error) {
+        console.log("Error in getsignup", error);
+        res.status(500).send("Error occured during getsignup");
     }
-}
+};
 
 const postSignup = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
-
         const checkEmail = await userDatabase.find({ email: email });
         if (checkEmail.length > 0) {
-            console.log('User already exists');
             req.flash("error", "User Already Exists..!");
             return res.redirect("/userSignup");
         } else {
@@ -90,35 +105,20 @@ const postSignup = async (req, res) => {
             const otp = generateotp();
             console.log('Generated OTP:', otp);
 
-            const text = `Hello ${username}... This mail is from Angelic Mirrors... Enter the otp ${otp} to confirm your mail id...`;
 
-            const mailOption = {
-                from: "knavya941@gmail.com",
-                to: email,
-                subject: "OTP Verification",
-                text: text
+            req.session.userDetails = {
+                username,
+                email,
+                password
             };
 
-            transporter.sendMail(mailOption, async (error, info) => {
-                if (error) {
-                    console.log("Error while sending OTP:", error);
-                    req.flash("error", "Error while sending otp..! Try Again..!");
-                    return res.redirect('/userSignup');
-                } else {
-                    console.log("OTP sent:", info.response);
-                    req.session.userDetails = {
-                        username,
-                        email,
-                        password
-                    };
+            req.session.otp = otp;
+            req.session.expireTime = new Date(expireTIme);
+            console.log("Redirecting to OTP page");
 
-                    console.log('OTP:', otp);
-                    req.session.otp = otp;
-                    req.session.expireTime = new Date(expireTIme);
-                    console.log("Redirecting to OTP page");
-                    return res.redirect('/otp');
-                }
-            });
+            req.flash("success", "Signup successful.");
+
+            return res.redirect('/otp');
         }
     } catch (error) {
         console.log("Error in signup:", error);
@@ -131,7 +131,7 @@ const postSignup = async (req, res) => {
 let expireTIme;
 const generateotp = () => {
     const now = new Date();
-    expireTIme = new Date(now.getTime() + 1 * 60000)
+    expireTIme = new Date(now.getTime() + 1 * 60000);
     return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
@@ -163,40 +163,21 @@ const getResendOtp = async (req, res) => {
             const otp = generateotp();
             console.log('Generated OTP:', otp);
 
-            const text = `Hello ${username}... This mail is from Angelic Mirrors... Enter the otp ${otp} to confirm your mail id...`;
 
-            const mailOption = {
-                from: "knavya941@gmail.com",
-                to: email,
-                subject: "OTP Verification",
-                text: text
-            };
+            req.session.otp = otp;
+            req.session.expireTime = new Date(expireTIme);
 
-            transporter.sendMail(mailOption, async (error, info) => {
-                if (error) {
-                    console.log("Error while sending OTP:", error);
-                    req.flash("error", "Error while sending otp..! Try Again..!");
-                    return res.redirect('/user/otp');
-                } else {
-                    console.log("OTP sent:", info.response);
-                    console.log('OTP:', otp);
-
-                    req.session.otp = otp;
-                    req.session.expireTime = new Date(expireTIme);
-
-                    console.log("Redirecting to OTP page");
-                    return res.redirect('/otp');
-                }
-            });
+            console.log("Redirecting to OTP page");
+            return res.redirect('/otp');
         }
+
+
     } catch (error) {
         console.log("Error in getResendOtp:", error);
         req.flash("error", "Error occurred during resend OTP");
         return res.status(500).send("Error occurred during resend OTP");
     }
 };
-
-
 
 module.exports = {
     userLogin,
@@ -206,4 +187,4 @@ module.exports = {
     signup,
     postSignup,
     getResendOtp
-}
+};

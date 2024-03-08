@@ -26,7 +26,8 @@ const getAddProduct = async (req, res) => {
 
             const allCategories = await categoryDatabase.find()
             const categories  = await allCategories.filter((category)=>category.blocked)
-            res.render('admin/addProduct', { categories ,error:""})
+            const error = req.query.error || "";
+            res.render('admin/addProduct', { categories ,error})
         } else {
             res.redirect('/admin')
         }
@@ -42,20 +43,21 @@ const postAddProduct = async (req, res) => {
         img = req.files.map((val) => {
             return val.filename;
         });
-        const productName = req.body.productName
+        const productName = req.body.productName.trim().toLowerCase()
 
         const catId = req.body.productCategory
         const category = await categoryDatabase.findById(catId)
 
         const check = await productDatabase.findOne({
-            product_name: productName
+            product_name: { $regex: new RegExp("^" + productName + "$", "i") }
         })
 
 
         if (check) {
             console.log("Product already exists");
             const categories = await categoryDatabase.find()
-            res.render('admin/addProduct', { categories,error:"Product already exists" })
+            res.redirect('/admin/addProduct?error=Product+already+exists');
+
         } else {
             productData = {
                 product_name: req.body.productName,
@@ -84,11 +86,12 @@ const getEditProduct = async (req, res) => {
             const categories = await categoryDatabase.find()
             const products = await productDatabase.findById(proId)
 
+            const errors = req.query.errors || "";  // it retrieves error message from the query parameter
+
             if (products) {
-                // Render the template with the product data
-                res.render('admin/editProduct', { products, categories });
+
+                res.render('admin/editProduct', { products, categories, errors });
             } else {
-                // Handle the case where the product is not found
                 res.status(404).send("Product not found");
             }
         }
@@ -100,39 +103,38 @@ const getEditProduct = async (req, res) => {
 
 const postEditProduct = async (req, res) => {
     try {
-        let img
+        let img;
 
         const category = await categoryDatabase.findOne({
             category_name: req.body.productCategory
-        })
+        });
+
+
+          // Check if the product name is already taken
+          const existingProduct = await productDatabase.findOne({
+            _id: { $ne: req.params.proId }, // Exclude the current product being edited
+            product_name: req.body.productName
+        });
+        
+        if (existingProduct) {
+            // Product with the same name already exists
+            return res.redirect(`/admin/editProduct/${req.params.proId}?errors=Product+with+name+'${req.body.productName}'+already+exists`);
+        }
+
 
         if (req.files && req.files.length > 0) {
             img = req.files.map((val) => {
                 return val.filename;
             });
 
-            const existingProduct = await productDatabase.findById(req.params.proId)
-
-
-            img = existingProduct.product_image.concat(img)
+            // const existingProduct = await productDatabase.findById(req.params.proId);
+            // img = existingProduct.product_image.concat(img);
         } else {
-            const existingProduct = await productDatabase.findById(req.params.proId)
-            img = existingProduct.product_image
+            const existingProduct = await productDatabase.findById(req.params.proId);
+            img = existingProduct.product_image;
         }
 
-        const proId = req.params.proId
-        const productName = req.body.productName.toLowerCase()
-
-        const check = await productDatabase.findOne({
-            _id: { $ne: proId },
-            product_name: { $regex: new RegExp("^" + productName + "$" + "i") }
-        })
-
-
-        if (check) {
-            res.redirect(`/admin/editProduct ${proId}`)
-        }
-
+        const proId = req.params.proId;
         await productDatabase.findByIdAndUpdate(
             proId,
             {
@@ -145,15 +147,21 @@ const postEditProduct = async (req, res) => {
             {
                 new: true
             }
-        )
-
-        res.redirect('/admin/productManagement')
+        );
+        res.redirect('/admin/productManagement');
 
     } catch (error) {
-        console.log(error);
-        res.status(500).send("Error occurred during post edit product");
+        if (error.code === 11000 && error.keyPattern && error.keyValue) { //11000 : mongodb error code for duplpicate key
+            // Handle duplicate key error
+            const duplicateKeyName = Object.keys(error.keyPattern)[0];
+            const duplicateKeyValue = error.keyValue[duplicateKeyName];
+            res.redirect(`/admin/editProduct/${req.params.proId}?error=Product+with+name+'${duplicateKeyValue}'+already+exists`);
+        } else {
+            console.log(error);
+            res.redirect(`/admin/editProduct/${req.params.proId}?error=An+error+occurred+during+editing+the+product`);
+        }
     }
-}
+};
 
 //listing and unlisting product
 const getBlockProduct = async (req, res) => {

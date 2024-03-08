@@ -1,180 +1,212 @@
 <%-include('header')-%>
 
-<style>
-    body {
-        background-image: url('/image/loginbg1.jpg');
-        background-size: cover;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .image {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: 100px;
-        padding-top: 50px;
-    }
-
-    .rightimage-container {
-        position: relative;
-        width: 100%;
-        max-width: 400px; /* Limit the width of the right image container */
-    }
-
-    
-    .leftimage, .rightimage {
-    width:  400px; /* Set a specific width for both images */
-    height:  500px; /* Set a specific height for both images */
-    object-fit: cover; /* Scales the image to fill the container while maintaining aspect ratio */
-    /* border-radius:  10px; To match the border-radius of the form container */
-}
-
-    .rightimage-container form {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        padding: 20px;
-        background-color: rgba(146, 198, 241, 0.5);
-        border-radius: 10px;
-        width: 80%; /* Adjust width as needed */
-       margin-top: 55%;
-    }
-
-    input.form-control {
-        margin-bottom: 10px;
-    }
-
-    input::placeholder {
-  font-size:  60%;
-}
-
-    /* Media query for screens smaller than 768px */
-    @media (max-width: 767.98px) {
+    <style>
         body {
-            margin: 10px;
+            background-image: url('/image/loginbg1.jpg');
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         .image {
-            margin-left: 25%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 100px;
+            padding-top: 50px;
         }
 
         .rightimage-container {
-            max-width: none; /* Remove max-width to allow the image to expand */
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            /* Limit the width of the right image container */
+        }
+
+
+        .leftimage,
+        .rightimage {
+            width: 400px;
+            /* Set a specific width for both images */
+            height: 500px;
+            /* Set a specific height for both images */
+            object-fit: cover;
+            /* Scales the image to fill the container while maintaining aspect ratio */
+            /* border-radius:  10px; To match the border-radius of the form container */
         }
 
         .rightimage-container form {
-            width: 90%; /* Adjust width for smaller screens */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            padding: 20px;
+            background-color: rgb(154, 148, 148);
+            border-radius: 10px;
+            width: 80%;
+            /* Adjust width as needed */
+            margin-top: 55%;
         }
-    }
-</style>
 
-<section class="vh-100 gradient-custom"> 
-    <div class="container">
-        <div class="image bg-transparent text-dark">
-            <div class="rightimage-container">
-                <form action="/userSignup" method="post" onsubmit="return validate()" style="padding-top: 0;">
-                    <h2 style="font-style:italic; text-decoration: underline;">Create Account</h2>
+        input.form-control {
+            margin-bottom: 10px;
+        }
 
-                    <div class="form-outline form-white mb-4">
-                        <input type="text" name="username" id="username" class="form-control form-control-lg" placeholder="Enter your name here..!"/>
-                        <span id="usernameError" class="error" style="color: red;"></span>
-                    </div>
+        input::placeholder {
+            font-size: 60%;
+        }
 
-                    <div class="form-outline form-white mb-4">
-                        <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Enter your email here..!"/>
-                        <span id="emailError" class="error" style="color: red;"></span>
-                    </div>
+        /* Media query for screens smaller than 768px */
+        @media (max-width: 767.98px) {
+            body {
+                margin: 10px;
+            }
 
-                    <div class="form-outline form-white mb-4">
-                        <input type="password" name="password" id="password" class="form-control form-control-lg" placeholder="Enter your password here..!"/>
-                        <span id="passwordError" class="error" style="color: red;"></span>
-                    </div>
+            .image {
+                margin-left: 25%;
+            }
 
-                    <div class="form-outline form-white mb-2">
-                        <input type="password" name="confirmPassword" id="confirmPassword" class="form-control form-control-lg" placeholder="Confirm your password here..!"/>
-                        <span id="confirmPasswordError" class="error" style="color: red;"></span>
-                    </div>
+            .rightimage-container {
+                max-width: none;
+                /* Remove max-width to allow the image to expand */
+            }
 
-                    <button class="btn btn-outline-dark btn-lg px-5 " type="submit" style="border-radius: 30px; font-size: medium;">Sign Up</button><br><br>
-                    <h6 style="font-size: small;">Already have an account..!</h6>
-                    <a href="/userLogin" >Log In</a>
-                </form>
+            .rightimage-container form {
+                width: 90%;
+                /* Adjust width for smaller screens */
+            }
+        }
+    </style>
+
+    <section class="vh-100 gradient-custom">
+        <div class="container">
+            <div class="image bg-transparent text-dark">
+                <div class="rightimage-container">
+                    <form action="/userSignup" method="post" onsubmit="return validate()"
+                        style="padding-top: 5%; margin-top: 65%;">
+                        <h2 style="font-style:italic; text-decoration: underline;">Create Account</h2>
+
+                        <% if(errorMessage){%>
+                            <div class="alert alert-danger" role="alert"
+                                style="color: rgb(114, 2, 2); background-color: transparent;border: none;">
+                                <%= errorMessage %>
+                            </div>
+                            <% } %>
+
+                                <div class="form-outline form-white mb-4" style="margin-top: 5%;">
+                                    <input type="text" name="username" id="username"
+                                        class="form-control form-control-lg" placeholder="Enter your name here..!" />
+                                    <span id="usernameError" class="error" style="color:  rgb(114, 2, 2);"></span>
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="email" name="email" id="email" class="form-control form-control-lg"
+                                        placeholder="Enter your email here..!" />
+                                    <span id="emailError" class="error" style="color:  rgb(114, 2, 2)"></span>
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="password" name="password" id="password"
+                                        class="form-control form-control-lg"
+                                        placeholder="Enter your password here..!" />
+                                    <span id="passwordError" class="error" style="color:  rgb(114, 2, 2)"></span>
+                                </div>
+
+                                <div class="form-outline form-white mb-2">
+                                    <input type="password" name="confirmPassword" id="confirmPassword"
+                                        class="form-control form-control-lg"
+                                        placeholder="Confirm your password here..!" />
+                                    <span id="confirmPasswordError" class="error" style="color:  rgb(114, 2, 2);"></span>
+                                </div>
+
+                                <button class="btn btn-outline-dark btn-lg px-5 " type="submit"
+                                    style="border-radius: 30px; font-size: medium;">Sign Up</button><br><br>
+                                <h6 style="font-size: small;">Already have an account..!</h6>
+                                <a href="/userLogin">Log In</a>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<script>
-    function validate(){
-        document.getElementById('usernameError').textcontent = "";
-        document.getElementById('emailError').textcontent = "";
-        document.getElementById('passwordError').textcontent = "";
-        document.getElementById('confirmPasswordError').textcontent = "";
+    <script>
+        function validate() {
+            document.getElementById('usernameError').textcontent = "";
+            document.getElementById('emailError').textcontent = "";
+            document.getElementById('passwordError').textcontent = "";
+            document.getElementById('confirmPasswordError').textcontent = "";
 
-        const username = document.getElementById("username").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-        const confirmPassword = document.getElementById("confirmPassword").value.trim();
+            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const confirmPassword = document.getElementById("confirmPassword").value.trim();
 
-        if(username===" "){
-            document.getElementById("usernameError").textContent = "Username cannot be empty..!";
-            return false
+            if (username === "") {
+                document.getElementById("usernameError").textContent = "Username cannot be empty..!";
+                return false
+            }
+
+            if (username.length < 4) {
+                document.getElementById("usernameError").textContent = "Username should contain atleast 4 characters..!";
+                return false
+            }
+
+            if (!/^[a-zA-Z]+$/.test(username)) {
+                document.getElementById("usernameError").textContent = "Username cannot contain symbols or numbers..!";
+                return false
+            }
+
+            if (email === "") {
+                document.getElementById("emailError").textContent = "Email cannot be empty..!";
+                return false
+            }
+
+            if (!/^\S+@\S+\.\S+$/.test(email)) {
+                document.getElementById("emailError").textContent = "Email should be in specific format..!";
+                return false
+            }
+
+            if (password === "") {
+                document.getElementById("passwordError").textContent = "Password cannot be empty..!";
+                return false
+            }
+
+            if (password.length < 5) {
+                document.getElementById("passwordError").textContent = "Password should contain atleast 5 characters..!";
+                return false
+            }
+
+            if (! /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(password)) {
+                document.getElementById("passwordError").textContent = "Password must be a combination of letters, digits, and symbols";
+                return false;
+            }
+
+            if (confirmPassword === "") {
+                document.getElementById("confirmPasswordError").textContent = "Password cannot be empty..!";
+                return false
+            }
+
+            if (confirmPassword.length < 5 && confrimPassword === password) {
+                document.getElementById("confirmPasswordError").textContent = "Password should contain atleast 5 characters..!";
+                return false
+            }
+
+            if (password !== confirmPassword) {
+                document.getElementById("passwordError").textContent = "Password doesn't match..!";
+                return false
+            }
+            return true
         }
+    </script>
 
-        if(username.length < 4){
-            document.getElementById("usernameError").textContent = "Username should contain atleast 4 characters..!";
-            return false
-        }
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
+        crossorigin="anonymous"></script>
 
-        if(!/^[a-zA-Z]+$/.test(username)){
-            document.getElementById("usernameError").textContent = "Username cannot contain symbols or numbers..!";
-            return false
-        }
-
-        if(email===" "){
-            document.getElementById("emailError").textContent = "Email cannot be empty..!";
-            return false
-        }
-
-        if(!/^\S+@\S+\.\S+$/.test(email)){
-            document.getElementById("emailError").textContent = "Email should be in specific format..!";
-            return false
-        }
-
-        if(password ===" "){
-            document.getElementById("passwordError").textContent = "Password cannot be empty..!";
-            return false
-        }
-
-        if(password.length < 3){
-            document.getElementById("passwordError").textContent = "Password should contain atleast 6 characters..!";
-            return false
-        }
-
-        if(confirmPassword === " "){
-            document.getElementById("confirmPasswordError").textContent = "Password cannot be empty..!";
-            return false
-        }
-
-        if(confrimPassword.length < 3){
-            document.getElementById("confirmPasswordError").textContent = "Password should contain atleast 6 characters..!";
-            return false
-        }
-
-        if(password!==confirmPassword){
-            document.getElementById("passwordError").textContent = "Password doesn't match..!";
-            return false
-        }
-        return true
-    }
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
-
-<%-include('footer')-%>
+    <%-include('footer')-%>

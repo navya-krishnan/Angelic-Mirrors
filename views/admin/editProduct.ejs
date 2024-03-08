@@ -75,12 +75,12 @@
                 </a>
 
                 <div class="navbar-nav w-100">
-                    <a href="/admin/adminDashboard" class="nav-item nav-link active"><i
+                    <a href="/admin/adminDashboard" class="nav-item nav-link"><i
                             class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="/admin/userManagement" class="nav-link"><i class="bi bi-people-fill"></i>User <span
                             style="margin-left: 25%;">
                             Management</span></a>
-                    <a href="/admin/productManagement" class="nav-item nav-link"><i class="bi bi-bag-fill"></i>Product
+                    <a href="/admin/productManagement" class="nav-item nav-link active"><i class="bi bi-bag-fill"></i>Product
                         <span style="margin-left: 25%;"> Management</span></a>
                     <a href="/admin/categoryManagement" class="nav-item nav-link"><i
                             class="bi bi-bookmark-check-fill"></i>Category
@@ -134,40 +134,55 @@
 
                     <h1>Edit Product</h1>
                     <div class="card-body-inner">
+                        <% if (errors) { %>
+                            <div class="alert alert-danger">
+                                <%= errors %>
+                            </div>
+                        <% } %>
+                        
                         <form action="/admin/editProduct/<%= products._id%>" method="post" enctype="multipart/form-data"
                             onsubmit="return validateForm()" style="margin-top: 2%;">
-
-                            <label for="productName" class="form-label">Product Name</label>
-                            <input type="text" name="productName" id="productName" class="form-control form-control-lg"
-                                value="<%= locals.products.product_name %>" style="border: 1px solid black; " />
+                            <div>
+                                <label for="productName" class="form-label">Product Name</label>
+                                <input type="text" name="productName" id="productName"
+                                    class="form-control form-control-lg" value="<%= locals.products.product_name %>"
+                                    style="border: 1px solid black; " />
                                 <span id="nameError" style="color: red;"></span>
+                            </div>
 
-                            <label for="productCategory" class="form-label" style="margin-top: 2%;">Product
-                                Category</label>
-                            <select name="productCategory" id="productCategory" class="form-select form-select-lg"
-                                style="border: 1px solid black;">
-                                <% for (let i=0; i < categories.length; i++) { %>
-                                    <% if(categories[i].blocked){%>
-                                        <option value="<%= categories[i].category_name %>">
-                                            <%= categories[i].category_name %>
-                                        </option>
-                                        <% } %>
+                            <div>
+                                <label for="productCategory" class="form-label" style="margin-top: 2%;">Product
+                                    Category</label>
+                                <select name="productCategory" id="productCategory" class="form-select form-select-lg"
+                                    style="border: 1px solid black;">
+                                    <% for (let i=0; i < categories.length; i++) { %>
+                                        <% if(categories[i].blocked){%>
+                                            <option value="<%= categories[i].category_name %>">
+                                                <%= categories[i].category_name %>
+                                            </option>
                                             <% } %>
-                            </select>
+                                                <% } %>
+                                </select>
+                            </div>
 
-                            <label for="productPrice" class="form-label" style="margin-top: 2%;">Product
-                                Price</label>
-                            <input type="text" name="productPrice" id="productPrice"
-                                value="<%= locals.products.product_price %>" class="form-control form-control-lg"
-                                style="border: 1px solid black;" />
+                            <div>
+                                <label for="productPrice" class="form-label" style="margin-top: 2%;">Product
+                                    Price</label>
+                                <input type="text" name="productPrice" id="productPrice"
+                                    value="<%= locals.products.product_price %>" class="form-control form-control-lg"
+                                    style="border: 1px solid black;" />
                                 <span id="priceError" style="color: red; "></span>
+                            </div>
 
-                            <label for="productStock" class="form-label" style="margin-top: 2%;">Product
-                                Stock</label>
-                            <input type="text" name="productStock" id="productStock"
-                                value="<%= locals.products.product_stock %>" class="form-control form-control-lg"
-                                style="border: 1px solid black;" />
+                            <div>
+                                <label for="productStock" class="form-label" style="margin-top: 2%;">Product
+                                    Stock</label>
+                                <input type="text" name="productStock" id="productStock"
+                                    value="<%= locals.products.product_stock %>" class="form-control form-control-lg"
+                                    style="border: 1px solid black;" />
                                 <span id="stockError" style="color: red; "></span>
+                            </div>
+
 
                             <div class="mb-3">
                                 <label for="productImage" class="form-label" style="margin-top: 2%;">Product
@@ -236,35 +251,41 @@
     <script src="js/main.js"></script>
     <script>
         function validateForm() {
-    var productName = document.getElementById("productName").value.trim();
-    var productPrice = parseFloat(document.getElementById("productPrice").value);
-    var productStock = parseInt(document.getElementById("productStock").value);
+            var productName = document.getElementById("productName").value.trim();
+            var productPrice = parseFloat(document.getElementById("productPrice").value);
+            var productStock = parseInt(document.getElementById("productStock").value);
 
-    var nameError = document.getElementById('nameError');
-    var priceError = document.getElementById('priceError');
-    var stockError = document.getElementById('stockError');
+            var nameError = document.getElementById('nameError');
+            var priceError = document.getElementById('priceError');
+            var stockError = document.getElementById('stockError');
 
-    nameError.textContent = "";
-    priceError.textContent = "";
-    stockError.textContent = "";
+            nameError.textContent = "";
+            priceError.textContent = "";
+            stockError.textContent = "";
 
-    if (productName === "") {
-        nameError.textContent = "Product name is required";
-        return false;
-    }
+            var lettersOnly = /^[a-zA-Z\s]+$/;
 
-    if (isNaN(productPrice) || productPrice <= 0) {
-        priceError.textContent = "Enter a valid price";
-        return false;
-    }
+            if (productName === "") {
+                document.getElementById('nameError').textContent = "Product name is required";
+                return false;
+            }
 
-    if (isNaN(productStock) || productStock < 0) {
-        stockError.textContent = "Enter a valid stock";
-        return false;
-    }
+            if (!productName.match(lettersOnly)) {
+                document.getElementById('nameError').textContent = "Product name only contains letters";
+                return false;
+            }
+            if (isNaN(productPrice) || productPrice <= 0) {
+                priceError.textContent = "Enter a valid price";
+                return false;
+            }
 
-    return true;
-}
+            if (isNaN(productStock) || productStock < 0) {
+                stockError.textContent = "Enter a valid stock";
+                return false;
+            }
+
+            return true;
+        }
 
     </script>
 

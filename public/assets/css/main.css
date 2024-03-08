@@ -474,9 +474,9 @@ a.boxed-btn, a.bordered-btn, a.cart-btn {
   margin-bottom: 80px;
 }
 
-.breadcrumb-bg {
+/* .breadcrumb-bg {
   background-image: url(../img/breadcrumb-bg.jpg);
-}
+} */
 
 .breadcrumb-text p {
   color: #F28123;
@@ -508,7 +508,7 @@ a.boxed-btn, a.bordered-btn, a.cart-btn {
   left: 0;
   top: 0;
   width: 100%;
-  height: 100%;
+  height: 30%;
   content: "";
   background-color: #07212e;
   z-index: -1;

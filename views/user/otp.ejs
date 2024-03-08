@@ -76,15 +76,18 @@
     <section class="vh-100 gradient-custom">
         <div class="container">
             <div class="image bg-transparent text-dark">
-                <!-- <img src="/image/adminleft.jpg" class="leftimage"> -->
                 <div class="rightimage-container">
-                    <img src="/image/adminright.jpg" class="rightimage">
                     <div class="form-container">
-                        <form action="/postSignupOtp" method="post">
+                        <form action="/postSignupOtp" method="post" style="margin-top: 60%; background-color: rgb(154, 148, 148);">
                             <h2 style="text-decoration: underline;">Verify Email Id..!</h2>
-                            <h6>Enter OTP send to your mail..!</h6>
+                            <% if (errorMessage) { %>
+                                <div class="alert alert-danger" role="alert" style="color: rgb(114, 2, 2); background-color: transparent;border: none;">
+                                    <%= errorMessage %>
+                                </div>
+                            <% } %>
+                            <h6 style="margin-top: 5%;">Enter OTP send to your mail..!</h6>
 
-                            <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+                            <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2" >
                                 <input class="m-2 text-center form-control rounded" type="text" id="first" name="digit1"
                                     maxlength="1" style="border-color: black; width: 35px;" />
                                 <input class="m-2 text-center form-control rounded" type="text" id="second"

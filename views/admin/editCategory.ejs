@@ -75,14 +75,14 @@
                 </a>
 
                 <div class="navbar-nav w-100">
-                    <a href="/admin/adminDashboard" class="nav-item nav-link active"><i
+                    <a href="/admin/adminDashboard" class="nav-item nav-link"><i
                             class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="/admin/userManagement" class="nav-link"><i class="bi bi-people-fill"></i>User <span
                             style="margin-left: 25%;">
                             Management</span></a>
                     <a href="/admin/productManagement" class="nav-item nav-link"><i class="bi bi-bag-fill"></i>Product
                         <span style="margin-left: 25%;"> Management</span></a>
-                    <a href="/admin/categoryManagement" class="nav-item nav-link"><i
+                    <a href="/admin/categoryManagement" class="nav-item nav-link active"><i
                             class="bi bi-bookmark-check-fill"></i>Category
                         <span style="margin-left: 25%;"> Management</span></a>
                     <!-- <a href="/orderManagement" class="nav-item nav-link"><i class="bi bi-card-checklist"></i>Order <span
@@ -131,34 +131,41 @@
             <!-- form -->
             <div class="container-fluid pt-4 px-4">
                 <div class="card-body">
-
                     <h1>Edit Category</h1>
-                    <div class="card-body-inner">
-                        <form action="/admin/editCategory/<%=category._id%>" method="post" style="margin-top: 2%;">
-
-                            <label for="categoryName" class="form-label">Category Name</label>
-                            <input type="text" name="categoryName" id="category" class="form-control form-control-lg"
-                                value="<%= locals.category.category_name %>" style="border: 1px solid black; " />
-
-                            <label for="categoryDescription" class="form-label" style="margin-top: 2%;">Category
-                                Description</label>
-                            <input type="text" name="categoryDescription" id="category"
-                                class="form-control form-control-lg" value="<%= locals.category.category_description %>"
-                                style="border: 1px solid black;" />
-
-                            <a href="/admin/categoryManagement">
-                                <button class="btn btn-outline-dark px-2" type="submit"
-                                    style="border-radius: 30px; font-size: medium; background-color: black; color: white; width: 200px; height: 40px; margin-left: 33%; margin-top: 3%;">
-                                    <img src="/image/edit.png"
-                                        style="width: 25px; height: 25px; padding-right: 3%;">Edit Category
-                                </button>
-                            </a>
-
-                        </form>
-                    </div>
+                    <% if (error) { %>
+                        <div class="alert alert-danger mt-3" role="alert">
+                            <%= error %>
+                        </div>
+                    <% } %>
+                            <div class="card-body-inner">
+                                <form action="/admin/editCategory/<%= category._id %>" method="post"
+                                    onsubmit="return validateForm()">
+                                    <div>
+                                        <label for="categoryName" class="form-label">Category Name</label>
+                                        <input type="text" name="categoryName" id="categoryName"
+                                            class="form-control form-control-lg" value="<%= category.category_name %>"
+                                            style="border: 1px solid black;" />
+                                        <span id="nameError" style="color: red;"></span>
+                                    </div>
+                                    <div>
+                                        <label for="categoryDescription" class="form-label"
+                                            style="margin-top: 2%;">Category Description</label>
+                                        <input type="text" name="categoryDescription" id="categoryDescription"
+                                            class="form-control form-control-lg"
+                                            value="<%= category.category_description %>"
+                                            style="border: 1px solid black;" />
+                                        <span id="descriptionError" style="color: red;"></span>
+                                    </div>
+                                    <button class="btn btn-outline-dark px-2" type="submit"
+                                        style="border-radius: 30px; font-size: medium; background-color: black; color: white; width: 200px; height: 40px; margin-left: 33%; margin-top: 3%;">
+                                        <img src="/image/edit.png"
+                                            style="width: 25px; height: 25px; padding-right: 3%;">Edit Category
+                                    </button>
+                                </form>
+                            </div>
                 </div>
-
             </div>
+
 
             <!-- Footer Start -->
             <div class="container-fluid pt-4 px-4">
@@ -178,6 +185,37 @@
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
+
+    <script>
+        function validateForm() {
+            document.getElementById('nameError').textContent = ""
+            document.getElementById('descriptionError').textContent = ""
+
+            var categoryName = document.getElementById('categoryName').value.trim()
+            var categoryDescription = document.getElementById('categoryDescription').value.trim()
+
+            // Regular expression to check if the product name contains only letters
+            var lettersOnly = /^[a-zA-Z\s]+$/;
+
+            if (categoryName === "") {
+                document.getElementById('nameError').textContent = "Category Name required"
+                return false
+            }
+
+            if (!categoryName.match(lettersOnly)) {
+                document.getElementById('nameError').textContent = "Category name should contain only letters";
+                return false;
+            }
+
+            if (categoryDescription === "") {
+                document.getElementById('descriptionError').textContent = "Category Description required"
+                return false
+            }
+
+            return true
+        }
+    </script>
+
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

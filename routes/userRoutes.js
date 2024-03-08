@@ -18,7 +18,8 @@ router.get('/userSignup', userController.signup)
 router.post('/userSignup', userController.postSignup) 
 
 router.get('/otp', otpController.getsignupOtp)
-router.post('/postSignupOtp', otpController.postSignupOtp)
+router.post('/otp', otpController.postSignupOtp)
+router.post('/postSignupOtp', otpController.postSignupOtp);
 router.get('/resendOtp',userController.getResendOtp)
 
 router.get('/shop',  userBlockMiddleware.block,userSessionMiddleware.isUser, shopController.getShop)

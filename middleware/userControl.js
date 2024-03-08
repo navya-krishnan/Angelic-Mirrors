@@ -1,24 +1,22 @@
 const express = require('express')
-const userCollection = require('../model/mongodb')
+const userCollection = require('../model/user')
 
-const block = async (req, res ,next) => {
+const block = async (req, res, next) => {
     try {
-        const user = req.session.user
-        const userEmail = user ? user.email : req.body.email
-        const check = await userCollection.findOne({ email: userEmail })
-
+        const user = req.session.user;
+        const userEmail = user ? user.email : req.body.email;
+        const check = await userCollection.findOne({ email: userEmail });
 
         if (req.session.user && check && !check.block) {
-            console.log("User is blocked");
-
-            req.session.user = null
-            res.status(400).render('user/userLogin')
+            const errorMessage = req.flash("error")[0];
+            req.session.user = null;
+            return res.status(400).render('user/userLogin', { errorMessage });
         } else {
-            next()
+            next();
         }
     } catch (error) {
-        console.log("Err in block");
-        res.status(502).send('error');
+        console.log("Error in block middleware:", error);
+        return res.status(502).send('Error occurred');
     }
 }
 

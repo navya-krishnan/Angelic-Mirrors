@@ -38,7 +38,7 @@
         transform: translate(-50%, -50%);
         text-align: center;
         padding: 20px;
-        background-color: rgba(91, 196, 222, 0.872);
+        background-color: rgb(154, 148, 148);
         border-radius: 10px;
         width: 80%; /* Adjust width as needed */
     }
@@ -76,13 +76,13 @@
         <div class="image bg-transparent text-dark">
             <div class="rightimage-container" style="margin-top: 25%;">
                 <form action="/admin" method="post" onsubmit="return validate()">
-                    <h2 style="font-style:italic; text-decoration: underline;">Welcome<br>Back..!</h2>
-                    <div class="form-outline form-white mb-4">
-                        <input type="email" name="email" id="email" class="form-control form-control-lg" value="navya@gmail.com" placeholder="Enter your email here..!" required/>
+                    <h2 style="font-style:normal; font-size: x-large; font-weight:bold; text-decoration: underline; margin-top: 10%;">Welcome Navya..!</h2>
+                    <div class="form-outline form-white mb-4" style="margin-top: 10%;">
+                        <input name="email" id="email" class="form-control form-control-lg"  placeholder="Enter your email here..!" />
                         <span id="emailError" class="error" style="color: red;"></span>
                     </div>
                     <div class="form-outline form-white mb-4">
-                        <input type="password" name="password" id="password" class="form-control form-control-lg" value="navya22" placeholder="Enter your password here..!" required/>
+                        <input type="password" name="password" id="password" class="form-control form-control-lg"  placeholder="Enter your password here..!" />
                         <span id="passwordError" class="error" style="color: red;"></span>
                     </div>
                     <button class="btn btn-outline-dark btn-lg px-5" type="submit" style="border-radius: 30px; font-size: small; font-weight: bolder;">LOG IN</button><br>
@@ -97,10 +97,10 @@
         document.getElementById('emailError').textContent = "";
         document.getElementById('passwordError').textContent = "";
 
-        const email = getElementById('email').value.trim();
+        const email = document.getElementById('email').value.trim();
         const password = document.getElementById("password").value.trim();
 
-        if(email===" "){
+        if(email===""){
             document.getElementById("emailError").textContent = "Email cannot be empty..!";
             return false
         }
@@ -110,7 +110,7 @@
             return false
         }
 
-        if(password ===" "){
+        if(password ===""){
             document.getElementById("passwordError").textContent = "Password cannot be empty..!";
             return false
         }
