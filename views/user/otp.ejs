@@ -78,37 +78,40 @@
             <div class="image bg-transparent text-dark">
                 <div class="rightimage-container">
                     <div class="form-container">
-                        <form action="/postSignupOtp" method="post" style="margin-top: 60%; background-color: rgb(154, 148, 148);">
+                        <form action="/postSignupOtp" method="post"
+                            style="margin-top: 60%; background-color: rgb(154, 148, 148);">
                             <h2 style="text-decoration: underline;">Verify Email Id..!</h2>
                             <% if (errorMessage) { %>
-                                <div class="alert alert-danger" role="alert" style="color: rgb(114, 2, 2); background-color: transparent;border: none;">
+                                <div class="alert alert-danger" role="alert"
+                                    style="color: rgb(114, 2, 2); background-color: transparent;border: none;">
                                     <%= errorMessage %>
                                 </div>
-                            <% } %>
-                            <h6 style="margin-top: 5%;">Enter OTP send to your mail..!</h6>
+                                <% } %>
+                                    <h6 style="margin-top: 5%;">Enter OTP send to your mail..!</h6>
 
-                            <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2" >
-                                <input class="m-2 text-center form-control rounded" type="text" id="first" name="digit1"
-                                    maxlength="1" style="border-color: black; width: 35px;" />
-                                <input class="m-2 text-center form-control rounded" type="text" id="second"
-                                    name="digit2" maxlength="1" style="border-color: black; width: 35px;" />
-                                <input class="m-2 text-center form-control rounded" type="text" id="third" name="digit3"
-                                    maxlength="1" style="border-color: black; width: 35px;" />
-                                <input class="m-2 text-center form-control rounded" type="text" id="fourth"
-                                    name="digit4" maxlength="1" style="border-color: black; width: 35px;" />
-                                <input class="m-2 text-center form-control rounded" type="text" id="fifth" name="digit5"
-                                    maxlength="1" style="border-color: black; width: 35px;" />
-                                <input class="m-2 text-center form-control rounded" type="text" id="sixth" name="digit6"
-                                    maxlength="1" style="border-color: black; width: 35px;" />
-                            </div>
-                            <div id="countdowntimer">00:30</div>
-                            <button class="btn btn-outline-dark btn-lg px-5 " type="submit"
-                                style="border-radius: 30px; background-color: white; font-size: medium; font-weight: bold;">Verify
-                                OTP</button>
-                            <h6 style="font-size: small; padding-top: 10px; text-decoration: underline;">Don't receive
-                                OTP..?</h6>
-                            <a href="/resendOtp" style="color: black; font-weight: bold;">RESEND</a><br>
-                            <a href="/" style="color:black; font-size: small; ">Back To Login..!</a>
+                                    <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+                                        <input class="m-2 text-center form-control rounded" type="text" id="first"
+                                            name="digit1" maxlength="1" style="border-color: black; width: 35px;" />
+                                        <input class="m-2 text-center form-control rounded" type="text" id="second"
+                                            name="digit2" maxlength="1" style="border-color: black; width: 35px;" />
+                                        <input class="m-2 text-center form-control rounded" type="text" id="third"
+                                            name="digit3" maxlength="1" style="border-color: black; width: 35px;" />
+                                        <input class="m-2 text-center form-control rounded" type="text" id="fourth"
+                                            name="digit4" maxlength="1" style="border-color: black; width: 35px;" />
+                                        <input class="m-2 text-center form-control rounded" type="text" id="fifth"
+                                            name="digit5" maxlength="1" style="border-color: black; width: 35px;" />
+                                        <input class="m-2 text-center form-control rounded" type="text" id="sixth"
+                                            name="digit6" maxlength="1" style="border-color: black; width: 35px;" />
+                                    </div>
+                                    <div id="countdowntimer">00:30</div>
+                                    <button class="btn btn-outline-dark btn-lg px-5 " type="submit"
+                                        style="border-radius: 30px; background-color: white; font-size: medium; font-weight: bold;">Verify
+                                        OTP</button>
+                                    <h6 style="font-size: small; padding-top: 10px; text-decoration: underline;">Don't
+                                        receive
+                                        OTP..?</h6>
+                                    <a href="/resendOtp" style="color: black; font-weight: bold;">RESEND</a><br>
+                                    <a href="/" style="color:black; font-size: small; ">Back To Login..!</a>
                         </form>
                     </div>
                 </div>
@@ -126,14 +129,19 @@
         crossorigin="anonymous"></script>
 
     <script>
+        // Function to reload the OTP page
+        function reloadPage() {
+            window.location.reload();
+        }
+
         // Initialize timeleft with the total number of seconds for the timer
-        var timeleft = 1 / 2 * 60; // For  30 minutes
+        var timeleft = 1 / 2 * 60; // For 30 minutes
 
         var downloadTimer = setInterval(function () {
             var minutes = Math.floor(timeleft / 60);
             var seconds = timeleft % 60;
 
-            // Pad with leading zeros if less than  10
+            // Pad with leading zeros if less than 10
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
 
@@ -143,13 +151,15 @@
             // Decrease time left by one second
             timeleft--;
 
-            // Clear interval when time runs out
-            if (timeleft <= 0) {
+            // Clear interval and reload the page when time runs out
+            if (timeleft < 0) {
                 clearInterval(downloadTimer);
                 document.getElementById("countdowntimer").textContent = "Expired";
+                setTimeout(reloadPage, 1000); // Reload after 2 seconds (adjust as needed)
             }
         }, 1000);
     </script>
+
 
 
     <%-include('footer')-%>

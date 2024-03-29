@@ -1,0 +1,400 @@
+<%- include('header') -%>
+
+	<style>
+		.breadcrumb {
+			background-color: transparent;
+			/* Remove background color */
+			margin-bottom: -100px;
+
+		}
+	</style>
+
+	<!-- header -->
+	<div class="top-header-area" id="sticker">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-sm-12 text-center">
+					<div class="main-menu-wrap">
+						<!-- logo -->
+						<div class="site-logo">
+							<a href="/user/home">
+								<img src="/image/logo.png" alt="">
+							</a>
+						</div>
+						<!-- logo -->
+
+						<!-- menu start -->
+						<nav class="main-menu" style="margin-left:2% ;">
+							<ul>
+								<li class="current-list-item"><a href="/">Home</a>
+								</li>
+								<li><a href="about.html">About</a></li>
+								<li><a href="#">Pages</a>
+									<!-- <ul class="sub-menu">
+										<li><a href="404.html">404 page</a></li>
+										<li><a href="about.html">About</a></li>
+										<li><a href="cart.html">Cart</a></li>
+										<li><a href="checkout.html">Check Out</a></li>
+										<li><a href="contact.html">Contact</a></li>
+										<li><a href="news.html">News</a></li>
+										<li><a href="shop.html">Shop</a></li>
+									</ul> -->
+								</li>
+
+								<!-- <li><a href="contact.html">Contact</a></li> -->
+								<li><a href="/shop">Shop</a>
+									<!-- <ul class="sub-menu">
+										<li><a href="shop.html">Shop</a></li>
+										<li><a href="checkout.html">Check Out</a></li>
+										<li><a href="single-product.html">Single Product</a></li>
+										<li><a href="cart.html">Cart</a></li>
+									</ul> -->
+								</li>
+								<li>
+									<div class="header-icons">
+										<!-- <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a> -->
+										<a href="/profile">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+												fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+												<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+												<path fill-rule="evenodd"
+													d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+											</svg>
+										</a>
+
+										<a href="/logout">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+												fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16"
+												style="color: white;">
+												<path fill-rule="evenodd"
+													d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
+												<path fill-rule="evenodd"
+													d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+											</svg>
+										</a>
+									</div>
+								</li>
+							</ul>
+						</nav>
+						<!-- <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+						<div class="mobile-menu"></div> -->
+
+
+						<!-- menu end -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end header -->
+
+	<!-- search area -->
+	<div class="search-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="close-btn"><i class="fas fa-window-close"></i></span>
+					<div class="search-bar">
+						<div class="search-bar-tablecell">
+							<h3>Search For:</h3>
+							<input type="text" placeholder="Keywords">
+							<button type="submit">Search <i class="fas fa-search"></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end search arewa -->
+
+	<!-- breadcrumb-section -->
+	<div class="breadcrumb-section breadcrumb-bg">
+		<div class="container">
+			<!-- <div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="breadcrumb-text">
+						<p>Fresh and Organic</p>
+						<h1>Cart</h1>
+					</div>
+				</div>
+			</div> -->
+		</div>
+	</div>
+	<!-- end breadcrumb section -->
+
+	<!-- cart -->
+	<nav aria-label="breadcrumb" style="margin-top: -19%;">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="/">Home</a></li>
+			<li class="breadcrumb-item"><a href="/shop">Shop</a></li>
+			<li class="breadcrumb-item"><a href="/singleProduct">Product</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Cart</li>
+		</ol>
+	</nav>
+
+
+	<!-- table -->
+	<div id="errorMessageContainer" class="container" style="display: none; margin-top: 10%;">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="alert alert-danger" role="alert">
+					<% if (maxQuantityError) { %>
+						Maximum quantity reached.
+						<% } else if (minQuantityError) { %>
+							Minimum quantity reached.
+							<% } %>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="cart-section mt-150 mb-150">
+		<div class="container">
+			<h3 style="text-align: center; text-decoration: underline; margin-top: -10%;">My Cart</h3>
+			<div class="row">
+				<div class="col-lg-8 col-md-12">
+					<div class="cart-table-wrap">
+						<table class="cart-table">
+							<thead class="cart-table-head">
+								<tr class="table-head-row">
+									<th class="product-image">Image</th>
+									<th class="product-name">Name</th>
+									<th class="product-price">Price</th>
+									<th class="product-quantity">Quantity</th>
+									<th class="product-total">Total</th>
+									<th class="product-total">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% if(cart.products.length===0){ %>
+									<tr>
+										<td colspan="6" style="text-align: center;">No products in cart</td>
+									</tr>
+									<% }else{ %>
+										<% cart.products.forEach((product)=> { %>
+											<tr data-product-id="<%= product.product._id %>">
+												<td>
+													<img src="/image/<%= product?.product.product_image[0] %>"
+														style="height: 100px;">
+												</td>
+												<td>
+													<%= product.product.product_name %>
+												</td>
+												<td>
+													<%= product.product.product_price %>
+												</td>
+												<td>
+													<input type="number" class="quantity-input"
+														value="<%= product.quantity %>"
+														data-product-price="<%= product.product.product_price %>"
+														data-product-id="<%= product.product._id %>">
+												</td>
+												<td>
+													<% const total=product.product.product_price * product.quantity;%>
+														<span class="product-total">
+															Rs. <%= total %>
+														</span>
+														<% cartTotal +=total; %>
+												</td>
+												<td>
+													<a href="/removeCart/<%=product.product._id%>">
+														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+															fill="currentColor" class="bi bi-trash3-fill"
+															viewBox="0 0 16 16">
+															<path
+																d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+														</svg>
+													</a>
+												</td>
+											</tr>
+											<% }); %>
+												<% } %>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="col-lg-4">
+					<div class="total-section">
+						<table class="total-table">
+							<thead class="total-table-head">
+								<tr class="table-total-row">
+									<th>Total</th>
+									<th>Price</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="total-data">
+									<% let subtotal=0; %>
+										<% cart.products.forEach((product)=> { %>
+											<% const productTotal=product.product.product_price * product.quantity; %>
+												<% subtotal +=productTotal; %>
+													<% }); %>
+														<td><strong>Subtotal: </strong></td>
+														<td>
+															<span class="product-total">
+																Rs. <%= subtotal %>
+															</span>
+														</td>
+
+								</tr>
+								<tr class="total-data">
+									<td><strong>Shipping: </strong></td>
+									<td>Rs. 100</td>
+								</tr>
+								<tr class="total-data">
+									<% const shippingCost=100; %>
+										<td><strong>Total: </strong></td>
+										<td>
+											<span class="product-total">
+												Rs. <%= subtotal + shippingCost %>
+											</span>
+										</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="cart-buttons">
+							<a href="/checkout" class="boxed-btn black" style="margin-left: 35%;">Check Out</a>
+						</div>
+					</div>
+
+					<!-- <div class="coupon-section">
+						<h3>Apply Coupon</h3>
+						<div class="coupon-form-wrap">
+							<form action="index.html">
+								<p><input type="text" placeholder="Coupon"></p>
+								<p><input type="submit" value="Apply"></p>
+							</form>
+						</div>
+					</div> -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end cart -->
+
+
+	<!-- footer -->
+	<div class="footer-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box about-widget">
+						<h2 class="widget-title">About us</h2>
+						<p>Discover the
+							Reflection of Perfection:
+							Collect Your Favourite
+							Mirrors Right Here</p>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box get-in-touch">
+						<h2 class="widget-title">Get in Touch</h2>
+						<ul>
+							<li>angelicmirrors@gmail.com</li>
+							<li>+00 111 222 3333</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box pages">
+						<h2 class="widget-title">Pages</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="about.html">About</a></li>
+							<li><a href="services.html">Shop</a></li>
+							<li><a href="news.html">News</a></li>
+							<li><a href="contact.html">Contact</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box subscribe">
+						<h2 class="widget-title">Subscribe</h2>
+						<p>Subscribe to our mailing list to get the latest updates.</p>
+						<form action="index.html">
+							<input type="email" placeholder="Email">
+							<button type="submit"><i class="fas fa-paper-plane"></i></button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end footer -->
+
+	<!-- copyright -->
+	<div class="copyright">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6 col-md-12">
+					<p>Copyrights &copy; 2024 - Angelic Mirrors</a>, All Rights Reserved.<br>
+					</p>
+				</div>
+				<div class="col-lg-6 text-right col-md-12">
+					<div class="social-icons">
+						<ul>
+							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end copyright -->
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const quantityInputs = document.querySelectorAll('.quantity-input');
+
+			quantityInputs.forEach(function (input) {
+				input.addEventListener('change', async function (event) {
+					const productId = event.target.dataset.productId;
+					const newQuantity = parseInt(event.target.value);
+
+					try {
+						const response = await fetch('/updateCart', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify({
+								productId,
+								quantity: newQuantity
+							})
+						});
+
+						if (!response.ok) {
+							throw new Error('Failed to update cart');
+						}
+
+						window.location.reload();
+					} catch (error) {
+						console.error(error);
+					}
+				});
+			});
+		});
+	</script>
+
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const errorMessageContainer = document.getElementById('errorMessageContainer');
+
+        <% if (maxQuantityError) { %>
+				// Show the error message container if the maximum quantity error exists
+				errorMessageContainer.style.display = 'block';
+        <% } else if (minQuantityError) { %>
+				errorMessageContainer.style.display = 'block';
+		<% } %>
+    });
+	</script>
+
+
+
+	<%- include('footer') -%>

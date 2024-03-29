@@ -1,21 +1,25 @@
 const categoryCollection = require('../../model/category');
 const productCollection = require('../../model/product');
+const cartCollection = require('../../model/cart')
 
 // shop
 const getShop = async (req, res) => {
     try {
-        if(req.session.user){
+        if (req.session.user) {
             const allProducts = await productCollection.find().populate('product_category');
-            const products = allProducts.filter(product => product.product_category && product.product_category.blocked); // Check if product_category exists
+            const products = allProducts.filter(product => product.product_category && product.product_category.blocked && product.unlist);
 
             const allCategories = await categoryCollection.find();
             const category = allCategories.filter(category => category.blocked);
 
+            const cart = await cartCollection.findOne({ userId: req.session.user._id })
+            const cartQuantity = cart?.products?.length || 0;
+
             res.render('user/shop', {
                 products,
-                category
+                category,
+                cartQuantity
             });
-            
         } else {
             console.log("Shop is not correct");
         }
@@ -28,16 +32,17 @@ const getShop = async (req, res) => {
 // single product
 const getSingleProduct = async (req, res) => {
     try {
-        if(req.session.user){
+        if (req.session.user) {
             const proId = req.params.proId;
 
             const product = await productCollection.findById(proId).populate('product_category');
 
             const similarProducts = await productCollection.find({ product_category: product.product_category }).populate('product_category');
-            
-            res.render('user/singleProduct', { product, similarProducts });
 
-            if(!product){
+            res.render('user/singleProduct', { product, similarProducts, userId: req.session.user._id, productId: proId });
+
+
+            if (!product) {
                 return res.status(400).send("Product not found");
             }
         } else {

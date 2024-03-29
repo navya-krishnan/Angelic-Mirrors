@@ -91,8 +91,16 @@
 								</li>
 								<li>
 									<div class="header-icons">
-										<a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
-										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+										<a class="shopping-cart" href="/cart"><i class="fas fa-shopping-cart"></i></a>
+										<!-- <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a> -->
+										<a href="/profile">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+												fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+												<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+												<path fill-rule="evenodd"
+													d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+											</svg>
+										</a>
 
 										<a href="/logout">
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -122,7 +130,7 @@
 
 	<!-- search area -->
 	<div class="search-area">
-		<div class="container" >
+		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
 					<span class="close-btn"><i class="fas fa-window-close"></i></span>
@@ -177,12 +185,11 @@
 						<h4>Rs.<%= product.product_price%>/-</h4>
 
 						<div class="single-product-form">
-							<!-- <form action="index.html">
-								<input type="number" placeholder="0">
-							</form> -->
 							<%if(product.product_stock> 0){%>
-								<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to
-									Cart</a>
+								<h4 style="color: green;">Only <%= product.product_stock%> left</h4>
+								<a href="#" id="addToCartButton" class="cart-btn"><i
+										class="fas fa-shopping-cart"></i>
+									Add to Cart</a>
 								<%}else{%>
 									<h4 style="color: red;">Currently Out Of Stock..!</h4>
 									<%}%>
@@ -228,7 +235,7 @@
 							<h6>Category: <%= item.product_category.category_name %>
 							</h6>
 							<p class="product-price">Rs. <%= item.product_price %>/- </p>
-							<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+							<a href="/user/cart" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
 						</div>
 					</div>
 					<% }) %>
@@ -348,31 +355,64 @@
 		}
 	</script>
 
+	<script>
+		document.getElementById('addToCartButton').addEventListener('click', function () {
+			var qtyValue = 1
+			console.log('fetchhhhhhh');
+
+			fetch('/cart', {
+				method: 'post',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					userId: '<%= userId %>',
+					productId: '<%= productId %>',
+					quantity: qtyValue
+				})
+			})
+				.then(response => {
+					if (response.ok) {
+
+						console.log('Product added to cart successfully');
+						window.location.href = '/cart';
+					} else {
+
+						console.error('Failed to add product to cart');
+					}
+
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		});
+	</script>
+
 	<!-- zoom -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="/assets/js/Nzoom.min.js"></script>
 
 
 	<!-- jquery -->
-	<script src="assets/js/jquery-1.11.3.min.js"></script>
+	<script src="/assets/js/jquery-1.11.3.min.js"></script>
 	<!-- bootstrap -->
-	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
 	<!-- count down -->
-	<script src="assets/js/jquery.countdown.js"></script>
+	<script src="/assets/js/jquery.countdown.js"></script>
 	<!-- isotope -->
-	<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+	<script src="/assets/js/jquery.isotope-3.0.6.min.js"></script>
 	<!-- waypoints -->
-	<script src="assets/js/waypoints.js"></script>
+	<script src="/assets/js/waypoints.js"></script>
 	<!-- owl carousel -->
-	<script src="assets/js/owl.carousel.min.js"></script>
+	<script src="/assets/js/owl.carousel.min.js"></script>
 	<!-- magnific popup -->
-	<script src="assets/js/jquery.magnific-popup.min.js"></script>
+	<script src="/assets/js/jquery.magnific-popup.min.js"></script>
 	<!-- mean menu -->
-	<script src="assets/js/jquery.meanmenu.min.js"></script>
+	<script src="/assets/js/jquery.meanmenu.min.js"></script>
 	<!-- sticker js -->
-	<script src="assets/js/sticker.js"></script>
+	<script src="/assets/js/sticker.js"></script>
 	<!-- main js -->
-	<script src="assets/js/main.js"></script>
+	<script src="/assets/js/main.js"></script>
 
 </body>
 

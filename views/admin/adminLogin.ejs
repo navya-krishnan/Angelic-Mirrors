@@ -1,129 +1,140 @@
 <%-include('header')-%>
 
-<style>
-    body {
-        background-image: url('/image/loginbg1.jpg');
-        background-size: cover;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .image {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: 100px;
-        padding-top: 50px;
-    }
-
-    .rightimage-container {
-        position: relative;
-        width: 100%;
-        max-width: 400px; 
-    }
-
-    .leftimage, .rightimage {
-    width:  400px; /* Set a specific width for both images */
-    height:  500px; /* Set a specific height for both images */
-    object-fit: cover; /* Scales the image to fill the container while maintaining aspect ratio */
-    /* border-radius:  10px; To match the border-radius of the form container */
-}
-
-    .rightimage-container form {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        padding: 20px;
-        background-color: rgb(154, 148, 148);
-        border-radius: 10px;
-        width: 80%; /* Adjust width as needed */
-    }
-
-    input.form-control {
-        margin-bottom: 10px;
-    }
-
-    input::placeholder {
-  font-size:  60%;
-}
-
-    /* Media query for screens smaller than 768px */
-    @media (max-width: 767.98px) {
+    <style>
         body {
-            margin: 10px;
+            background-image: url('/image/loginbg1.jpg');
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         .image {
-            margin-left: 25%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 100px;
+            padding-top: 50px;
         }
 
         .rightimage-container {
-            max-width: none; /* Remove max-width to allow the image to expand */
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .leftimage,
+        .rightimage {
+            width: 400px;
+            height: 500px;
+            object-fit: cover;
         }
 
         .rightimage-container form {
-            width: 90%; /* Adjust width for smaller screens */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            padding: 20px;
+            background-color: rgb(154, 148, 148);
+            border-radius: 10px;
+            width: 80%;
         }
-    }
-</style>
 
-<section class="vh-100 gradient-custom"> 
-    <div class="container">
-        <div class="image bg-transparent text-dark">
-            <div class="rightimage-container" style="margin-top: 25%;">
-                <form action="/admin" method="post" onsubmit="return validate()">
-                    <h2 style="font-style:normal; font-size: x-large; font-weight:bold; text-decoration: underline; margin-top: 10%;">Welcome Navya..!</h2>
-                    <div class="form-outline form-white mb-4" style="margin-top: 10%;">
-                        <input name="email" id="email" class="form-control form-control-lg"  placeholder="Enter your email here..!" />
-                        <span id="emailError" class="error" style="color: red;"></span>
-                    </div>
-                    <div class="form-outline form-white mb-4">
-                        <input type="password" name="password" id="password" class="form-control form-control-lg"  placeholder="Enter your password here..!" />
-                        <span id="passwordError" class="error" style="color: red;"></span>
-                    </div>
-                    <button class="btn btn-outline-dark btn-lg px-5" type="submit" style="border-radius: 30px; font-size: small; font-weight: bolder;">LOG IN</button><br>
-                </form>
+        input.form-control {
+            margin-bottom: 10px;
+        }
+
+        input::placeholder {
+            font-size: 60%;
+        }
+
+        /* Media query for screens smaller than 768px */
+        @media (max-width: 767.98px) {
+            body {
+                margin: 10px;
+            }
+
+            .image {
+                margin-left: 25%;
+            }
+
+            .rightimage-container {
+                max-width: none;
+                /* Remove max-width to allow the image to expand */
+            }
+
+            .rightimage-container form {
+                width: 90%;
+                /* Adjust width for smaller screens */
+            }
+        }
+    </style>
+
+    <section class="vh-100 gradient-custom">
+        <div class="container">
+            <div class="image bg-transparent text-dark">
+                <div class="rightimage-container" style="margin-top: 25%;">
+                    <form action="/admin" method="post" onsubmit="return validate()">
+                        <h2
+                            style="font-style:normal; font-size: x-large; font-weight:bold; text-decoration: underline; margin-top: 10%;">
+                            Welcome Navya..!</h2>
+                        <div class="form-outline form-white mb-4" style="margin-top: 10%;">
+                            <input name="email" id="email" class="form-control form-control-lg"
+                                placeholder="Enter your email here..!" value="navya@gmail.com" />
+                            <span id="emailError" class="error" style="color: red;"></span>
+                        </div>
+                        <div class="form-outline form-white mb-4">
+                            <input type="password" name="password" id="password" class="form-control form-control-lg"
+                                placeholder="Enter your password here..!" value="navya22" />
+                            <span id="passwordError" class="error" style="color: red;"></span>
+                        </div>
+                        <button class="btn btn-outline-dark btn-lg px-5" type="submit"
+                            style="border-radius: 30px; font-size: small; font-weight: bolder;">LOG IN</button><br>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<script>
-    function validate(){
-        document.getElementById('emailError').textContent = "";
-        document.getElementById('passwordError').textContent = "";
+    <script>
+        function validate() {
+            document.getElementById('emailError').textContent = "";
+            document.getElementById('passwordError').textContent = "";
 
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById("password").value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById("password").value.trim();
 
-        if(email===""){
-            document.getElementById("emailError").textContent = "Email cannot be empty..!";
-            return false
+            if (email === "") {
+                document.getElementById("emailError").textContent = "Email cannot be empty..!";
+                return false
+            }
+
+            if (!/^\S+@\S+\.\S+$/.test(email)) {
+                document.getElementById("emailError").textContent = "Email should be in specific format..!";
+                return false
+            }
+
+            if (password === "") {
+                document.getElementById("passwordError").textContent = "Password cannot be empty..!";
+                return false
+            }
+
+            if (password.length < 6) {
+                document.getElementById("passwordError").textContent = "Password should contain atleast 6 characters..!";
+                return false
+            }
+            return true
         }
+    </script>
 
-        if(!/^\S+@\S+\.\S+$/.test(email)){
-            document.getElementById("emailError").textContent = "Email should be in specific format..!";
-            return false
-        }
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
+        crossorigin="anonymous"></script>
 
-        if(password ===""){
-            document.getElementById("passwordError").textContent = "Password cannot be empty..!";
-            return false
-        }
-
-        if(password.length < 6){
-            document.getElementById("passwordError").textContent = "Password should contain atleast 6 characters..!";
-            return false
-        }
-        return true
-    }
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
-
-<%-include('footer')-%>
+    <%-include('footer')-%>

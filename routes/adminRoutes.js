@@ -8,6 +8,7 @@ const dashboardController = require('../controller/adminController/dashboardCont
 const userContoller = require('../controller/adminController/userController')
 const categoryController = require('../controller/adminController/categoryController')
 const productContoller = require('../controller/adminController/productController')
+const orderController = require('../controller/adminController/orderControllerAdmin')
 
 const adminSessionMiddleware = require('../middleware/admin')
 
@@ -34,5 +35,10 @@ router.post('/addProduct', adminSessionMiddleware.isAdmin, multer.upload.array('
 router.get('/editProduct/:proId', adminSessionMiddleware.isAdmin, productContoller.getEditProduct)
 router.post('/editProduct/:proId', adminSessionMiddleware.isAdmin, multer.upload.array('productImage', 3), productContoller.postEditProduct)
 router.get('/blockProduct', adminSessionMiddleware.isAdmin, productContoller.getBlockProduct)
+router.get('/deleteSingleImage/:index/:id', adminSessionMiddleware.isAdmin, productContoller.getDeleteSingleImage)
+
+router.get('/orderManagement',adminSessionMiddleware.isAdmin,orderController.getOrderManage)
+router.get('/updateOrderStatus/:orderId/:newStatus',adminSessionMiddleware.isAdmin,orderController.getUpdateStatus)
+router.get('/orderDetail/:orderId',orderController.getOrderDetail)
 
 module.exports = router

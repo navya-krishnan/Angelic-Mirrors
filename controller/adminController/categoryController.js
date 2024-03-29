@@ -34,23 +34,22 @@ const getAddCategory = async (req, res) => {
 
 const postAddCategory = async (req, res) => {
     try {
-        const categoryName = req.body.categoryName
+        const categoryName = req.body.categoryName.toLowerCase(); // Convert to lowercase
         const check = await categoryDatabase.findOne({
-            category_name: categoryName
-        })
-        console.log(categoryName, "jhdaj");
-        if (check) {
+            category_name: { $regex: new RegExp("^" + categoryName + "$", "i") } // Case-insensitive regex match
+        });
 
+        if (check) {
             console.log("Category already exists");
-            return res.render('admin/addCategory', { error: "Category already exists" })
+            return res.render('admin/addCategory', { error: "Category already exists" });
         } else {
             const categoryData = {
                 category_name: req.body.categoryName,
                 category_description: req.body.categoryDescription
             }
-            await categoryDatabase.insertMany([categoryData])
+            await categoryDatabase.insertMany([categoryData]);
             console.log("Details added successfully");
-            res.redirect('/admin/categoryManagement')
+            res.redirect('/admin/categoryManagement');
         }
     } catch (error) {
         console.log(error);
@@ -76,15 +75,14 @@ const getEditCategory = async (req, res) => {
     }
 }
 
-
 const postEditCategory = async (req, res) => {
     try {
         const categoryId = req.params.categoryId;
 
-        const categoryName = req.body.categoryName.toLowerCase();
+        const categoryName = req.body.categoryName.toLowerCase(); 
         const check = await categoryDatabase.findOne({
             _id: { $ne: categoryId },
-            category_name: { $regex: new RegExp("^" + categoryName + "$" + "i") }
+            category_name: { $regex: new RegExp("^" + categoryName + "$", "i") } 
         });
 
         if (check) {
@@ -113,7 +111,6 @@ const postEditCategory = async (req, res) => {
         }
     }
 };
-
 
 //listing and unlisting category
 const getBlockCategory = async (req, res) => {

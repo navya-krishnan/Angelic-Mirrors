@@ -25,9 +25,9 @@ const getAddProduct = async (req, res) => {
         if (req.session.admin) {
 
             const allCategories = await categoryDatabase.find()
-            const categories  = await allCategories.filter((category)=>category.blocked)
+            const categories = await allCategories.filter((category) => category.blocked)
             const error = req.query.error || "";
-            res.render('admin/addProduct', { categories ,error})
+            res.render('admin/addProduct', { categories, error })
         } else {
             res.redirect('/admin')
         }
@@ -43,21 +43,20 @@ const postAddProduct = async (req, res) => {
         img = req.files.map((val) => {
             return val.filename;
         });
-        const productName = req.body.productName.trim().toLowerCase()
+
+        const productName = req.body.productName.trim().toLowerCase(); // Convert product name to lowercase
 
         const catId = req.body.productCategory
         const category = await categoryDatabase.findById(catId)
 
         const check = await productDatabase.findOne({
-            product_name: { $regex: new RegExp("^" + productName + "$", "i") }
+            product_name: { $regex: new RegExp("^" + productName + "$", "i") } // Case-insensitive regex match
         })
 
 
         if (check) {
             console.log("Product already exists");
-            const categories = await categoryDatabase.find()
             res.redirect('/admin/addProduct?error=Product+already+exists');
-
         } else {
             productData = {
                 product_name: req.body.productName,
@@ -67,15 +66,15 @@ const postAddProduct = async (req, res) => {
                 product_image: img
             }
             await productDatabase.insertMany([productData])
-            console.log("Product added successfullly");
+            console.log("Product added successfully");
             res.redirect('/admin/productManagement')
         }
-
     } catch (error) {
         console.log(error);
         res.status(500).send("Error occurred");
     }
 }
+
 
 //edit product
 const getEditProduct = async (req, res) => {
@@ -109,15 +108,15 @@ const postEditProduct = async (req, res) => {
             category_name: req.body.productCategory
         });
 
+        const productName = req.body.productName.trim().toLowerCase();
 
-          // Check if the product name is already taken
-          const existingProduct = await productDatabase.findOne({
-            _id: { $ne: req.params.proId }, // Exclude the current product being edited
-            product_name: req.body.productName
+        // Check if the product name is already taken 
+        const existingProduct = await productDatabase.findOne({
+            _id: { $ne: req.params.proId }, 
+            product_name: { $regex: new RegExp("^" + productName + "$", "i") } 
         });
-        
+
         if (existingProduct) {
-            // Product with the same name already exists
             return res.redirect(`/admin/editProduct/${req.params.proId}?errors=Product+with+name+'${req.body.productName}'+already+exists`);
         }
 
@@ -127,8 +126,9 @@ const postEditProduct = async (req, res) => {
                 return val.filename;
             });
 
-            // const existingProduct = await productDatabase.findById(req.params.proId);
-            // img = existingProduct.product_image.concat(img);
+            const existingProduct = await productDatabase.findById(req.params.proId);
+            img = existingProduct.product_image.concat(img);
+
         } else {
             const existingProduct = await productDatabase.findById(req.params.proId);
             img = existingProduct.product_image;
@@ -191,11 +191,32 @@ const getBlockProduct = async (req, res) => {
     }
 }
 
+//get method for deleting single image of product in edit product
+const getDeleteSingleImage = async (req, res) => {
+    try {
+        const { index, id } = req.params;
+        const product = await productDatabase.findById(id);
+
+        if (product) {
+            // Remove the image at the specified index
+            product.product_image.splice(index, 1);
+            await product.save();
+        }
+
+        res.redirect(`/admin/editProduct/${id}`);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Error occurred during deleting single image product");
+    }
+};
+
+
 module.exports = {
     getProductManage,
     getAddProduct,
     postAddProduct,
     getEditProduct,
     postEditProduct,
-    getBlockProduct
+    getBlockProduct,
+    getDeleteSingleImage
 }

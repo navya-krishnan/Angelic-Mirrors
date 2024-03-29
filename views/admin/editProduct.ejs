@@ -80,20 +80,21 @@
                     <a href="/admin/userManagement" class="nav-link"><i class="bi bi-people-fill"></i>User <span
                             style="margin-left: 25%;">
                             Management</span></a>
-                    <a href="/admin/productManagement" class="nav-item nav-link active"><i class="bi bi-bag-fill"></i>Product
+                    <a href="/admin/productManagement" class="nav-item nav-link active"><i
+                            class="bi bi-bag-fill"></i>Product
                         <span style="margin-left: 25%;"> Management</span></a>
                     <a href="/admin/categoryManagement" class="nav-item nav-link"><i
                             class="bi bi-bookmark-check-fill"></i>Category
                         <span style="margin-left: 25%;"> Management</span></a>
-                    <!-- <a href="/orderManagement" class="nav-item nav-link"><i class="bi bi-card-checklist"></i>Order <span
+                    <a href="/admin/orderManagement" class="nav-item nav-link"><i class="bi bi-card-checklist"></i>Order <span
                             style="margin-left: 25%;"> Management</span></a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banner <span
+                    <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banner <span
                             style="margin-left: 25%;"> Management</span></a>
                     <a href="chart.html" class="nav-item nav-link"><i class="bi bi-credit-card-fill"></i>Coupon <span
                             style="margin-left: 25%;"> Management</span></a>
                     <a href="chart.html" class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i>Sales
-                        Report</a> -->
-                </div>
+                        Report</a>
+                </div> -->
             </nav>
         </div>
         <!-- Sidebar End -->
@@ -119,8 +120,7 @@
                             </svg>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">My Profile</a>
-                            <a href="#" class="dropdown-item">Settings</a>
+                           
                             <a href="/admin/adminLogout" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
@@ -138,80 +138,91 @@
                             <div class="alert alert-danger">
                                 <%= errors %>
                             </div>
-                        <% } %>
-                        
-                        <form action="/admin/editProduct/<%= products._id%>" method="post" enctype="multipart/form-data"
-                            onsubmit="return validateForm()" style="margin-top: 2%;">
-                            <div>
-                                <label for="productName" class="form-label">Product Name</label>
-                                <input type="text" name="productName" id="productName"
-                                    class="form-control form-control-lg" value="<%= locals.products.product_name %>"
-                                    style="border: 1px solid black; " />
-                                <span id="nameError" style="color: red;"></span>
-                            </div>
+                            <% } %>
 
-                            <div>
-                                <label for="productCategory" class="form-label" style="margin-top: 2%;">Product
-                                    Category</label>
-                                <select name="productCategory" id="productCategory" class="form-select form-select-lg"
-                                    style="border: 1px solid black;">
-                                    <% for (let i=0; i < categories.length; i++) { %>
-                                        <% if(categories[i].blocked){%>
-                                            <option value="<%= categories[i].category_name %>">
-                                                <%= categories[i].category_name %>
-                                            </option>
-                                            <% } %>
-                                                <% } %>
-                                </select>
-                            </div>
+                                <form action="/admin/editProduct/<%= products._id%>" method="post"
+                                    enctype="multipart/form-data" onsubmit="return validateForm()"
+                                    style="margin-top: 2%;">
+                                    <div>
+                                        <label for="productName" class="form-label">Product Name</label>
+                                        <input type="text" name="productName" id="productName"
+                                            class="form-control form-control-lg"
+                                            value="<%= locals.products.product_name %>"
+                                            style="border: 1px solid black;" />
+                                        <span id="nameError" style="color: red;"></span>
+                                    </div>
 
-                            <div>
-                                <label for="productPrice" class="form-label" style="margin-top: 2%;">Product
-                                    Price</label>
-                                <input type="text" name="productPrice" id="productPrice"
-                                    value="<%= locals.products.product_price %>" class="form-control form-control-lg"
-                                    style="border: 1px solid black;" />
-                                <span id="priceError" style="color: red; "></span>
-                            </div>
+                                    <div>
+                                        <label for="productCategory" class="form-label" style="margin-top: 2%;">Product
+                                            Category</label>
+                                        <select name="productCategory" id="productCategory"
+                                            class="form-select form-select-lg" style="border: 1px solid black;">
+                                            <% for (let i=0; i < categories.length; i++) { %>
+                                                <% if(categories[i].blocked){%>
+                                                    <option value="<%= categories[i].category_name %>">
+                                                        <%= categories[i].category_name %>
+                                                    </option>
+                                                    <% } %>
+                                                        <% } %>
+                                        </select>
+                                    </div>
 
-                            <div>
-                                <label for="productStock" class="form-label" style="margin-top: 2%;">Product
-                                    Stock</label>
-                                <input type="text" name="productStock" id="productStock"
-                                    value="<%= locals.products.product_stock %>" class="form-control form-control-lg"
-                                    style="border: 1px solid black;" />
-                                <span id="stockError" style="color: red; "></span>
-                            </div>
+                                    <div>
+                                        <label for="productPrice" class="form-label" style="margin-top: 2%;">Product
+                                            Price</label>
+                                        <input type="text" name="productPrice" id="productPrice"
+                                            value="<%= locals.products.product_price %>"
+                                            class="form-control form-control-lg" style="border: 1px solid black;" />
+                                        <span id="priceError" style="color: red; "></span>
+                                    </div>
+
+                                    <div>
+                                        <label for="productStock" class="form-label" style="margin-top: 2%;">Product
+                                            Stock</label>
+                                        <input type="text" name="productStock" id="productStock"
+                                            value="<%= locals.products.product_stock %>"
+                                            class="form-control form-control-lg" style="border: 1px solid black;" />
+                                        <span id="stockError" style="color: red; "></span>
+                                    </div>
 
 
-                            <div class="mb-3">
-                                <label for="productImage" class="form-label" style="margin-top: 2%;">Product
-                                    Image</label>
-                                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 2px;">
-                                    <% products.product_image.forEach((element, index)=> { %>
-                                        <div style="position: relative;">
-                                            <img class="img-fluid" style="width: 90px; margin: 10px;"
-                                                src="/image/ element %>" alt="" />
+                                    <div class="mb-3">
+                                        <label for="productImage" class="form-label" style="margin-top: 2%;">Product
+                                            Image</label>
+                                        <input multiple type="file" class="form-control" id="productImage"
+                                            name="productImage" accept="image/jpeg, image/png, image/gif"
+                                            accept="image/*"
+                                            style="border: 1px solid #000000; width: 430px; text-align: center; width: 100%; margin-bottom: 2%;"
+                                            onchange="previewImages(event)">
+
+                                        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 2px;">
+                                            <% products.product_image.forEach((element, index)=> {
+                                                %>
+                                                <div style="position: relative;">
+                                                    <img src="/image/<%= element %>" alt="Product Image"
+                                                        class="img-fluid" style="width: 90px; margin: 10px;">
+
+                                                    <a href="/admin/deleteSingleImage/<%= index %>/<%= products._id %>"
+                                                        style="position: absolute; top: 5px; right: 5px; color: red;"
+                                                        class="fas fa-times"></a>
+                                                </div>
+                                                <% }) %>
                                         </div>
-                                        <% }) %>
-                                </div>
-                                <input multiple type="file" class="form-control" id="productImage" name="productImage"
-                                    accept="image/jpeg, image/png, image/gif" accept="image/*"
-                                    style="border: 1px solid #000000; width: 430px; text-align: center; width: 100%; margin-bottom: 2%;"
-                                    onchange="previewImages(event)">
 
-                                <div id="image-preview" style="display: flex; flex-wrap: wrap;"></div>
-                            </div>
 
-                            <a href="/admin/productManagement">
-                                <button class="btn btn-outline-dark px-2" type="submit"
-                                    style="border-radius: 30px; font-size: medium; background-color: black; color: white; width: 200px; height: 40px; margin-left: 33%; margin-top: 3%;">
-                                    <img src="/image/edit.png"
-                                        style="width: 25px; height: 25px; padding-right: 3%;">Edit Product
-                                </button>
-                            </a>
+                                        <div id="image-preview" style="display: flex; flex-wrap: wrap;"></div>
+                                    </div>
 
-                        </form>
+                                    <a href="/admin/productManagement">
+                                        <button class="btn btn-outline-dark px-2" type="submit"
+                                            style="border-radius: 30px; font-size: medium; background-color: black; color: white; width: 200px; height: 40px; margin-left: 33%; margin-top: 3%;">
+                                            <img src="/image/edit.png"
+                                                style="width: 25px; height: 25px; padding-right: 3%;">Edit
+                                            Product
+                                        </button>
+                                    </a>
+
+                                </form>
                     </div>
                 </div>
 
@@ -251,7 +262,7 @@
     <script src="js/main.js"></script>
     <script>
         function validateForm() {
-            var productName = document.getElementById("productName").value.trim();
+            var productName = document.getElementById("productName").value.trim().toLowerCase(); // Convert product name to lowercase
             var productPrice = parseFloat(document.getElementById("productPrice").value);
             var productStock = parseInt(document.getElementById("productStock").value);
 
@@ -274,6 +285,16 @@
                 document.getElementById('nameError').textContent = "Product name only contains letters";
                 return false;
             }
+
+            // Check for existing product names
+            var existingNames = document.querySelectorAll('.existing-product-name');
+            for (var i = 0; i < existingNames.length; i++) {
+                if (existingNames[i].textContent.toLowerCase() === productName) {
+                    document.getElementById('nameError').textContent = "Product with this name already exists";
+                    return false;
+                }
+            }
+
             if (isNaN(productPrice) || productPrice <= 0) {
                 priceError.textContent = "Enter a valid price";
                 return false;
@@ -287,7 +308,9 @@
             return true;
         }
 
+
     </script>
+
 
     <script>
         function previewImages(event) {

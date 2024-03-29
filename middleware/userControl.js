@@ -1,4 +1,3 @@
-const express = require('express')
 const userCollection = require('../model/user')
 
 const block = async (req, res, next) => {
