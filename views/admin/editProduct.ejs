@@ -86,15 +86,16 @@
                     <a href="/admin/categoryManagement" class="nav-item nav-link"><i
                             class="bi bi-bookmark-check-fill"></i>Category
                         <span style="margin-left: 25%;"> Management</span></a>
-                    <a href="/admin/orderManagement" class="nav-item nav-link"><i class="bi bi-card-checklist"></i>Order <span
-                            style="margin-left: 25%;"> Management</span></a>
+                    <a href="/admin/orderManagement" class="nav-item nav-link"><i class="bi bi-card-checklist"></i>Order
+                        <span style="margin-left: 25%;"> Management</span></a>
+                    <a href="/admin/couponManagement" class="nav-item nav-link"><i
+                            class="bi bi-credit-card-fill"></i>Coupon <span style="margin-left: 25%;">
+                            Management</span></a>
                     <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banner <span
                             style="margin-left: 25%;"> Management</span></a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="bi bi-credit-card-fill"></i>Coupon <span
-                            style="margin-left: 25%;"> Management</span></a>
                     <a href="chart.html" class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i>Sales
-                        Report</a>
-                </div> -->
+                        Report</a> -->
+                </div>
             </nav>
         </div>
         <!-- Sidebar End -->
@@ -120,7 +121,7 @@
                             </svg>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                           
+
                             <a href="/admin/adminLogout" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
@@ -157,13 +158,12 @@
                                             Category</label>
                                         <select name="productCategory" id="productCategory"
                                             class="form-select form-select-lg" style="border: 1px solid black;">
-                                            <% for (let i=0; i < categories.length; i++) { %>
-                                                <% if(categories[i].blocked){%>
-                                                    <option value="<%= categories[i].category_name %>">
-                                                        <%= categories[i].category_name %>
-                                                    </option>
-                                                    <% } %>
-                                                        <% } %>
+                                            <% categories.forEach(category=> { %>
+                                                <option value="<%= category._id %>"
+                                                    <%=(products.product_category._id.toString()===category._id.toString())
+                                                    ? 'selected' : '' %>><%= category.category_name %>
+                                                </option>
+                                                <% }) %>
                                         </select>
                                     </div>
 
@@ -208,7 +208,6 @@
                                                 </div>
                                                 <% }) %>
                                         </div>
-
 
                                         <div id="image-preview" style="display: flex; flex-wrap: wrap;"></div>
                                     </div>
@@ -265,6 +264,7 @@
             var productName = document.getElementById("productName").value.trim().toLowerCase(); // Convert product name to lowercase
             var productPrice = parseFloat(document.getElementById("productPrice").value);
             var productStock = parseInt(document.getElementById("productStock").value);
+            var productImage = document.getElementById('productImage').value.trim()
 
             var nameError = document.getElementById('nameError');
             var priceError = document.getElementById('priceError');
@@ -304,6 +304,7 @@
                 stockError.textContent = "Enter a valid stock";
                 return false;
             }
+
 
             return true;
         }

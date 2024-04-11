@@ -3,12 +3,12 @@ const productDatabase = require('../../model/product');
 const cartDatabase = require('../../model/cart');
 const orderDatabase = require('../../model/order');
 const addressDatabase = require('../../model/address')
-// const { Promise } = require('mongoose');
+const Razorpay = require("razorpay");
 
 //route for placing order
 const getPlaceOrder = async (req, res) => {
     try {
-        const { userId, productId } = req.body
+        const { userId, productId, paymentMethod } = req.body
         console.log(productId, "user");
         const cart = await cartDatabase.findOne({ userId: userId }).populate("products.product");
 
@@ -26,7 +26,8 @@ const getPlaceOrder = async (req, res) => {
             userId,
             products: productsInCart,
             shippingAddress:shippingAddress,
-            orderDate: orderDate 
+            orderDate: orderDate,
+            paymentMethod: paymentMethod 
         })
         console.log(order,"order");
 
@@ -58,7 +59,6 @@ const getOrderConfirm = async (req, res) => {
 
             const product = await productDatabase.findOne({ productId: productId })
             res.render('user/orderConfirm', { orders, loggedIn, product });
-            // console.log(order, "order");
         } else {
             throw new Error("User session not found");
         }
@@ -84,8 +84,9 @@ const getMyOrders = async (req, res) => {
             const currentDate = new Date();
             const expectedDeliveryDate = new Date(currentDate.getTime() + deliveryDurationInDays * 24 * 60 * 60 * 1000);
 
+            const orderId = req.params.id
 
-            res.render('user/myOrders', { loggedIn, orders, expectedDeliveryDate })
+            res.render('user/myOrders', { loggedIn, orders, expectedDeliveryDate, orderId })
         }
     } catch (error) {
         console.log("Error in getOrderConfirm:", error);
@@ -103,11 +104,29 @@ const getCancelOrder = async (req, res) => {
             console.log(updateOrder, "update");
             res.redirect('/myOrders');
         } else {
-            throw new Error("User session not found");
+            throw new Error("User session not found  for cancel");
         }
     } catch (error) {
         console.log("Error in postCancelOrder:", error);
         return res.status(500).send("Error occurred during cancel order");
+    }
+}
+
+//return order
+const postReturnOrder = async(req,res)=>{
+    try {
+        if(req.session.user){
+            const orderId = req.params.id;
+            const orderUpdate = await orderDatabase.findByIdAndUpdate(orderId,
+                {$set:{status : "Returned"}})
+                console.log(orderUpdate,"orderupdate");
+                res.sendStatus(200); 
+        }else{
+            throw new Error("User session not found for return");
+        }
+    } catch (error) {
+        console.log("Error in postCancelOrder:", error);
+        return res.status(500).send("Error occurred during return order");
     }
 }
 
@@ -133,17 +152,10 @@ const getOrderDetail = async (req, res) => {
 
             const cartQty = cart.products.length;
 
-            // Calculate expected delivery date
-            const deliveryDurationInDays = 7;
-            const currentDate = new Date();
-            const expectedDeliveryDate = new Date(currentDate.getTime() + deliveryDurationInDays * 24 * 60 * 60 * 1000);
-
-
             res.render('user/orderDetail', {
                 order,
                 cartQty,
-                loggedIn,
-                expectedDeliveryDate
+                loggedIn
             });
         } else {
             throw new Error("User session not found or order ID missing");
@@ -154,14 +166,50 @@ const getOrderDetail = async (req, res) => {
     }
 };
 
+//razorpay payment
+const postRazorpay = async (req, res) => {
+    try {
+        let total = req.body.totalPrice;
 
+        // Create a new instance of Razorpay with your API keys
+        let instance = new Razorpay({
+            key_id: process.env.RAZORPAY_ID_KEY,
+            key_secret: process.env.RAZORPAY_SECRET_KEY,
+        });
 
+        // Define options for creating a new order
+        let options = {
+            amount: Number(total) * 100, // amount should be in paise (Indian currency)
+            currency: "INR",
+            receipt: "receipt#",
+            notes: {
+                key1: "value3",
+                key2: "value2",
+            },
+        };
 
+        // Create a new order using Razorpay API
+        instance.orders.create(options, function (err, order) {
+            if (err) {
+                console.error("Error creating order:", err);
+                return res.status(500).json({ error: "Error creating order", details: err });
+            }
+
+            console.log("Order created successfully:", order);
+            res.status(200).json({ orderId: order.id });
+        });
+    } catch (error) {
+        console.error("Error in postRazorpay:", error);
+        res.status(500).json({ error: "Error while creating Razorpay payment", details: error });
+    }
+};
 
 module.exports = {
     getOrderConfirm,
     getPlaceOrder,
     getMyOrders,
     getCancelOrder,
-    getOrderDetail
+    postReturnOrder,
+    getOrderDetail,
+    postRazorpay
 };

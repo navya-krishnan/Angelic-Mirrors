@@ -12,6 +12,10 @@ const angelicMirrorSchema = new mongoose.Schema({
         type : String,
         required : true,
     },
+    couponApplied:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"coupondb"
+    },
     block :{
         type : Boolean,
         default : true

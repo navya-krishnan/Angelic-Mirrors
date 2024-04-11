@@ -31,6 +31,7 @@ router.post('/forgotPassword',userController.postForgotPassword)
 
 router.get('/forgotOtp',otpController.getForgotOtp)
 router.post('/forgotOtp',otpController.postForgotOtp)
+router.get('/resendForgotOtp',userController.getForgotResendOtp)
 
 router.get('/newPassword',userController.getNewPassword)
 router.post('/newPassword',userController.postNewPassword)
@@ -53,11 +54,13 @@ router.post('/editAddress/:addressId', profileController.postEditAddress);
 router.get('/deleteAddress/:addressId',userBlockMiddleware.block,profileController.getDeleteAddress)
 
 router.get('/checkout',userBlockMiddleware.block,checkoutController.getCheckout)
+router.post('/razorpay',userBlockMiddleware.block,orderController.postRazorpay)
 
 router.get('/orderConfirm',userBlockMiddleware.block,orderController.getOrderConfirm)
 router.post('/getPlaceOrder',userBlockMiddleware.block,orderController.getPlaceOrder)
 router.get('/myOrders',userBlockMiddleware.block,orderController.getMyOrders)
 router.get('/cancelOrder/:id',userBlockMiddleware.block,orderController.getCancelOrder)
+router.post('/returnOrder/:id',userBlockMiddleware.block,orderController.postReturnOrder)
 router.get('/orderDetails/:id',userBlockMiddleware.block,orderController.getOrderDetail)
 
 

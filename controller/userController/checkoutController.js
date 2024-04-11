@@ -1,5 +1,6 @@
 const cartDatabase = require('../../model/cart');
 const addressDatabase = require('../../model/address');
+const couponDatabase = require('../../model/coupon')
 
 const getCheckout = async (req, res) => {
     try {
@@ -18,6 +19,8 @@ const getCheckout = async (req, res) => {
 
             const productId = cart.products[0].product._id;
 
+            const coupon = await couponDatabase.find()
+
             // Pass the data to the template
             res.render('user/checkout', {
                 address: address ? address.address : null,
@@ -27,7 +30,8 @@ const getCheckout = async (req, res) => {
                 cartQuantity,
                 loggedIn,
                 productId,
-                userId
+                userId,
+                coupon
             });
         } else {
             res.redirect('/userLogin');
@@ -38,6 +42,25 @@ const getCheckout = async (req, res) => {
     }
 };
 
+//coupon apply
+const postCouponApply = async (req, res) => {
+    try {
+        const user = req.session.user;
+        const userId = user._id;
+
+        const couponCode = req.body.couponCode
+        const cartTotal = req.body.cartTotal
+
+        const coupon = await couponDatabase.findOne({ coupon_Code: couponCode })
+
+        
+    } catch (error) {
+        console.log("Error in getCheckout:", error);
+        return res.status(500).send("Error occurred during post coupon apply");
+    }
+}
+
 module.exports = {
-    getCheckout
+    getCheckout,
+    postCouponApply
 };

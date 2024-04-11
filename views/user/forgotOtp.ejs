@@ -101,11 +101,12 @@
                                 Verify
                             </button>
 
+                            <h6 style="font-size: small; padding-top: 10px; text-decoration: underline;">Don't
+                                receive
+                                OTP..?</h6>
+                            <a id="resendLink" href="/resendForgotOtp"
+                                style="color: black; font-weight: bold; pointer-events: none; opacity: 0.5;">RESEND</a><br>
                         </form>
-                        <p class="resend text-muted mb-0">
-                            Didn't receive code? <br>
-                            <a href="">Resend Otp</a>
-                        </p>
                     </div>
                 </div>
             </div>
@@ -184,11 +185,6 @@
     </script>
 
     <script>
-        // Function to reload the OTP page
-        function reloadPage() {
-            window.location.reload();
-        }
-
         // Initialize timeleft with the total number of seconds for the timer
         var timeleft = 1 / 2 * 60; // For 30 minutes
 
@@ -210,7 +206,8 @@
             if (timeleft < 0) {
                 clearInterval(downloadTimer);
                 document.getElementById("countdowntimer").textContent = "Expired";
-                setTimeout(reloadPage, 1000); // Reload after 2 seconds (adjust as needed)
+                document.getElementById("resendLink").style.pointerEvents = "auto";
+                document.getElementById("resendLink").style.opacity = "1";
             }
         }, 1000);
     </script>

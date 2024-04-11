@@ -19,23 +19,25 @@ const getProductManage = async (req, res) => {
     }
 }
 
+
 //add product
 const getAddProduct = async (req, res) => {
     try {
-        if (req.session.admin) {
 
-            const allCategories = await categoryDatabase.find()
-            const categories = await allCategories.filter((category) => category.blocked)
+        if (req.session.admin) {
+            const allCategories = await categoryDatabase.find();
+            const categories = await allCategories.filter((category) => category.blocked);
             const error = req.query.error || "";
-            res.render('admin/addProduct', { categories, error })
+            res.render('admin/addProduct', { categories, error });
         } else {
-            res.redirect('/admin')
+            res.redirect('/admin');
         }
     } catch (error) {
         console.log(error);
         res.status(500).send("Error occurred");
     }
 }
+
 
 const postAddProduct = async (req, res) => {
     try {
@@ -49,12 +51,12 @@ const postAddProduct = async (req, res) => {
         const catId = req.body.productCategory
         const category = await categoryDatabase.findById(catId)
 
-        const check = await productDatabase.findOne({
+        const checkProductExists = await productDatabase.findOne({
             product_name: { $regex: new RegExp("^" + productName + "$", "i") } // Case-insensitive regex match
         })
 
 
-        if (check) {
+        if (checkProductExists) {
             console.log("Product already exists");
             res.redirect('/admin/addProduct?error=Product+already+exists');
         } else {
@@ -65,6 +67,12 @@ const postAddProduct = async (req, res) => {
                 product_stock: req.body.productStock,
                 product_image: img
             }
+
+            if (productData.product_stock <= 0) { 
+                console.log("Product stock must be greater than 0");
+                return res.redirect('/admin/addProduct?error=Product+stock+must+be+greater+than+0');
+            }
+
             await productDatabase.insertMany([productData])
             console.log("Product added successfully");
             res.redirect('/admin/productManagement')
@@ -83,7 +91,7 @@ const getEditProduct = async (req, res) => {
             const proId = req.params.proId
 
             const categories = await categoryDatabase.find()
-            const products = await productDatabase.findById(proId)
+            const products = await productDatabase.findById(proId).populate('product_category')
 
             const errors = req.query.errors || "";  // it retrieves error message from the query parameter
 
@@ -104,9 +112,7 @@ const postEditProduct = async (req, res) => {
     try {
         let img;
 
-        const category = await categoryDatabase.findOne({
-            category_name: req.body.productCategory
-        });
+        const category = await categoryDatabase.findById(req.body.productCategory);
 
         const productName = req.body.productName.trim().toLowerCase();
 
@@ -126,7 +132,7 @@ const postEditProduct = async (req, res) => {
                 return val.filename;
             });
 
-            const existingProduct = await productDatabase.findById(req.params.proId);
+            const existingProduct = await productDatabase.findById(req.params.proId)
             img = existingProduct.product_image.concat(img);
 
         } else {

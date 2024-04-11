@@ -27,9 +27,14 @@
             margin-left: 10%;
         }
 
-        /* .product-details{
-            margin-left: 3%;
-        } */
+        .btn-grey {
+            background-color: grey;
+            color: white;
+        }
+
+        .rounded-btn {
+            border-radius: 20px;
+        }
     </style>
 
     <!-- google font -->
@@ -83,18 +88,18 @@
                             <ul>
                                 <li class="current-list-item"><a href="/">Home</a>
                                 </li>
-                                <li><a href="about.html">About</a></li>
+                                <!-- <li><a href="about.html">About</a></li>
                                 <li><a href="#">Pages</a>
                                     <ul class="sub-menu">
-                                        <!-- <li><a href="404.html">404 page</a></li>
+                                        <li><a href="404.html">404 page</a></li>
 										<li><a href="about.html">About</a></li>
 										<li><a href="cart.html">Cart</a></li>
 										<li><a href="checkout.html">Check Out</a></li>
 										<li><a href="contact.html">Contact</a></li>
-										<li><a href="news.html">News</a></li> -->
-                                        <!-- <li><a href="/user/shop.ejs">Shop</a></li> -->
+										<li><a href="news.html">News</a></li>
+                                        <li><a href="/user/shop.ejs">Shop</a></li>
                                     </ul>
-                                </li>
+                                </li> -->
                                 <li><a href="/shop">Shop</a>
 
                                 <li>
@@ -187,41 +192,68 @@
                         <th class="product-total">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <% orders.forEach((order, index)=> { %>
+                <% if (orders.length===0) { %>
+                    <tbody>
                         <tr>
-                            <td>
-                                <% const orderId=order._id ? order._id.toString() : '' ; %>
-                                    <% const lastFiveDigits=orderId.substr(-5); %>
-                                        <% const hashedOrderId="#" .repeat(orderId.length - 5); %>
-                                            <% const displayOrderId=hashedOrderId + lastFiveDigits; %>
-                                                <%= displayOrderId %>
-                            </td>
-
-                            <td>
-                                <% let totalPrice=0; order.products.forEach((product)=> {
-                                    if (product) {
-                                    totalPrice += product.totalPrice;
-                                    }
-                                    });
-                                    %>
-                                    Rs. <%= totalPrice %> /-
-                            </td>
-                            <td>
-                                <%= expectedDeliveryDate.toDateString() %>
-                            </td>
-                            <td>
-                                <%= order.status %>
-                            </td>
-                            <td>
-                                <a href="#" onclick="confirmCancelOrder('<%= order._id %>')" class="boxed-btn"
-                                    style="margin-bottom: 5%; padding: 2px 20px;">Cancel </a>
-                                <a href="/orderDetails/<%= order._id %>" class="boxed-btn"
-                                    style="margin-bottom: 5%; padding: 2px 20px;">Details</a>
-                            </td>
+                            <td colspan="5">No orders available.</td>
                         </tr>
-                        <% }) %>
-                </tbody>
+                    </tbody>
+                    <% } else { %>
+                        <tbody>
+                            <% orders.forEach((order, index)=> { %>
+                                <tr>
+                                    <td>
+                                        <% const orderId=order._id ? order._id.toString() : '' ; %>
+                                            <% const lastFiveDigits=orderId.substr(-5); %>
+                                                <% const hashedOrderId='#' .repeat(orderId.length - 5); %>
+                                                    <% const displayOrderId=hashedOrderId + lastFiveDigits; %>
+                                                        <%= displayOrderId %>
+                                    </td>
+
+                                    <td>
+                                        <% let totalPrice=0; order.products.forEach((product)=> {
+                                            if (product) {
+                                            totalPrice += product.totalPrice;
+                                            }
+                                            }); %>
+                                            Rs. <%= totalPrice %> /-
+                                    </td>
+                                    <td>
+                                        <% if(order.orderDate) { %>
+                                            <% const deliveryDurationInDays=7; %>
+                                                <% const orderDate=new Date(order.orderDate); %>
+                                                    <% const expectedDeliveryDate=new Date(orderDate.getTime() +
+                                                        deliveryDurationInDays * 24 * 60 * 60 * 1000); %>
+                                                        <%= expectedDeliveryDate.toLocaleDateString() %>
+                                                            <% } %>
+                                    </td>
+                                    <td>
+                                        <%= order.status %>
+                                    </td>
+                                    <td>
+                                        <% if (order.status==='Delivered' ) { %>
+                                            <a href="#" class="boxed-btn return-btn"
+                                                onclick="returnOrder('<%= order._id %>')"
+                                                style="margin-bottom: 5%; padding: 2px 20px; background-color: green;">Return</a>
+                                            <% }else if(order.status==='Returned' ){ %>
+                                                <a href="#" class="disabled btn-success rounded-btn"
+                                                    style="margin-bottom: 5%; padding: 2px 20px; cursor: not-allowed;">Returned</a>
+                                                <% } else if (order.status !=='Cancelled' ) { %>
+                                                    <a href="#" class="boxed-btn"
+                                                        onclick="confirmCancelOrder('<%= order._id %>')"
+                                                        style="margin-bottom: 5%; padding: 2px 20px;">Cancel</a>
+                                                    <% } else { %>
+                                                        <a href="#" class="disabled btn-danger rounded-btn"
+                                                            style="margin-bottom: 5%; padding: 2px 20px; cursor: not-allowed;">Cancelled</a>
+                                                        <% } %>
+                                                            <a href="/orderDetails/<%= order._id %>" class="boxed-btn"
+                                                                style="margin-bottom: 5%; padding: 2px 20px;">Details</a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                        <% } %>
+
             </table>
         </div>
     </div>
@@ -304,10 +336,42 @@
         </div>
     </div>
     <!-- end copyright -->
+
     <script>
         function confirmCancelOrder(orderId) {
             if (confirm("Are you sure you want to cancel this order?")) {
                 window.location.href = "/cancelOrder/" + orderId;
+            }
+        }
+    </script>
+
+    <script>
+        function returnOrder(orderId) {
+            if (confirm("Are you sure you want to return this order?")) {
+                try {
+                    fetch("/returnOrder/" + orderId, {
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            orderId: '<%= orderId %>'
+                        })
+                    })
+
+                        .then(response => {
+                            if (response.ok) {
+                                console.log('Order returned');
+                                window.location.href = '/myOrders';
+                            } else {
+                                console.log('Failed to return order');
+                                alert('Failed to return order. Please try again later.');
+                            }
+                        })
+
+                } catch (error) {
+                    console.error("Error returning order:", error);
+                }
             }
         }
     </script>

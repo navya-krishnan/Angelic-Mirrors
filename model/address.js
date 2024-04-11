@@ -2,45 +2,45 @@ const mongoose = require('mongoose')
 
 const addressSchema = new mongoose.Schema({
     userId: {
-        type: mongoose.Schema.Types.ObjectId, // Correct usage of mongoose.Schema
+        type: mongoose.Schema.Types.ObjectId, 
         ref: 'users',
-        // required: true
+        required: true
     },
     name:{
         type: String,
-        // required: true
+        required: true
     },
     address: {
         type: String,
-        // required: true
+        required: true
     },
     street: {
         type: String,
-        // required: true
+        required: true
     },
     city: {
         type: String,
-        // required: true
+        required: true
     },
     district: {
         type: String,
-        // required: true
+        required: true
     },
     state: {
         type: String,
-        // required: true
+        required: true
     },
     country: {
         type: String,
-        // required: true
+        required: true
     },
     pincode: {
         type: String,
-        // required: true
+        required: true
     },
     phone: {
         type: String,
-        // required: true
+        required: true
     }
 })
 

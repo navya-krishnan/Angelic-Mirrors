@@ -121,18 +121,18 @@
                             <ul>
                                 <li class="current-list-item"><a href="/">Home</a>
                                 </li>
-                                <li><a href="about.html">About</a></li>
+                                <!-- <li><a href="about.html">About</a></li>
                                 <li><a href="#">Pages</a>
                                     <ul class="sub-menu">
-                                        <!-- <li><a href="404.html">404 page</a></li>
+                                        <li><a href="404.html">404 page</a></li>
 										<li><a href="about.html">About</a></li>
 										<li><a href="cart.html">Cart</a></li>
 										<li><a href="checkout.html">Check Out</a></li>
 										<li><a href="contact.html">Contact</a></li>
-										<li><a href="news.html">News</a></li> -->
-                                        <!-- <li><a href="/user/shop.ejs">Shop</a></li> -->
+										<li><a href="news.html">News</a></li>
+                                        <li><a href="/user/shop.ejs">Shop</a></li>
                                     </ul>
-                                </li>
+                                </li> -->
                                 <li><a href="/shop">Shop</a>
 
                                 <li>
@@ -251,6 +251,15 @@
                                 <% } else { %>
                                     Date Not Available
                                     <% } %>
+                    </p>
+                    <p class="p-element">Expected Date :
+                        <% if(order.orderDate) { %>
+                            <% const deliveryDurationInDays=7; %>
+                                <% const orderDate=new Date(order.orderDate); %>
+                                    <% const expectedDeliveryDate=new Date(orderDate.getTime() +
+                                        deliveryDurationInDays * 24 * 60 * 60 * 1000); %>
+                                        <%= expectedDeliveryDate.toLocaleDateString() %>
+                                            <% } %>
                     </p>
                     <p class="p-element">Order Status :
                         <%= order.status %>

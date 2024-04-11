@@ -31,20 +31,22 @@ const getCart = async (req, res) => {
         const maxQuantityError = cartQuantity >= max_product_quantity_per_person;
         const minQuantityError = cartQuantity <= min_product_quantity_per_person;
 
-        res.render('user/cart', { cart, cartQuantity, cartTotal, maxQuantityError, minQuantityError });
+        res.render('user/cart', { cart,userId, cartQuantity, cartTotal, maxQuantityError, minQuantityError });
     } catch (error) {
         console.log(error);
         res.status(500).send("Error while rendering get cart page");
     }
 };
 
-const max_product_quantity_per_person = 5;
+
+const max_product_quantity_per_person = 10;
 const min_product_quantity_per_person = 1;
+
 
 const postCart = async (req, res) => {
     try {
         const productId = req.body.productId;
-        const userId = req.body.userId;
+        const userId = req.session.user._id;
         const quantity = parseInt(req.body.quantity); 
 
         // Fetch the product from the database
@@ -59,20 +61,9 @@ const postCart = async (req, res) => {
             return res.status(400).send("Requested quantity exceeds available stock");
         }
 
-        // Check if the user has already added this product to the cart
-        const userCart = await Cart.findOne({ userId });
-        if (userCart) {
-            const existingProductIndex = userCart.products.findIndex(item =>
-                item.product._id.equals(productId)
-            );
-
-            if (existingProductIndex !== 1) {
-                // If the product already exists in the cart, check if the new quantity exceeds the limit
-                const totalQuantityInCart = userCart.products.reduce((total, product) => total + product.quantity, 0);
-                if (totalQuantityInCart + quantity > max_product_quantity_per_person) {
-                    return res.status(400).send(`You can only add up to ${max_product_quantity_per_person} units of this product to your cart`);
-                }
-            }
+        // Prevent adding to cart if stock is zero or negative
+        if (product.product_stock < 0) {
+            return res.status(400).send("Product out of stock");
         }
 
         // Create or update the cart
@@ -81,6 +72,7 @@ const postCart = async (req, res) => {
         if (!cart) {
             cart = new Cart({ userId, products: [{ product: productId, quantity }] });
         } else {
+            // Check if the product already exists in the cart
             const existingProductIndex = cart.products.findIndex(item =>
                 item.product._id.equals(productId)
             );
@@ -96,29 +88,16 @@ const postCart = async (req, res) => {
 
         // Decrement the stock of the product by the requested quantity
         product.product_stock -= quantity;
-         
 
-        await product.save();
+        await Promise.all([cart.save(), product.save()]);
 
-        let cartTotal = 0;
-        for (const product of cart.products) {
-            const productPrice = parseFloat(product.product.product_price); 
-            const productQuantity = parseInt(product.quantity); 
-            if (!isNaN(productPrice) && !isNaN(productQuantity)) {
-                cartTotal += productPrice * productQuantity;
-            }
-        }
-
-        // Update total price in the cart
-        cart.cartTotal = cartTotal;
-
-        await cart.save();
         res.redirect('/cart');
     } catch (error) {
         console.log(error);
         res.status(500).send("Error while rendering post cart page");
     }
 };
+
 
 
 const removeCart = async (req, res) => {
@@ -181,17 +160,29 @@ const postUpdateCart = async (req, res) => {
             item.product._id.equals(productId)
         );
 
+        // Check if the product exists in the cart
+        if (productIndex === -1) {
+            return res.status(404).send("Product not found in cart");
+        }
+
         const previousQuantity = cart.products[productIndex].quantity;
 
+        // Update the quantity in the cart
         cart.products[productIndex].quantity = quantity;
 
+        // Save the updated cart to the database
+        await cart.save();
+
+
+        // Calculate the quantity difference
         const quantityDifference = quantity - previousQuantity;
 
+        // Update the product stock accordingly
         const product = await Product.findById(productId);
-
         product.product_stock -= quantityDifference;
 
-        await Promise.all([cart.save(), product.save()]);
+        // Save the updated product information back to the database
+        await product.save();
 
         res.sendStatus(200); 
     } catch (error) {
@@ -199,7 +190,6 @@ const postUpdateCart = async (req, res) => {
         res.status(500).send("Error while updating cart");
     }
 };
-
 
 
 module.exports = {

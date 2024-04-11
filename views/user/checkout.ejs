@@ -74,18 +74,18 @@
                             <ul>
                                 <li class="current-list-item"><a href="/">Home</a>
                                 </li>
-                                <li><a href="about.html">About</a></li>
+                                <!-- <li><a href="about.html">About</a></li>
                                 <li><a href="#">Pages</a>
                                     <ul class="sub-menu">
-                                        <!-- <li><a href="404.html">404 page</a></li>
+                                        <li><a href="404.html">404 page</a></li>
 										<li><a href="about.html">About</a></li>
 										<li><a href="cart.html">Cart</a></li>
 										<li><a href="checkout.html">Check Out</a></li>
 										<li><a href="contact.html">Contact</a></li>
-										<li><a href="news.html">News</a></li> -->
-                                        <!-- <li><a href="/user/shop.ejs">Shop</a></li> -->
+										<li><a href="news.html">News</a></li>
+                                        <li><a href="/user/shop.ejs">Shop</a></li>
                                     </ul>
-                                </li>
+                                </li> -->
                                 <li><a href="/shop">Shop</a>
 
                                 <li>
@@ -258,23 +258,51 @@
                                                                     </td>
                                             </tr>
                                             <tr>
+                                                <td>Coupon Amount</td>
+
+                                            </tr>
+                                            <tr>
                                                 <% const shippingCost=100; %>
-                                                    <td>Total</td>
-                                                    <td>Rs. <%= subtotal + shippingCost %>
-                                                    </td>
+                                                <td>Total</td>
+                                                <td id="totalPrice">Rs. <%= subtotal + shippingCost %>
+                                                </td>
                                             </tr>
                             </tbody>
                         </table>
+                        <form class="form-inline" style="margin-top: 5%;">
+                            <div class="form-group mx-sm-3 mb-2">
+                                <label for="inputPassword2" class="sr-only">Coupon</label>
+                                <input type="text" class="form-control" id="inputPassword2"
+                                    placeholder="Enter Coupon Code">
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-2">Apply Coupon</button>
+                        </form>
                         <div class="payment" style="margin-top: 10%;">
-                            <input type="radio" id="cod" class="paymentMethod">
-                            <label for="">COD</label>
-                            <!-- <input type="radio" id="cod" class="paymentMethod">
-                            <label for="">Online Payment</label>
-                            <input type="radio" id="cod" class="paymentMethod">
-                            <label for="">Wallet</label> -->
+                            <div>
+                                <input type="radio" id="cod" class="paymentMethod" name="payment" value="cod">
+                                <label for="cod">COD</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="online" class="paymentMethod" name="payment" value="online">
+                                <label for="cod">Online</label>
+                            </div>
                         </div>
-                        <a href="#" class="boxed-btn" id="placeOrderButton"
-                            style="margin-bottom: 5%; margin-left: 35%;">Place Order</a>
+
+                        
+                        <div class="coupon-container" style="border: 1px solid black; height: 150px;">
+                            <h4 style=" text-align: center; margin-top: 10%;">Your Coupon Code is:</h4>
+                            <% coupon.forEach((coupons,i)=>{ %>
+                                <h5 style="text-align: center; padding-top: 0%;"><%= coupons.coupon_Name %></h5>
+                                <h5 style="text-align: center; padding-top: 0%;"><%= coupons.coupon_Code %></h5>
+                                <% }) %>
+                        </div>
+                        
+                        <% if (addresses && addresses.length> 0) { %>
+                            <a href="#" class="boxed-btn" id="placeOrderButton"
+                                style="margin-bottom: 5%; margin-left: 35%;">Place Order</a>
+                            <% } else { %>
+                                <p>No address available</p>
+                                <% } %>
                     </div>
                 </div>
 
@@ -301,7 +329,7 @@
                                                                         Phone: <%= address.phone %>
                                             </p>
                                             <% } else { %>
-                                                <p class="card-title">No Name Available</p>
+                                                <p class="card-title">No Address Available</p>
                                                 <% } %>
                                     </div>
 
@@ -439,33 +467,111 @@
         });
     </script>
 
-    <script>
-        document.getElementById('placeOrderButton').addEventListener('click', function () {
-    fetch('/getPlaceOrder', {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            userId: '<%= userId %>',
-            productId: '<%= productId %>'
-        })
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log('Order confirmed');
-            // Redirect to the order confirmation page
-            window.location.href = '/orderConfirm';
-        } else {
-            console.log('Failed to confirm order');
-        }
-    })
-    .catch((error) => {
-        console.log(error);
-    });
-});
 
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        document.getElementById('placeOrderButton').addEventListener('click', function (event) {
+            event.preventDefault();
+
+            // Check if COD is selected
+            var codSelected = document.getElementById('cod').checked;
+            var onlineSelected = document.getElementById('online').checked;
+
+            // If any payment method is selected, proceed with placing the order
+            if (codSelected || onlineSelected) {
+                if (onlineSelected) {
+                    initiateRazorpayPayment();
+                } else {
+                    placeOrder('COD');
+                }
+            } else {
+                // If no payment method is selected, alert the user
+                alert('Please select a payment method.');
+            }
+        });
+
+        async function initiateRazorpayPayment() {
+            console.log("initiated");
+            let totalPrice = document.getElementById('totalPrice').innerText;
+            totalPrice = (totalPrice.replace("Rs. ", ""));
+            console.log(totalPrice);
+
+            // Check which payment method is selected
+            var paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+
+            if (paymentMethod === 'online') {
+                fetch('/razorpay', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        totalPrice: Math.round(Number(totalPrice) * 100)
+                    })
+                })
+                    .then(response => response.json())
+                    .then(order => {
+                        var options = {
+                            "key": "rzp_test_BpPRrxU8lLKrkJ",
+                            "amount": Number(totalPrice) * 100,
+                            "currency": "INR",
+                            "name": "Angelic Mirrors",
+                            "description": "Payment for your order",
+                            "image": "",
+                            "order_id": order.id,
+                            "handler": function (response) {
+                                console.log(response);
+                                placeOrder('Online'); // Call function to place order after successful payment
+                            },
+                            "prefill": {
+                                "name": "Customer Name",
+                                "email": "customer@example.com",
+                                "contact": "9999999999"
+                            },
+                            "theme": {
+                                "color": "#3399cc"
+                            }
+                        };
+                        var rzp1 = new Razorpay(options);
+                        rzp1.open();
+                    })
+                    .catch(function (error) {
+                        console.error('Payment failed', error);
+                    });
+            }
+        }
+
+        function placeOrder(paymentMethod) {
+            // Fetch request to your server to place the order
+            fetch('/getPlaceOrder', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: '<%= userId %>',
+                    productId: '<%= productId %>',
+                    paymentMethod: paymentMethod
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Order confirmed');
+                        window.location.href = '/orderConfirm';
+                    } else {
+                        console.log('Failed to confirm order');
+                        alert('Failed to confirm order. Please try again later.');
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    alert('An error occurred. Please try again later.');
+                });
+        }
     </script>
+
+
 
     <!-- jquery -->
     <script src="assets/js/jquery-1.11.3.min.js"></script>

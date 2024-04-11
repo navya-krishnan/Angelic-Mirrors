@@ -80,16 +80,18 @@
                     <a href="/admin/userManagement" class="nav-link"><i class="bi bi-people-fill"></i>User <span
                             style="margin-left: 25%;">
                             Management</span></a>
-                    <a href="/admin/productManagement" class="nav-item nav-link active"><i class="bi bi-bag-fill"></i>Product
+                    <a href="/admin/productManagement" class="nav-item nav-link active"><i
+                            class="bi bi-bag-fill"></i>Product
                         <span style="margin-left: 25%;"> Management</span></a>
                     <a href="/admin/categoryManagement" class="nav-item nav-link"><i
                             class="bi bi-bookmark-check-fill"></i>Category
                         <span style="margin-left: 25%;"> Management</span></a>
-                    <a href="/admin/orderManagement" class="nav-item nav-link"><i class="bi bi-card-checklist"></i>Order <span
-                            style="margin-left: 25%;"> Management</span></a>
+                    <a href="/admin/orderManagement" class="nav-item nav-link"><i class="bi bi-card-checklist"></i>Order
+                        <span style="margin-left: 25%;"> Management</span></a>
+                    <a href="/admin/couponManagement" class="nav-item nav-link"><i
+                            class="bi bi-credit-card-fill"></i>Coupon <span style="margin-left: 25%;">
+                            Management</span></a>
                     <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banner <span
-                            style="margin-left: 25%;"> Management</span></a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="bi bi-credit-card-fill"></i>Coupon <span
                             style="margin-left: 25%;"> Management</span></a>
                     <a href="chart.html" class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i>Sales
                         Report</a> -->
@@ -119,7 +121,7 @@
                             </svg>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            
+
                             <a href="/admin/adminLogout" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
@@ -186,8 +188,10 @@
                                     style="font-size: large; font-weight: 700; margin-top: 2%;">Product Image</label>
                                 <input multiple type="file" class="form-control" id="productImage" name="productImage"
                                     accept="image/jpeg, image/png, image/gif"
-                                    style="border: 1px solid black; text-align: center;" />
+                                    style="border: 1px solid black; text-align: center;"
+                                    onchange="previewImages(event)" />
                                 <span id="imageError" style="color: red;"></span>
+                                <div id="image-preview" style="display: flex; flex-wrap: wrap;"></div>
                             </div>
 
                             <div>
@@ -196,8 +200,6 @@
                                     <img src="/image/productadd.jpg" style="width: 30px; height: 30px;">Add Product
                                 </button>
                             </div>
-
-                            </a>
 
                         </form>
                     </div>
@@ -261,17 +263,17 @@
                 return false;
             }
 
-            if(productPrice === ""){
+            if (productPrice === "") {
                 document.getElementById('priceError').textContent = "Enter price";
                 return false
             }
 
-            if(productStock === ""){
+            if (productStock === "") {
                 document.getElementById('stockError').textContent = "Enter stock";
                 return false
             }
 
-            
+
             if (isNaN(productPrice) || productPrice <= 0) {
                 document.getElementById('priceError').textContent = "Enter a valid price";
                 return false;
@@ -290,6 +292,48 @@
 
 
     </script>
+
+    <script>
+        function previewImages(event) {
+            var previewContainer = document.getElementById('image-preview');
+            var files = event.target.files;
+
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var previewImageContainer = document.createElement('div');
+                    previewImageContainer.style.position = 'relative'; // Make the container position relative
+
+                    var closeButton = document.createElement('button');
+                    closeButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg>';
+                    closeButton.style.position = 'absolute'; // Make the close button position absolute
+                    closeButton.style.top = '0'; // Position at the top
+                    closeButton.style.right = '0'; // Position at the right
+                    closeButton.style.backgroundColor = 'transparent';
+                    closeButton.style.border = 'none';
+                    closeButton.style.cursor = 'pointer';
+                    closeButton.onclick = function () {
+                        previewImageContainer.remove(); // Remove the preview image container when the close button is clicked
+                    };
+
+                    var previewImage = document.createElement('img');
+                    previewImage.style.width = '100px';
+                    previewImage.style.margin = '10px';
+                    previewImage.src = e.target.result;
+
+                    previewImageContainer.appendChild(closeButton); // Append close button to the container
+                    previewImageContainer.appendChild(previewImage); // Append image to the container
+
+                    previewContainer.appendChild(previewImageContainer); // Append container to the preview area
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>

@@ -30,6 +30,12 @@
     <!-- Template Stylesheet -->
     <link href="/assetsAdmin/css/style.css" rel="stylesheet">
 
+    <!-- Cropper.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+
+    <!-- Cropper.js JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
 
     <style>
         table tbody tr td {
@@ -61,11 +67,12 @@
                     <a href="/admin/categoryManagement" class="nav-item nav-link"><i
                             class="bi bi-bookmark-check-fill"></i>Category
                         <span style="margin-left: 25%;"> Management</span></a>
-                    <a href="/admin/orderManagement" class="nav-item nav-link"><i class="bi bi-card-checklist"></i>Order <span
-                            style="margin-left: 25%;"> Management</span></a>
+                    <a href="/admin/orderManagement" class="nav-item nav-link"><i class="bi bi-card-checklist"></i>Order
+                        <span style="margin-left: 25%;"> Management</span></a>
+                    <a href="/admin/couponManagement" class="nav-item nav-link"><i
+                            class="bi bi-credit-card-fill"></i>Coupon <span style="margin-left: 25%;">
+                            Management</span></a>
                     <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banner <span
-                            style="margin-left: 25%;"> Management</span></a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="bi bi-credit-card-fill"></i>Coupon <span
                             style="margin-left: 25%;"> Management</span></a>
                     <a href="chart.html" class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i>Sales
                         Report</a> -->
@@ -95,7 +102,7 @@
                             </svg>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                           
+
                             <a href="/admin/adminLogout" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
@@ -129,7 +136,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% product.forEach((products, i) => { %>
+                                    <% product.forEach((products, i)=> { %>
                                         <tr style="text-align: center;">
                                             <td>
                                                 <%= i + 1 %>
@@ -140,9 +147,9 @@
                                             <td>
                                                 <% if (products.product_category) { %>
                                                     <%= products.product_category.category_name %>
-                                                <% } else { %>
-                                                    No category
-                                                <% } %>
+                                                        <% } else { %>
+                                                            No category
+                                                            <% } %>
                                             </td>
                                             <td>
                                                 <%= products.product_price %>
@@ -152,7 +159,8 @@
                                             </td>
                                             <td>
                                                 <div class="product-image">
-                                                    <img src="/image/<%= products.product_image[0] %>" alt="">
+                                                    <img id="productImage<%= i %>"
+                                                        src="/image/<%= products.product_image[0] %>" alt="">
                                                 </div>
                                             </td>
                                             <td>
@@ -163,15 +171,15 @@
                                                     <a href="/admin/blockProduct?productId=<%= products._id %>">
                                                         <button class="btn btn-danger">List</button>
                                                     </a>
-                                                <% } else { %>
-                                                    <a href="/admin/blockProduct?productId=<%= products._id %>">
-                                                        <button class="btn btn-success">Unlist</button>
-                                                    </a>
-                                                <% } %>
+                                                    <% } else { %>
+                                                        <a href="/admin/blockProduct?productId=<%= products._id %>">
+                                                            <button class="btn btn-success">Unlist</button>
+                                                        </a>
+                                                        <% } %>
                                             </td>
                                         </tr>
-                                    <% }) %>
-                                    
+                                        <% }) %>
+
                                 </tbody>
                             </table>
                         </div>
@@ -215,6 +223,20 @@
             object-fit: cover;
         }
     </style>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize Cropper.js for each image
+            $('.product-image img').each(function (index) {
+                var cropper = new Cropper(this, {
+                    // Add Cropper.js options here
+                    aspectRatio: 1, // Example aspect ratio
+                    // Add more options as needed
+                });
+            });
+        });
+    </script>
+
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

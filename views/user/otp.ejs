@@ -104,13 +104,14 @@
                                             name="digit6" maxlength="1" style="border-color: black; width: 35px;" />
                                     </div>
                                     <div id="countdowntimer">00:30</div>
-                                    <button class="btn btn-outline-dark btn-lg px-5 " type="submit"
+                                    <button id="verifyBtn" class="btn btn-outline-dark btn-lg px-5" type="submit"
                                         style="border-radius: 30px; background-color: white; font-size: medium; font-weight: bold;">Verify
                                         OTP</button>
                                     <h6 style="font-size: small; padding-top: 10px; text-decoration: underline;">Don't
                                         receive
                                         OTP..?</h6>
-                                    <a href="/resendOtp" style="color: black; font-weight: bold;">RESEND</a><br>
+                                    <a id="resendLink" href="/resendOtp"
+                                        style="color: black; font-weight: bold; pointer-events: none; opacity: 0.5;">RESEND</a><br>
                                     <a href="/" style="color:black; font-size: small; ">Back To Login..!</a>
                         </form>
                     </div>
@@ -128,38 +129,33 @@
         integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
         crossorigin="anonymous"></script>
 
-    <script>
-        // Function to reload the OTP page
-        function reloadPage() {
-            window.location.reload();
-        }
-
-        // Initialize timeleft with the total number of seconds for the timer
-        var timeleft = 1 / 2 * 60; // For 30 minutes
-
-        var downloadTimer = setInterval(function () {
-            var minutes = Math.floor(timeleft / 60);
-            var seconds = timeleft % 60;
-
-            // Pad with leading zeros if less than 10
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-
-            // Display updated time left
-            document.getElementById("countdowntimer").textContent = minutes + ":" + seconds;
-
-            // Decrease time left by one second
-            timeleft--;
-
-            // Clear interval and reload the page when time runs out
-            if (timeleft < 0) {
-                clearInterval(downloadTimer);
-                document.getElementById("countdowntimer").textContent = "Expired";
-                setTimeout(reloadPage, 1000); // Reload after 2 seconds (adjust as needed)
-            }
-        }, 1000);
-    </script>
-
+        <script>
+            // Initialize timeleft with the total number of seconds for the timer
+            var timeleft = 1 / 2 * 60; // For 30 minutes
+        
+            var downloadTimer = setInterval(function () {
+                var minutes = Math.floor(timeleft / 60);
+                var seconds = timeleft % 60;
+        
+                // Pad with leading zeros if less than 10
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+        
+                // Display updated time left
+                document.getElementById("countdowntimer").textContent = minutes + ":" + seconds;
+        
+                // Decrease time left by one second
+                timeleft--;
+        
+                // Clear interval and enable resend button when time runs out
+                if (timeleft < 0) {
+                    clearInterval(downloadTimer);
+                    document.getElementById("countdowntimer").textContent = "Expired";
+                    document.getElementById("resendLink").style.pointerEvents = "auto";
+                    document.getElementById("resendLink").style.opacity = "1";
+                }
+            }, 1000);
+        </script>
 
 
     <%-include('footer')-%>

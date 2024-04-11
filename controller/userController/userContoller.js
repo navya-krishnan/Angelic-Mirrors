@@ -110,6 +110,7 @@ const postSignup = async (req, res) => {
             const otp = generateOTP();
             console.log('Generated OTP:', otp);
 
+           await sendOTPByEmail(email, otp);
 
             req.session.userDetails = {
                 username,
@@ -188,6 +189,7 @@ const getResendOtp = async (req, res) => {
 
         console.log("Redirecting to OTP page");
         return res.redirect('/otp');
+
     } catch (error) {
         console.log("Error in getResendOtp:", error);
         req.flash("error", "Error occurred during resend OTP");
@@ -198,7 +200,7 @@ const getResendOtp = async (req, res) => {
 //forgot password
 const getForgotPassword = async (req, res) => {
     try {
-        res.render('user/forgotPassword')
+        res.render('user/forgotPassword', { expireTime: req.session.expireTime })
     } catch (error) {
         console.log("Error in getResendOtp:", error);
         return res.status(500).send("Error occurred during getting forgot password");
@@ -208,6 +210,8 @@ const getForgotPassword = async (req, res) => {
 const postForgotPassword = async (req, res) => {
     try {
         const email = req.body.email;
+        // console.log(email,"email");
+
 
         if (!email) {
             return res.status(400).send("Email is missing.");
@@ -259,6 +263,19 @@ const postForgotPassword = async (req, res) => {
     }
 };
 
+//to resend otp for forgot password
+const getForgotResendOtp = async (req, res) => {
+    try {
+        const email = req.body.email;
+        console.log(email, "email");
+    } catch (error) {
+        console.log("Error in getResendOtp:", error);
+        req.flash("error", "Error occurred during resend OTP");
+        return res.status(500).send("Error occurred during forgot resend OTP");
+    }
+}
+
+
 //to get the new password page
 const getNewPassword = async (req, res) => {
     try {
@@ -304,14 +321,6 @@ const postNewPassword = async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
 module.exports = {
     userLogin,
     postLogin,
@@ -323,5 +332,6 @@ module.exports = {
     getForgotPassword,
     postForgotPassword,
     getNewPassword,
-    postNewPassword
+    postNewPassword,
+    getForgotResendOtp
 };

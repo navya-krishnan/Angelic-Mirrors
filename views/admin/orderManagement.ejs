@@ -55,12 +55,13 @@
                     <a href="/orderManagement" class="nav-item nav-link active"><i
                             class="bi bi-card-checklist"></i>Order <span style="margin-left: 25%;">
                             Management</span></a>
+                    <a href="/admin/couponManagement" class="nav-item nav-link"><i
+                            class="bi bi-credit-card-fill"></i>Coupon <span style="margin-left: 25%;">
+                            Management</span></a>
                     <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banner <span
-                            style="margin-left: 25%;"> Management</span></a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="bi bi-credit-card-fill"></i>Coupon <span
-                            style="margin-left: 25%;"> Management</span></a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i>Sales
-                        Report</a> -->
+                                style="margin-left: 25%;"> Management</span></a>
+                        <a href="chart.html" class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i>Sales
+                            Report</a> -->
                 </div>
             </nav>
         </div>
@@ -87,7 +88,7 @@
                             </svg>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            
+
                             <a href="/admin/adminLogout" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
@@ -114,79 +115,97 @@
                                     </tr>
                                 </thead>
                                 <tbody style="color: #000;">
-                                    <% orders.forEach((order,i)=> { %>
+                                    <% if (orders.length===0) { %>
                                         <tr style="text-align: center;">
-                                            <td>
-                                                <%= i+1 %>
-                                            </td>
-                                            
-                                            <td>
-                                                <% order.products.forEach((product)=> { %>
-                                                    <% if (product.product && product.product.product_name) { %>
-                                                        <%= product.product.product_name %>
-                                                            <% } else { %>
-                                                                Product Name Not Available
-                                                                <% } %>
-                                                                    <br>
-                                                                    <br>
-                                                                    <% }); %>
-                                            </td>
-                                            <td>
-                                                <% let cartTotal=0; %>
-                                                    <% order.products.forEach((product)=> { %>
-                                                        <% if (product.product && product.quantity &&
-                                                            product.product.product_price) { %>
-                                                            <% const total=product.product.product_price *
-                                                                product.quantity; %>
-                                                                <span class="product-total">
-                                                                    Rs. <%= total %>
-                                                                </span>
-                                                                <% cartTotal +=total; %>
+                                            <td colspan="7">No orders available.</td>
+                                        </tr>
+                                        <% } else { %>
+                                            <% orders.forEach((order,i)=> { %>
+                                                <tr style="text-align: center;">
+                                                    <td>
+                                                        <%= i+1 %>
+                                                    </td>
+                                                    <td>
+                                                        <% order.products.forEach((product)=> { %>
+                                                            <% if (product.product && product.product.product_name) { %>
+                                                                <%= product.product.product_name %>
                                                                     <% } else { %>
-                                                                        Total Price Not Available
+                                                                        Product Name Not Available
                                                                         <% } %>
                                                                             <br><br>
                                                                             <% }); %>
-                                            </td>
-                                            <td>
-                                                <% if (order.orderDate) { %>
-                                                    <%= order.orderDate.toLocaleDateString() %>
-                                                        <% } else { %>
-                                                            Date Not Available
-                                                            <% } %>
-                                            </td>
-                                            <td>
-                                                <%= order.status %>
-                                            </td>
-                                            <td>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-danger dropdown-toggle" type="button"
-                                                        id="statusDropdown" data-bs-toggle="dropdown"
-                                                        aria-expanded="true">
-                                                        Change
-                                                    </button>
-                                                    <ul class="dropdown-menu" aria-labelledby="statusDropdown">
-                                                        <li>
-                                                            <!-- Pass the order ID to the JavaScript function -->
-                                                            <a class="dropdown-item" href="#"
-                                                                onclick="confirmCancellation('<%= order._id %>')">Cancelled</a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item"
-                                                                href="/admin/updateOrderStatus/<%= order._id %>/Delivered"
-                                                                onclick="updateOrderStatus('<%= order._id %>', 'Delivered')">Delivered</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <button class="btn btn-info"
-                                                    onclick="window.location.href='/admin/orderDetail/<%= order._id %>'">View</button>
-                                            </td>
-                                        </tr>
-                                        <% }); %>
+                                                    </td>
+                                                    <td>
+                                                        <% let cartTotal=0; %>
+                                                            <% order.products.forEach((product)=> { %>
+                                                                <% if (product.product && product.quantity &&
+                                                                    product.product.product_price) { %>
+                                                                    <% const total=product.product.product_price *
+                                                                        product.quantity; %>
+                                                                        <span class="product-total">
+                                                                            Rs. <%= total %>
+                                                                        </span>
+                                                                        <% cartTotal +=total; %>
+                                                                            <% } else { %>
+                                                                                Total Price Not Available
+                                                                                <% } %>
+                                                                                    <br><br>
+                                                                                    <% }); %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (order.orderDate) { %>
+                                                            <%= order.orderDate.toLocaleDateString() %>
+                                                                <% } else { %>
+                                                                    Date Not Available
+                                                                    <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <%= order.status %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (order.status !=='Returned' && order.status !=='Cancelled'
+                                                            ) { %>
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-danger dropdown-toggle"
+                                                                    type="button" id="statusDropdown"
+                                                                    data-bs-toggle="dropdown" aria-expanded="true">
+                                                                    Change
+                                                                </button>
+                                                                <ul class="dropdown-menu"
+                                                                    aria-labelledby="statusDropdown">
+                                                                    <li>
+                                                                        <!-- Pass the order ID to the JavaScript function -->
+                                                                        <a class="dropdown-item" href="#"
+                                                                            onclick="confirmCancellation('<%= order._id %>')">Cancelled</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item"
+                                                                            href="/admin/updateOrderStatus/<%= order._id %>/Delivered"
+                                                                            onclick="updateOrderStatus('<%= order._id %>', 'Delivered')">Delivered</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <% } else { %>
+                                                                <button class="btn btn-grey" type="button"
+                                                                    aria-expanded="true" style="border: 2px solid #000;"
+                                                                    disabled>
+                                                                    <% if (order.status==='Cancelled' ) { %>
+                                                                        Cancelled
+                                                                        <% } else if (order.status==='Returned' ) { %>
+                                                                            Returned
+                                                                            <% } %>
+                                                                </button>
+                                                                <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-info"
+                                                            onclick="window.location.href='/admin/orderDetail/<%= order._id %>'">View</button>
+                                                    </td>
+                                                </tr>
+                                                <% }); %>
+                                                    <% } %>
                                 </tbody>
+
                             </table>
                         </div>
                     </div>

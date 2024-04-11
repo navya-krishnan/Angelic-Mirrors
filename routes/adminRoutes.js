@@ -9,6 +9,7 @@ const userContoller = require('../controller/adminController/userController')
 const categoryController = require('../controller/adminController/categoryController')
 const productContoller = require('../controller/adminController/productController')
 const orderController = require('../controller/adminController/orderControllerAdmin')
+const couponController = require('../controller/adminController/couponController')
 
 const adminSessionMiddleware = require('../middleware/admin')
 
@@ -40,5 +41,12 @@ router.get('/deleteSingleImage/:index/:id', adminSessionMiddleware.isAdmin, prod
 router.get('/orderManagement',adminSessionMiddleware.isAdmin,orderController.getOrderManage)
 router.get('/updateOrderStatus/:orderId/:newStatus',adminSessionMiddleware.isAdmin,orderController.getUpdateStatus)
 router.get('/orderDetail/:orderId',orderController.getOrderDetail)
+
+router.get('/couponManagement',adminSessionMiddleware.isAdmin,couponController.getCouponManage)
+router.get('/addCoupon',adminSessionMiddleware.isAdmin,couponController.getAddCoupon)
+router.post('/addCoupon',adminSessionMiddleware.isAdmin,couponController.postAddCoupon)
+router.get('/editCoupon/:couponId', adminSessionMiddleware.isAdmin,couponController.getEditCoupon)
+router.post('/editCoupon/:couponId', adminSessionMiddleware.isAdmin, couponController.postEditCoupon)
+router.get('/blockCoupon', adminSessionMiddleware.isAdmin, couponController.getBlockCoupon)
 
 module.exports = router

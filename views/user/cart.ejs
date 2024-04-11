@@ -28,9 +28,9 @@
 							<ul>
 								<li class="current-list-item"><a href="/">Home</a>
 								</li>
-								<li><a href="about.html">About</a></li>
+								<!-- <li><a href="about.html">About</a></li>
 								<li><a href="#">Pages</a>
-									<!-- <ul class="sub-menu">
+									<ul class="sub-menu">
 										<li><a href="404.html">404 page</a></li>
 										<li><a href="about.html">About</a></li>
 										<li><a href="cart.html">Cart</a></li>
@@ -38,8 +38,8 @@
 										<li><a href="contact.html">Contact</a></li>
 										<li><a href="news.html">News</a></li>
 										<li><a href="shop.html">Shop</a></li>
-									</ul> -->
-								</li>
+									</ul>
+								</li> -->
 
 								<!-- <li><a href="contact.html">Contact</a></li> -->
 								<li><a href="/shop">Shop</a>
@@ -134,7 +134,8 @@
 
 
 	<!-- table -->
-	<div id="errorMessageContainer" class="container" style="display: none; margin-top: 10%;">
+	<div id="errorMessageContainer" class="container"
+		style="<%= maxQuantityError || minQuantityError ? '' : 'display: none;' %> margin-top: 10%;">
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="alert alert-danger" role="alert">
@@ -183,11 +184,21 @@
 													<%= product.product.product_price %>
 												</td>
 												<td>
-													<input type="number" class="quantity-input"
-														value="<%= product.quantity %>"
-														data-product-price="<%= product.product.product_price %>"
-														data-product-id="<%= product.product._id %>">
+													<div class="quantity-controls">
+														<button class="decrement-button"
+															data-product-id="<%= product.product._id %>"
+															style="border: none;">-</button>
+														<span class="quantity-value"
+															data-product-id="<%= product.product._id %>"
+															data-quantity="<%= product.quantity %>">
+															<%= product.quantity %>
+														</span>
+														<button class="increment-button"
+															data-product-id="<%= product.product._id %>"
+															style="border: none;">+</button>
+													</div>
 												</td>
+
 												<td>
 													<% const total=product.product.product_price * product.quantity;%>
 														<span class="product-total">
@@ -349,35 +360,92 @@
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function () {
-			const quantityInputs = document.querySelectorAll('.quantity-input');
+			const quantityControls = document.querySelectorAll('.quantity-controls');
 
-			quantityInputs.forEach(function (input) {
-				input.addEventListener('change', async function (event) {
-					const productId = event.target.dataset.productId;
-					const newQuantity = parseInt(event.target.value);
+			quantityControls.forEach(control => {
+				const incrementButton = control.querySelector('.increment-button');
+				const decrementButton = control.querySelector('.decrement-button');
+				const quantityValue = control.querySelector('.quantity-value');
+				const productId = quantityValue.dataset.productId;
 
-					try {
-						const response = await fetch('/updateCart', {
-							method: 'POST',
-							headers: {
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify({
-								productId,
-								quantity: newQuantity
-							})
-						});
+				incrementButton.addEventListener('click', function () {
+					updateQuantity(productId, parseInt(quantityValue.dataset.quantity) + 1);
+				});
 
-						if (!response.ok) {
-							throw new Error('Failed to update cart');
-						}
-
-						window.location.reload();
-					} catch (error) {
-						console.error(error);
+				decrementButton.addEventListener('click', function () {
+					const newQuantity = parseInt(quantityValue.dataset.quantity) - 1;
+					if (newQuantity >= 1) {
+						updateQuantity(productId, newQuantity);
 					}
 				});
 			});
+
+			async function updateQuantity(productId, quantity) {
+				try {
+					const response = await fetch('/updateCart', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ productId, quantity }),
+					});
+
+					if (response.ok) {
+						const text = await response.text();
+						if (text === 'OK') {
+							// Successful response without JSON
+							console.log('Quantity updated successfully');
+							const quantityElement = document.querySelector(`.quantity-value[data-product-id="${productId}"]`);
+							quantityElement.textContent = quantity;
+							quantityElement.dataset.quantity = quantity;
+							// Recalculate total price
+							updateTotalPrice();
+						} else {
+							// If the response is not "OK", attempt to parse it as JSON
+							try {
+								const updatedCart = JSON.parse(text);
+								const updatedQuantity = updatedCart.products[productId].quantity;
+								const quantityElement = document.querySelector(`.quantity-value[data-product-id="${productId}"]`);
+								quantityElement.textContent = updatedQuantity;
+								quantityElement.dataset.quantity = updatedQuantity;
+								// Recalculate total price
+								updateTotalPrice();
+								console.log('Quantity updated successfully');
+							} catch (error) {
+								console.error('Invalid JSON response:', text);
+							}
+						}
+					} else {
+						console.error('Failed to update quantity:', response.status);
+					}
+				} catch (error) {
+					console.error('Error updating quantity:', error);
+				}
+			}
+
+			function updateTotalPrice() {
+				const productRows = document.querySelectorAll('.cart-table tbody tr');
+				let subtotal = 0;
+				productRows.forEach(row => {
+					const priceElement = row.querySelector('.product-price');
+					const quantityElement = row.querySelector('.quantity-value');
+					const totalPriceElement = row.querySelector('.product-total');
+					const price = parseFloat(priceElement.textContent.replace('Rs. ', ''));
+					const quantity = parseInt(quantityElement.textContent);
+					const total = price * quantity;
+					totalPriceElement.textContent = 'Rs. ' + total;
+					subtotal += total;
+				});
+				// Update subtotal and total price
+				const subtotalElement = document.querySelector('.total-data .product-total');
+				const shippingCost = 100; // Assuming fixed shipping cost
+				const total = subtotal + shippingCost;
+				subtotalElement.textContent = 'Rs. ' + subtotal;
+				const totalElement = document.querySelector('.total-data:last-child .product-total');
+				totalElement.textContent = 'Rs. ' + total;
+			}
+
+			updateTotalPrice();
 		});
 	</script>
 
@@ -385,14 +453,12 @@
 	<script>
 		document.addEventListener('DOMContentLoaded', function () {
 			const errorMessageContainer = document.getElementById('errorMessageContainer');
+    
+			<% if (maxQuantityError || minQuantityError) { %>
+				errorMessageContainer.style.display = 'block';
+			<% } %>
+		});
 
-        <% if (maxQuantityError) { %>
-				// Show the error message container if the maximum quantity error exists
-				errorMessageContainer.style.display = 'block';
-        <% } else if (minQuantityError) { %>
-				errorMessageContainer.style.display = 'block';
-		<% } %>
-    });
 	</script>
 
 

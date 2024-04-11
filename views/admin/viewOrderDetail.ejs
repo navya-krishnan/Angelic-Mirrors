@@ -107,12 +107,13 @@
                     <a href="/admin/orderManagement" class="nav-item nav-link active"><i
                             class="bi bi-card-checklist"></i>Order <span style="margin-left: 25%;">
                             Management</span></a>
+                    <a href="/admin/couponManagement" class="nav-item nav-link"><i
+                            class="bi bi-credit-card-fill"></i>Coupon <span style="margin-left: 25%;">
+                            Management</span></a>
                     <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banner <span
-                            style="margin-left: 25%;"> Management</span></a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="bi bi-credit-card-fill"></i>Coupon <span
-                            style="margin-left: 25%;"> Management</span></a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i>Sales
-                        Report</a> -->
+                                style="margin-left: 25%;"> Management</span></a>
+                        <a href="chart.html" class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i>Sales
+                            Report</a> -->
                 </div>
             </nav>
         </div>
@@ -201,27 +202,28 @@
                                     Rs. <%= subtotal + shippingCost %>
                             </p>
                             <p>Address :
-                            <% if (order && order.shippingAddress) { %>
-                                <div class="shipping-address">
-                                    <p>
-                                        <%= order.shippingAddress.name %>
-                                    </p>
-                                    <p>
-                                        <%= order.shippingAddress.address %>, <%= order.shippingAddress.district %>, <%=
-                                                    order.shippingAddress.state %>, <%= order.shippingAddress.country %>
-                                    </p>
-                                    <p>
-                                        <%= order.shippingAddress.pincode %>
-                                    </p>
-                                    <p>
-                                        <%= order.shippingAddress.phone %>
-                                    </p>
-                                </div>
-                                <% } else { %>
-                                    <p>Shipping Address Not Available</p>
-                                    <% } %>
-
+                                <% if (order && order.shippingAddress) { %>
+                                    <div class="shipping-address">
+                                        <p>
+                                            <%= order.shippingAddress.name %>
                                         </p>
+                                        <p>
+                                            <%= order.shippingAddress.address %>, <%= order.shippingAddress.district %>,
+                                                    <%= order.shippingAddress.state %>, <%=
+                                                            order.shippingAddress.country %>
+                                        </p>
+                                        <p>
+                                            <%= order.shippingAddress.pincode %>
+                                        </p>
+                                        <p>
+                                            <%= order.shippingAddress.phone %>
+                                        </p>
+                                    </div>
+                                    <% } else { %>
+                                        <p>Shipping Address Not Available</p>
+                                        <% } %>
+
+                            </p>
 
 
                         </div>
