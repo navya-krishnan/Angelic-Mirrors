@@ -3,33 +3,62 @@ const productDatabase = require('../../model/product');
 const cartDatabase = require('../../model/cart');
 const orderDatabase = require('../../model/order');
 const addressDatabase = require('../../model/address')
+const couponDatabase = require('../../model/coupon')
 const Razorpay = require("razorpay");
 
 //route for placing order
 const getPlaceOrder = async (req, res) => {
     try {
-        const { userId, productId, paymentMethod } = req.body
+        const { userId, productId, paymentMethod } = req.body;
         console.log(productId, "user");
+
+        // Fetch coupon information here
+        const coupon = await couponDatabase.findOne({ userId: userId });
+        console.log(coupon, "coupon");
+
+        // Extract discountAmount from the coupon if it exists
+        const discountAmount = coupon ? coupon.discount_Amount : 0;
+
         const cart = await cartDatabase.findOne({ userId: userId }).populate("products.product");
 
         const productsInCart = cart.products.map((item => ({
             product: item.product._id,
             quantity: item.quantity,
             totalPrice: (item.quantity * item.product.product_price)
-        })))
+        })));
 
         const shippingAddress = await addressDatabase.findOne({ userId: userId });
-
         const orderDate = new Date();
 
+        //inserting order
         const order = await orderDatabase.create({
             userId,
             products: productsInCart,
-            shippingAddress:shippingAddress,
+            shippingAddress: shippingAddress,
             orderDate: orderDate,
-            paymentMethod: paymentMethod 
-        })
-        console.log(order,"order");
+            paymentMethod: paymentMethod,
+            discountAmount: discountAmount
+        });
+
+        console.log(order, "order");
+
+        //adding coupon to user database
+        if (req.query.couponId && req.query.couponId !== undefined) {
+            console.log("Coupon ID:", req.query.couponId);
+            try {
+                const coupon = await userCollection.findByIdAndUpdate(userId, {
+                    $push: { appliedCoupons: req.query.couponId }
+                });
+                if (!coupon) {
+                    console.log("User not found or coupon not applied.");
+                } else {
+                    console.log("Coupon applied successfully.");
+                }
+            } catch (error) {
+                console.error("Error applying coupon:", error);
+            }
+        }
+
 
         //removing purchased products from cart
         const updateCart = await cartDatabase.updateOne(
@@ -52,6 +81,7 @@ const getPlaceOrder = async (req, res) => {
 const getOrderConfirm = async (req, res) => {
     try {
         if (req.session && req.session.user) {
+
             const loggedIn = true;
             const productId = req.body.productId
             const orders = await orderDatabase.findOne({ userId: req.session.user._id }).populate('products.product')
@@ -113,15 +143,15 @@ const getCancelOrder = async (req, res) => {
 }
 
 //return order
-const postReturnOrder = async(req,res)=>{
+const postReturnOrder = async (req, res) => {
     try {
-        if(req.session.user){
+        if (req.session.user) {
             const orderId = req.params.id;
             const orderUpdate = await orderDatabase.findByIdAndUpdate(orderId,
-                {$set:{status : "Returned"}})
-                console.log(orderUpdate,"orderupdate");
-                res.sendStatus(200); 
-        }else{
+                { $set: { status: "Returned" } })
+            console.log(orderUpdate, "orderupdate");
+            res.sendStatus(200);
+        } else {
             throw new Error("User session not found for return");
         }
     } catch (error) {
@@ -173,13 +203,16 @@ const postRazorpay = async (req, res) => {
 
         // Create a new instance of Razorpay with your API keys
         let instance = new Razorpay({
-            key_id: process.env.RAZORPAY_ID_KEY,
-            key_secret: process.env.RAZORPAY_SECRET_KEY,
+            key_id: process.env.RAZORPAY_KEY_ID,
+            key_secret: process.env.RAZORPAY_KEY_SECRET,
         });
+
+        // Calculate total amount in paise (Indian currency)
+        let totalAmountInPaise = Number(total) * 100;
 
         // Define options for creating a new order
         let options = {
-            amount: Number(total) * 100, // amount should be in paise (Indian currency)
+            amount: totalAmountInPaise,
             currency: "INR",
             receipt: "receipt#",
             notes: {
@@ -187,6 +220,7 @@ const postRazorpay = async (req, res) => {
                 key2: "value2",
             },
         };
+
 
         // Create a new order using Razorpay API
         instance.orders.create(options, function (err, order) {

@@ -5,6 +5,11 @@ const orderDatabase = require('../../model/order')
 const getOrderManage = async (req, res) => {
     try {
         if (req.session.admin) {
+            const page = parseInt(req.query.page) || 1;
+            const perPage = 6;
+
+            const startIndex = (page - 1) * perPage;
+
             const orderDetails = await orderDatabase
                 .find()
                 .populate('userId')
@@ -12,11 +17,25 @@ const getOrderManage = async (req, res) => {
                     path: "products.product",
                     model: "productdb"
                 })
-                .populate('shippingAddress'); 
-                
-            console.log(orderDetails, "orderdet");
+                .populate('shippingAddress')
+                .skip(startIndex) 
+                .limit(perPage);
 
-            res.render('admin/orderManagement', { orders: orderDetails });
+            const totalOrders = await orderDatabase.countDocuments(); 
+            const totalPages = Math.ceil(totalOrders / perPage); 
+
+            const sortOption = req.query.sortOption || null;
+            const order = req.query.order || null;
+            const search = req.query.search || null;
+
+            res.render('admin/orderManagement', { 
+                orders: orderDetails,
+                page,
+                totalPages,
+                sortOption,
+                order,
+                search
+            });
         }
     } catch (error) {
         console.log(error);
@@ -24,6 +43,7 @@ const getOrderManage = async (req, res) => {
     }
 }
 
+//order status updations
 const getUpdateStatus = async (req, res) => {
     const orderId = req.params.orderId
     const newStatus = req.params.newStatus

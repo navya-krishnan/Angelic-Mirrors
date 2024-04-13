@@ -184,6 +184,41 @@
                             </table>
                         </div>
                     </div>
+                     <!-- pagination -->
+                     <div class="row">
+                        <div class="col-lg-12 text-center">
+                            <div class="pagination-wrap">
+                                <ul class="pagination" style="justify-content: center;">
+                                    <li class="page-item <%= page == 1 ? 'disabled' : '' %>">
+                                        <a class="page-link"
+                                            href="?page=<%= page - 1 %><%= sortOption ? '&sortOption=' + sortOption : '' %><%= product ? '&product=' + product : '' %><%= search ? '&search=' + search : '' %>"
+                                            aria-label="Previous">
+                                            <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                                        </a>
+                                    </li>
+
+                                    <% for (let i=1; i <=totalPages; i++) { %>
+                                        <li class="page-item <%= page == i ? 'active' : '' %>">
+                                            <a class="page-link"
+                                                href="?page=<%= i %><%= sortOption ? '&sortOption=' + sortOption : '' %><%= product ? '&product=' + product : '' %><%= search ? '&search=' + search : '' %>">
+                                                <%= i %>
+                                            </a>
+                                        </li>
+                                        <% } %>
+
+                                            <li class="page-item <%= page == totalPages ? 'disabled' : '' %>">
+                                                <a class="page-link"
+                                                    href="?page=<%= page + 1 %><%= sortOption ? '&sortOption=' + sortOption : '' %><%= product ? '&product=' + product : '' %><%= search ? '&search=' + search : '' %>"
+                                                    aria-label="Next">
+                                                    Next <span aria-hidden="true"><i
+                                                            class="icon-long-arrow-right"></i></span>
+                                                </a>
+                                            </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end of pagination -->
                 </div>
             </div>
 

@@ -5,11 +5,31 @@ const categoryDatabase = require('../../model/category')
 const getProductManage = async (req, res) => {
     try {
         if (req.session.admin) {
-            const product = await productDatabase.find().populate('product_category')
+            const page = parseInt(req.query.page) || 1;
+            const perPage = 6;
+
+            const startIndex = (page - 1) * perPage;
+
+            const product = await productDatabase.find().populate('product_category').skip(startIndex).limit(perPage);
             const category = await categoryDatabase.find();
 
+            const totalProducts = await productDatabase.countDocuments();
+            const totalPages = Math.ceil(totalProducts / perPage);
 
-            res.render('admin/productManagement', { product, category })
+            const sortOption = req.query.sortOption || null;
+            const products = req.query.products || null;
+            const search = req.query.search || null;
+
+
+            res.render('admin/productManagement', {
+                product,
+                category,
+                page,
+                totalPages,
+                sortOption,
+                products,
+                search
+            })
         } else {
             res.redirect('/admin')
         }
@@ -68,7 +88,7 @@ const postAddProduct = async (req, res) => {
                 product_image: img
             }
 
-            if (productData.product_stock <= 0) { 
+            if (productData.product_stock <= 0) {
                 console.log("Product stock must be greater than 0");
                 return res.redirect('/admin/addProduct?error=Product+stock+must+be+greater+than+0');
             }
@@ -118,8 +138,8 @@ const postEditProduct = async (req, res) => {
 
         // Check if the product name is already taken 
         const existingProduct = await productDatabase.findOne({
-            _id: { $ne: req.params.proId }, 
-            product_name: { $regex: new RegExp("^" + productName + "$", "i") } 
+            _id: { $ne: req.params.proId },
+            product_name: { $regex: new RegExp("^" + productName + "$", "i") }
         });
 
         if (existingProduct) {

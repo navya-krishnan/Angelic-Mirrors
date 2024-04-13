@@ -4,10 +4,30 @@ const userDatabase = require('../../model/user')
 const getUserManage = async (req, res) => {
     try {
         if (req.session.admin) {
+            const page = parseInt(req.query.page) || 1;
+            const perPage = 6;
 
             const users = await userDatabase.find()
 
-            res.render('admin/userManagement', { users })
+            const totalPages = Math.ceil(users.length / perPage);
+
+            const startIndex = (page - 1) * perPage;
+            const endIndex = Math.min(startIndex + perPage, users.length);
+            const currentUsers = users.slice(startIndex, endIndex);
+
+            const sortOption = req.query.sortOption || null;
+            const user = req.query.user || null;
+            const search = req.query.search || null;
+
+
+            res.render('admin/userManagement', { 
+                users : currentUsers,
+                page,
+                totalPages,
+                sortOption,
+                user,
+                search
+            })
 
         } else {
             res.redirect('/admin')

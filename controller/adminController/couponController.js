@@ -5,10 +5,30 @@ const moment = require('moment')
 const getCouponManage = async (req, res) => {
     try {
         if (req.session.admin) {
-            const couponId = req.body.couponId;
-            const coupon = await couponDatabase.find()
+            const page = parseInt(req.query.page) || 1;
+            const perPage = 6;
 
-            res.render('admin/couponManagement', { coupon, couponId })
+            const startIndex = (page - 1) * perPage;
+
+            const couponId = req.body.couponId;
+            const coupon = await couponDatabase.find().skip(startIndex).limit(perPage);
+
+            const totalCoupon = await couponDatabase.countDocuments();
+            const totalPages = Math.ceil(totalCoupon / perPage);
+
+            const sortOption = req.query.sortOption || null;
+            const coupons = req.query.coupons || null;
+            const search = req.query.search || null;
+
+            res.render('admin/couponManagement', { 
+                coupon, 
+                couponId,
+                page,
+                totalPages,
+                sortOption,
+                coupons,
+                search 
+            })
         }
     } catch (error) {
         console.log(error);

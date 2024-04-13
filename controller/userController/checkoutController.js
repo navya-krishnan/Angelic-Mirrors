@@ -1,6 +1,7 @@
 const cartDatabase = require('../../model/cart');
 const addressDatabase = require('../../model/address');
-const couponDatabase = require('../../model/coupon')
+const couponDatabase = require('../../model/coupon');
+const userDatabase = require('../../model/user')
 
 const getCheckout = async (req, res) => {
     try {
@@ -45,20 +46,84 @@ const getCheckout = async (req, res) => {
 //coupon apply
 const postCouponApply = async (req, res) => {
     try {
-        const user = req.session.user;
-        const userId = user._id;
+        const userSession = req.session.user;
+        const userId = userSession._id;
 
-        const couponCode = req.body.couponCode
-        const cartTotal = req.body.cartTotal
+        const couponCode = req.body.couponCode;
+        const cartTotal = req.body.cartTotal;
 
-        const coupon = await couponDatabase.findOne({ coupon_Code: couponCode })
+        if (cartTotal == null) {
+            // If cartTotal is null or undefined, return an error response
+            console.log("Cart total is missing in the request");
+            return res.status(400).send({
+                message: "Cart total is missing in the request",
+                discountAmount: 0,
+                total: 0, // Provide a default value for total
+            });
+        }
 
-        
+        const coupon = await couponDatabase.findOne({ coupon_Code: couponCode });
+
+        if (!coupon) {
+            // If the coupon is not found, return an error response
+            console.log("No coupon available");
+            return res.status(400).send({
+                message: "Coupon not found",
+                discountAmount: 0,
+                total: cartTotal.toFixed(2), // Ensure to provide a valid total
+            });
+        }
+
+        const couponId = coupon._id;
+        console.log(couponId, "couponid");
+
+        // Check if the coupon is already applied to the user
+        const user = await userDatabase.findById(userId);
+
+        if (user.couponApplied.includes(couponId)) {
+            console.log("Coupon already applied");
+            // If the coupon is already applied, return an error response
+            return res.status(400).send({
+                message: "Coupon already applied",
+                discountAmount: 0,
+                total: cartTotal.toFixed(2),
+            });
+        }
+
+        // Check if the cart total meets the minimum amount required for the coupon
+        if (coupon.minimum_Amount > cartTotal || coupon.maximum_Amount < cartTotal) {
+            console.log("Cannot apply coupon");
+            return res.status(400).send({
+                message: "Cannot apply coupon",
+                discountAmount: 0,
+                total: cartTotal.toFixed(2),
+            });
+        }
+
+        // Calculate discount amount and update user's coupon information
+        const discountAmount = coupon.discount_Amount;
+        const total = cartTotal - discountAmount;
+
+        // Update user's coupon information
+        await userDatabase.findByIdAndUpdate(userId, {
+            $push: { couponApplied: couponId }
+        });
+
+        console.log("Coupon applied");
+
+        // Return success response with discount amount and total
+        return res.send({
+            discountAmount: discountAmount.toFixed(2),
+            total: total.toFixed(2),
+            couponId: couponId,
+        });
+
     } catch (error) {
-        console.log("Error in getCheckout:", error);
+        console.log("Error in postCouponApply:", error);
         return res.status(500).send("Error occurred during post coupon apply");
     }
 }
+
 
 module.exports = {
     getCheckout,

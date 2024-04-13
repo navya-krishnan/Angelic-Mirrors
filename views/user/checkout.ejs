@@ -223,7 +223,7 @@
 
                 <div class="col-lg-4">
                     <div class="order-details-wrap">
-                        <table class="order-details " style="width: 90%; margin-left: 5%; ">
+                        <table class="order-details" style="width: 90%; margin-left: 5%;">
                             <thead>
                                 <h4 style="text-align: center; text-decoration: underline; margin-top: 5%;">Your Order
                                 </h4>
@@ -257,25 +257,45 @@
                                                                     <td>Rs. <%= subtotal %>
                                                                     </td>
                                             </tr>
+                                            <% const shippingCost=100; %>
                                             <tr>
-                                                <td>Coupon Amount</td>
+                                                <td>Cart Total</td>
+                                                <td id="cartTotal">Rs. <%= subtotal + shippingCost %></td>
+                                            </tr>
+                                            <% if (coupon && coupon.discountAmount) { %>
+                                                <tr>
+                                                    <td>Coupon Amount</td>
+                                                    <td id="discountAmount">Rs. <%= coupon.discountAmount.toFixed(2) %>
+                                                    </td>
+                                                </tr>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td>Coupon Amount</td>
+                                                        <td id="discountAmount">Rs. 0</td>
+                                                    </tr>
+                                                    <% } %>
 
-                                            </tr>
-                                            <tr>
-                                                <% const shippingCost=100; %>
-                                                <td>Total</td>
-                                                <td id="totalPrice">Rs. <%= subtotal + shippingCost %>
-                                                </td>
-                                            </tr>
+                                                            <% const totalBeforeDiscount=subtotal + shippingCost; %>
+                                                                <% const totalAfterDiscount=totalBeforeDiscount -
+                                                                    (coupon && coupon.discountAmount ?
+                                                                    coupon.discountAmount : 0); %>
+
+                                                                    <tr>
+                                                                        <td>Total</td>
+                                                                        <td id="totalPrice">Rs. <%=
+                                                                                totalAfterDiscount.toFixed(2) %>
+                                                                        </td>
+                                                                    </tr>
                             </tbody>
                         </table>
-                        <form class="form-inline" style="margin-top: 5%;">
+
+                        <form action="#" class="form-inline" style="margin-top: 5%;">
                             <div class="form-group mx-sm-3 mb-2">
                                 <label for="inputPassword2" class="sr-only">Coupon</label>
-                                <input type="text" class="form-control" id="inputPassword2"
-                                    placeholder="Enter Coupon Code">
+                                <input type="text" class="form-control" id="couponCode" placeholder="Enter Coupon Code">
                             </div>
-                            <button type="submit" class="btn btn-primary mb-2">Apply Coupon</button>
+                            <button type="submit" id="applyCouponButton" class="btn btn-primary mb-2">Apply
+                                Coupon</button>
                         </form>
                         <div class="payment" style="margin-top: 10%;">
                             <div>
@@ -288,15 +308,6 @@
                             </div>
                         </div>
 
-                        
-                        <div class="coupon-container" style="border: 1px solid black; height: 150px;">
-                            <h4 style=" text-align: center; margin-top: 10%;">Your Coupon Code is:</h4>
-                            <% coupon.forEach((coupons,i)=>{ %>
-                                <h5 style="text-align: center; padding-top: 0%;"><%= coupons.coupon_Name %></h5>
-                                <h5 style="text-align: center; padding-top: 0%;"><%= coupons.coupon_Code %></h5>
-                                <% }) %>
-                        </div>
-                        
                         <% if (addresses && addresses.length> 0) { %>
                             <a href="#" class="boxed-btn" id="placeOrderButton"
                                 style="margin-bottom: 5%; margin-left: 35%;">Place Order</a>
@@ -306,8 +317,10 @@
                     </div>
                 </div>
 
+                <!-- address -->
+
                 <% if (addresses && addresses.length> 0) { %>
-                    <div class="row" id="viewAddress" style="margin-left: 1%; width: 100%; margin-top: 5%;">
+                    <div class="row" id="viewAddress" style="margin-left: 1%; width: 100%; margin-top: 0%;">
                         <% addresses.forEach((address, index)=> { %>
                             <div class="col-md-4 mb-3">
                                 <div class="card">
@@ -361,6 +374,29 @@
                         <p>No address available</p>
                         <% } %>
 
+
+                            <!-- coupon -->
+                            <% if (coupon && coupon.length> 0) { %>
+                                <div class="row" id="viewAddress" style="margin-left: 1%; width: 100%; margin-top: 0%;">
+                                    <% coupon.forEach((coupons, index)=> { %>
+                                        <div class="coupon-container"
+                                            style="border: 1px solid black; height: fit-content; margin-left: 2%; width: 20%;">
+                                            <h4 style=" text-align: center; margin-top: 10%;">Coupon Code is:</h4>
+                                            <h5 style="text-align: center; padding-top: 0%;">
+                                                <%= coupons.coupon_Name %>
+                                            </h5>
+                                            <p style="text-align: center;">For purchase between <br>
+                                                <%= coupons.minimum_Amount %> and <%= coupons.maximum_Amount %>
+                                            </p>
+                                            <h5 style="text-align: center; padding-top: 0%; margin-bottom: 5%;">
+                                                <%= coupons.coupon_Code %>
+                                            </h5>
+                                        </div>
+                                        <% }) %>
+                                </div>
+                                <% } else { %>
+                                    <p>No Coupon available</p>
+                                    <% } %>
 
             </div>
         </div>
@@ -442,55 +478,38 @@
     </div>
     <!-- end copyright -->
 
-    <script>
-        // Define the selectAddress function
-        function selectAddress(addressIndex) {
-            // Get the selected address
-            var selectedAddress = document.querySelector('input[name="selectedAddress"]:checked');
-            if (selectedAddress) {
-                var index = selectedAddress.value;
-                var addressInfo = document.querySelector('.username-container');
-                var address = addresses[index];
-                var addressHTML = `${address.name}, ${address.address}, ${address.street}, ${address.city}, ${address.district}, ${address.state}, ${address.country}, ${address.pincode}, ${address.phone}`;
-                addressInfo.innerHTML = addressHTML;
-            }
-        }
-
-        // Add event listeners after DOM content is loaded
-        document.addEventListener('DOMContentLoaded', function () {
-            var addressRadios = document.querySelectorAll('input[name="selectedAddress"]');
-            addressRadios.forEach(function (radio) {
-                radio.addEventListener('click', function () {
-                    selectAddress(this.value);
-                });
-            });
-        });
-    </script>
-
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
-        document.getElementById('placeOrderButton').addEventListener('click', function (event) {
-            event.preventDefault();
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add event listener for the placeOrderButton
+            var placeOrderButton = document.getElementById('placeOrderButton');
+            if (placeOrderButton) {
+                placeOrderButton.addEventListener('click', function (event) {
+                    event.preventDefault();
 
-            // Check if COD is selected
-            var codSelected = document.getElementById('cod').checked;
-            var onlineSelected = document.getElementById('online').checked;
+                    // Check if COD is selected
+                    var codSelected = document.getElementById('cod').checked;
+                    var onlineSelected = document.getElementById('online').checked;
 
-            // If any payment method is selected, proceed with placing the order
-            if (codSelected || onlineSelected) {
-                if (onlineSelected) {
-                    initiateRazorpayPayment();
-                } else {
-                    placeOrder('COD');
-                }
+                    // If any payment method is selected, proceed with placing the order
+                    if (codSelected || onlineSelected) {
+                        if (onlineSelected) {
+                            initiateRazorpayPayment();
+                        } else {
+                            placeOrder('COD');
+                        }
+                    } else {
+                        // If no payment method is selected, alert the user
+                        alert('Please select a payment method.');
+                    }
+                });
             } else {
-                // If no payment method is selected, alert the user
-                alert('Please select a payment method.');
+                console.error("Element with ID 'placeOrderButton' not found.");
             }
-        });
 
+           
         async function initiateRazorpayPayment() {
             console.log("initiated");
             let totalPrice = document.getElementById('totalPrice').innerText;
@@ -513,7 +532,7 @@
                     .then(response => response.json())
                     .then(order => {
                         var options = {
-                            "key": "rzp_test_BpPRrxU8lLKrkJ",
+                            "key": "rzp_test_lSbwNbIgtUL14w",
                             "amount": Number(totalPrice) * 100,
                             "currency": "INR",
                             "name": "Angelic Mirrors",
@@ -569,9 +588,76 @@
                     alert('An error occurred. Please try again later.');
                 });
         }
+
+
+         // Add event listener for the applyCouponButton
+         var applyCouponButton = document.getElementById('applyCouponButton');
+            if (applyCouponButton) {
+                applyCouponButton.addEventListener('click', function () {
+                    let couponCode = document.getElementById('couponCode').value;
+                    let cartTotalText = document.getElementById('cartTotal').innerText;
+                    console.log("Cart Total Text:", cartTotalText);
+                    let cartTotal = parseFloat(cartTotalText.split('Rs. ')[1]);
+                    console.log("Parsed Cart Total:", cartTotal);
+
+                    if (isNaN(cartTotal)) {
+                        console.error('Error: Cart total is not a valid number');
+                        return;
+                    }
+
+                    fetch('/couponApply', {
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            couponCode: couponCode,
+                            cartTotal: cartTotal
+                        }),
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error("Network error")
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (typeof data.discountAmount !== 'number') {
+                                data.discountAmount = Number(data.discountAmount);
+
+                                const discountAmountElement = document.getElementById('discountAmount');
+                                if (discountAmountElement) {
+                                    discountAmountElement.textContent = `Rs. ${data.discountAmount.toFixed(2)}`;
+                                } else {
+                                    console.error("Element with ID 'discountAmount' not found.");
+                                }
+                                console.log(discountAmountElement,"discount");
+                            } else {
+                                console.error("Invalid discount amount data:", data.discountAmount);
+                            }
+
+
+                            if (typeof data.total !== 'number') {
+                                data.total = Number(data.total);
+
+                                const total = document.getElementById('totalPrice');
+                                console.log(total,'to');
+                                total.textContent = `Rs. ${data.total.toFixed(2)}`;
+                            }
+
+                            console.log(data.couponId, "couponid");
+                            couponIds = data.couponId
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
+            } else {
+                console.error("Element with ID 'applyCouponButton' not found.");
+            }
+        });
+        
     </script>
-
-
 
     <!-- jquery -->
     <script src="assets/js/jquery-1.11.3.min.js"></script>

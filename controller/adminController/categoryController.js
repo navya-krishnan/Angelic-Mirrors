@@ -4,10 +4,28 @@ const categoryDatabase = require('../../model/category')
 const getCategoryManage = async (req, res) => {
     try {
         if (req.session.admin) {
+            const page = parseInt(req.query.page) || 1;
+            const perPage = 6;
 
-            const category = await categoryDatabase.find()
+            const startIndex = (page - 1) * perPage;
 
-            res.render('admin/categoryManagement', { category })
+            const category = await categoryDatabase.find().skip(startIndex).limit(perPage);
+
+            const totalCategory = await categoryDatabase.countDocuments();
+            const totalPages = Math.ceil(totalCategory / perPage);
+
+            const sortOption = req.query.sortOption || null;
+            const categories = req.query.categories || null;
+            const search = req.query.search || null;
+
+            res.render('admin/categoryManagement', { 
+                category,
+                page,
+                totalPages,
+                sortOption,
+                categories,
+                search
+            })
         } else {
             res.redirect('/admin')
         }

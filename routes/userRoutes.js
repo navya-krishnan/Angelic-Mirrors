@@ -54,6 +54,7 @@ router.post('/editAddress/:addressId', profileController.postEditAddress);
 router.get('/deleteAddress/:addressId',userBlockMiddleware.block,profileController.getDeleteAddress)
 
 router.get('/checkout',userBlockMiddleware.block,checkoutController.getCheckout)
+router.post('/couponApply',userBlockMiddleware.block,checkoutController.postCouponApply)
 router.post('/razorpay',userBlockMiddleware.block,orderController.postRazorpay)
 
 router.get('/orderConfirm',userBlockMiddleware.block,orderController.getOrderConfirm)
