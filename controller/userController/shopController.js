@@ -5,6 +5,7 @@ const escapeRegex = (text) => {
 const categoryCollection = require('../../model/category');
 const productCollection = require('../../model/product');
 const cartCollection = require('../../model/cart')
+const offerCollection = require('../../model/offer')
 
 // shop
 const getShop = async (req, res) => {
@@ -22,7 +23,7 @@ const getShop = async (req, res) => {
             }
 
             const allProducts = await productsQuery.exec();
-            const products = allProducts.filter(product => product.product_category && product.product_category.blocked && product.unlist);
+            let products = allProducts.filter(product => product.product_category && product.product_category.blocked && product.unlist);
 
             const allCategories = await categoryCollection.find();
             const category = allCategories.filter(category => category.blocked);
@@ -40,6 +41,27 @@ const getShop = async (req, res) => {
             const cart = await cartCollection.findOne({ userId: req.session.user._id });
             const cartQuantity = cart?.products?.length || 0;
 
+            //applying offer to products
+            products = await Promise.all(products.map(async (product) => {
+                const productOffer = await offerCollection.findOne({ product: product._id, unlist: true });
+                console.log(productOffer, "productOffer for product:", product.product_name);
+                const categoryOffer = await offerCollection.findOne({ category: product.product_category.length > 0 ? product.product_category[0]._id : null, unlist: true });
+                console.log(categoryOffer, "categoryOffer for product:", product.product_name);
+            
+                if (productOffer && typeof productOffer.discount === 'number') {
+                    product.offerPrice = product.price - (product.price * (productOffer.discount / 100));
+                } else if (categoryOffer && typeof categoryOffer.discount === 'number') {
+                    product.offerPrice = product.price - (product.price * (categoryOffer.discount / 100));
+                } else {
+                    product.offerPrice = null;
+                }
+                
+                
+                console.log("Offer price for product:", product.product_name, "is", product.offerPrice);
+            
+                return product;
+            }));
+            
             res.render('user/shop', {
                 products: currentProducts,
                 page,
@@ -66,13 +88,14 @@ const getSingleProduct = async (req, res) => {
 
             const product = await productCollection.findById(proId).populate('product_category');
 
+            if (!product) {
+                return res.status(400).send("Product not found");
+            }
+
             const similarProducts = await productCollection.find({ product_category: product.product_category }).populate('product_category');
 
             res.render('user/singleProduct', { product, similarProducts, userId: req.session.user._id, productId: proId });
 
-            if (!product) {
-                return res.status(400).send("Product not found");
-            }
         } else {
             console.log("Cannot get single product");
         }

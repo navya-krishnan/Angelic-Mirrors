@@ -13,8 +13,6 @@ const multer = require('multer')
 require('dotenv').config();
 
 
-
-
 // Set up session middleware
 const secretKey = process.env.SECRET_KEY;
 if (!secretKey) {
@@ -40,6 +38,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/angelicMirror")
         console.error("MongoDB connection error:", err);
     });
 
+
 // Parsing
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
@@ -57,3 +56,4 @@ app.use('/', userRouter)
 app.listen(5000, () => {
     console.log("Connected")
 })
+

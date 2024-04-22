@@ -8,6 +8,7 @@ const cartController = require('../controller/userController/cartController')
 const profileController = require('../controller/userController/profileController')
 const checkoutController = require('../controller/userController/checkoutController')
 const orderController = require('../controller/userController/orderController')
+const wishlistController = require('../controller/userController/wishlistController')
 
 const userBlockMiddleware = require('../middleware/userControl')
 const userSessionMiddleware = require('../middleware/userSession')
@@ -43,6 +44,10 @@ router.get('/cart', userBlockMiddleware.block, cartController.getCart)
 router.post('/cart',userBlockMiddleware.block,cartController.postCart)
 router.get('/removecart/:id',userBlockMiddleware.block,cartController.removeCart)
 router.post('/updateCart',userBlockMiddleware.block,cartController.postUpdateCart)
+
+router.get('/wishlist',userBlockMiddleware.block,wishlistController.getWishlist)
+router.post('/wishlist',userBlockMiddleware.block,wishlistController.postWishlist)
+router.get('/removeWishlist/:id',userBlockMiddleware.block,wishlistController.getRemoveWishlist)
 
 router.get('/profile',userBlockMiddleware.block,profileController.getProfile)
 router.get('/editProfile/:id',userBlockMiddleware.block,profileController.getEditProfile)

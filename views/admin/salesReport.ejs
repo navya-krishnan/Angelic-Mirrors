@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Angelic Mirrors - Admin</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="/assetsAdmin/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/public/assetsAdmin/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/assetsAdmin/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="/assetsAdmin/css/style.css" rel="stylesheet">
+
+    <style>
+        table tbody tr td {
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-dark">Sales <br> Report </h3>
+                </a>
+
+                <div class="navbar-nav w-100">
+                    <a href="/admin/adminDashboard" class="nav-item nav-link"><i
+                            class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="/admin/userManagement" class="nav-link"><i class="bi bi-people-fill"></i>User <span
+                            style="margin-left: 25%;">
+                            Management</span></a>
+                    <a href="/admin/productManagement" class="nav-item nav-link"><i class="bi bi-bag-fill"></i>Product
+                        <span style="margin-left: 25%;"> Management</span></a>
+                    <a href="/admin/categoryManagement" class="nav-item nav-link"><i
+                            class="bi bi-bookmark-check-fill"></i>Category
+                        <span style="margin-left: 25%;"> Management</span></a>
+                    <a href="/admin/orderManagement" class="nav-item nav-link"><i class="bi bi-card-checklist"></i>Order
+                        <span style="margin-left: 25%;"> Management</span></a>
+                    <a href="/admin/couponManagement" class="nav-item nav-link"><i
+                            class="bi bi-credit-card-fill"></i>Coupon <span style="margin-left: 25%;">
+                            Management</span></a>
+                    <a href="/admin/offerManagement" class="nav-item nav-link "><i class="bi bi-percent"></i>Offer
+                        <span style="margin-left: 25%;">
+                            Management</span></a>
+                    <a href="/admin/salesReport" class="nav-item nav-link active"><i
+                            class="bi bi-bar-chart-line-fill"></i>Sales
+                        Report</a>
+                    <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banner <span
+                            style="margin-left: 25%;"> Management</span></a> -->
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+
+                <!-- <form class="d-none d-md-flex ms-4">
+                    <input class="form-control border-0" type="search" placeholder="Search">
+                </form>  -->
+                <div class="navbar-nav align-items-center ms-auto">
+
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-person-bounding-box" viewBox="0 0 16 16">
+                                <path
+                                    d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5" />
+                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                            </svg>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+
+                            <a href="/admin/adminLogout" class="dropdown-item">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+            <!-- table start -->
+
+            <div>
+
+                <div class="col-12 pt-4 px-4">
+                    <div class="bg-white rounded h-80 p-3">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" style="border: #000;">
+                                <thead>
+                                    <tr style="color: black;text-align: center;">
+                                        <th class="product-index">No.</th>
+                                        <th class="product-name">Customer Name</th>
+                                        <th class="product-address">Address</th>
+                                        <th class="product-product">Product Name</th>
+                                        <th class="product-qty">Quantity</th>
+                                        <th class="product-price">Price</th>
+                                        <th class="product-discount">Discount</th>
+                                        <th class="product-totprice">Total Price</th>
+                                        <th class="product-date">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (orders.length===0) { %>
+                                        <tr style="text-align: center;">
+                                            <td colspan="7">No orders available.</td>
+                                        </tr>
+                                        <% } else { %>
+                                            <% orders.forEach((order, i)=> { %>
+                                                <tr style="text-align: center;">
+                                                    <td>
+                                                        <%= i + 1 %>
+                                                    </td>
+                                                    <td>
+                                                        <%=order.userId.username %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (order && order.shippingAddress) { %>
+                                                            <div class="shipping-address">
+                                                                <p>
+                                                                    <%= order.shippingAddress.name %>
+                                                                </p>
+                                                                <p>
+                                                                    <%= order.shippingAddress.address %>, <%=
+                                                                            order.shippingAddress.district %>,
+                                                                            <%= order.shippingAddress.state %>, <%=
+                                                                                    order.shippingAddress.country %>
+                                                                </p>
+                                                                <p>
+                                                                    <%= order.shippingAddress.pincode %>
+                                                                </p>
+                                                                <p>
+                                                                    <%= order.shippingAddress.phone %>
+                                                                </p>
+                                                            </div>
+                                                            <% } else { %>
+                                                                <p>Shipping Address Not Available</p>
+                                                                <% } %>
+
+                                                    </td>
+                                                    <td>
+                                                        <% order.products.forEach((product)=> { %>
+                                                            <% if (product.product && product.product.product_name) { %>
+                                                                <%= product.product.product_name %>
+                                                                    <% } else { %>
+                                                                        Product Name Not Available
+                                                                        <% } %>
+                                                                            <br><br>
+                                                                            <% }); %>
+                                                    </td>
+                                                    <td>
+                                                        <% order.products.forEach((product)=> { %>
+                                                            <% if (product.product && product.product.product_name) { %>
+                                                                <%= product.quantity %>
+                                                                    <% } else { %>
+                                                                        Product quantity Not Available
+                                                                        <% } %>
+                                                                            <br><br>
+                                                                            <% }); %>
+                                                    </td>
+
+                                                    <td>
+                                                        <% let cartTotal=0; %>
+                                                            <% order.products.forEach((product)=> { %>
+                                                                <% if (product.product && product.quantity &&
+                                                                    product.product.product_price) { %>
+                                                                    <% const total=product.product.product_price *
+                                                                        product.quantity; %>
+                                                                        <span class="product-total">
+                                                                            Rs. <%= total %>
+                                                                        </span>
+                                                                        <% cartTotal +=total; %>
+                                                                            <% } else { %>
+                                                                                Total Price Not Available
+                                                                                <% } %>
+                                                                                    <br><br>
+                                                                                    <% }); %>
+                                                    </td>
+
+                                                    <td>
+                                                        <% if (totalDiscount> 0) { %>
+                                                            <p>Rs.<%= totalDiscount.toFixed(2) %>
+                                                            </p>
+                                                            <% } else { %>
+                                                                <p>No discount applied</p>
+                                                                <% } %>
+                                                    </td>
+
+                                                    <td>
+                                                        <% cartTotal=0; %>
+                                                            <% order.products.forEach((product)=> { %>
+                                                                <% if (product.product && product.quantity &&
+                                                                    product.product.product_price) { %>
+                                                                    <% const originalPrice=product.product.product_price
+                                                                        * product.quantity; %>
+                                                                        <% const discountedPrice=originalPrice -
+                                                                            totalDiscount; %>
+                                                                            <span class="product-total">
+                                                                                Rs. <%= discountedPrice %>
+                                                                            </span>
+                                                                            <% cartTotal +=discountedPrice; %>
+                                                                                <% } else { %>
+                                                                                    Total Price Not Available
+                                                                                    <% } %>
+                                                                                        <br><br>
+                                                                                        <% }); %>
+                                                    </td>
+
+                                                    <td>
+                                                        <% if (order.orderDate) { %>
+                                                            <%= order.orderDate.toLocaleDateString() %>
+                                                                <% } else { %>
+                                                                    Date Not Available
+                                                                    <% } %>
+                                                    </td>
+                                                </tr>
+                                                <% }); %>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <a href="/admin/salesPdf">
+                            <button>Generate PDF</button>
+                        </a>
+                    </div>
+                    <!-- pagination -->
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                            <div class="pagination-wrap">
+                                <ul class="pagination" style="justify-content: center;">
+                                    <li class="page-item <%= page == 1 ? 'disabled' : '' %>">
+                                        <a class="page-link"
+                                            href="?page=<%= page - 1 %><%= sortOption ? '&sortOption=' + sortOption : '' %><%= order ? '&order=' + order : '' %><%= search ? '&search=' + search : '' %>"
+                                            aria-label="Previous">
+                                            <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                                        </a>
+                                    </li>
+
+                                    <% for (let i=1; i <=totalPages; i++) { %>
+                                        <li class="page-item <%= page == i ? 'active' : '' %>">
+                                            <a class="page-link"
+                                                href="?page=<%= i %><%= sortOption ? '&sortOption=' + sortOption : '' %><%= order ? '&order=' + order : '' %><%= search ? '&search=' + search : '' %>">
+                                                <%= i %>
+                                            </a>
+                                        </li>
+                                        <% } %>
+
+                                            <li class="page-item <%= page == totalPages ? 'disabled' : '' %>">
+                                                <a class="page-link"
+                                                    href="?page=<%= page + 1 %><%= sortOption ? '&sortOption=' + sortOption : '' %><%= order ? '&order=' + order : '' %><%= search ? '&search=' + search : '' %>"
+                                                    aria-label="Next">
+                                                    Next <span aria-hidden="true"><i
+                                                            class="icon-long-arrow-right"></i></span>
+                                                </a>
+                                            </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end of pagination -->
+                </div>
+            </div>
+
+            <!-- table end -->
+
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <a href="#">Angelic Mirrors</a>, All Right Reserved.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/chart/chart.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

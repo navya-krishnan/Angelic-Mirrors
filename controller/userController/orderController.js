@@ -107,7 +107,6 @@ const getMyOrders = async (req, res) => {
             const userId = user._id
 
             const orders = await orderDatabase.find({ userId: userId }).populate("products.product")
-            console.log(user, "user");
 
             // Calculate expected delivery date
             const deliveryDurationInDays = 7;

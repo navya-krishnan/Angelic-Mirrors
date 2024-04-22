@@ -90,10 +90,14 @@
                     <a href="/admin/couponManagement" class="nav-item nav-link active"><i
                             class="bi bi-credit-card-fill"></i>Coupon <span style="margin-left: 25%;">
                             Management</span></a>
+                    <a href="/admin/offerManagement" class="nav-item nav-link "><i class="bi bi-percent"></i>Offer <span
+                            style="margin-left: 25%;">
+                            Management</span></a>
+                    <a href="/admin/salesReport" class="nav-item nav-link"><i
+                            class="bi bi-bar-chart-line-fill"></i>Sales
+                        Report</a>
                     <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banner <span
-                                style="margin-left: 25%;"> Management</span></a>
-                        <a href="chart.html" class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i>Sales
-                            Report</a> -->
+                                    style="margin-left: 25%;"> Management</span></a> -->
                 </div>
             </nav>
         </div>
@@ -132,70 +136,72 @@
             <div class="container-fluid pt-4 px-4">
                 <div class="card-body">
                     <h1>Edit Coupon</h1>
-                    
-                            <div class="card-body-inner">
-                                <form action="" method="post"
-                                    onsubmit="return validateForm()">
-                                    <div>
-                                        <label for="couponName" class="form-label"
-                                            style="font-size: large; font-weight: 700;">Coupon Name</label>
-                                        <input type="text" name="couponName" id="couponName"
-                                            class="form-control form-control-lg" value="<%= locals.coupon.coupon_Name %>"
-                                            style="border: 1px solid black;" />
-                                        <span id="nameError" style="color: red;"></span>
-                                    </div>
-        
-                                    <div>
-                                        <label for="couponCode" class="form-label"
-                                            style="font-size: large; font-weight: 700;">Coupon Code</label>
-                                        <input type="text" name="couponCode" id="couponCode"
-                                            class="form-control form-control-lg" value="<%= locals.coupon.coupon_Code %>"
-                                            style="border: 1px solid black;" />
-                                        <span id="codeError" style="color: red;"></span>
-                                    </div>
-        
-                                    <div>
-                                        <label for="discountAmount" class="form-label"
-                                            style="font-size: large; font-weight: 700; margin-top: 2%;">Discount Amount</label>
-                                        <input type="text" name="discountAmount" id="discountAmount"
-                                            class="form-control form-control-lg" value="<%= locals.coupon.discount_Amount %>"
-                                            style="border: 1px solid black;" />
-                                        <span id="priceError" style="color: red;"></span>
-                                    </div>
-        
-                                    <div>
-                                        <label for="minimumPurchaseAmount" class="form-label"
-                                            style="font-size: large; font-weight: 700; margin-top: 2%;">Minimum Purchase Amount</label>
-                                        <input type="text" name="minimumPurchaseAmount" id="minimumPurchaseAmount"
-                                            class="form-control form-control-lg" value="<%= locals.coupon.minimum_Amount %>"
-                                            style="border: 1px solid black;" />
-                                        <span id="minimumError" style="color: red;"></span>
-                                    </div>
-        
-                                    <div>
-                                        <label for="maximumPurchaseAmount" class="form-label"
-                                            style="font-size: large; font-weight: 700; margin-top: 2%;">Maximum Purchase Amount</label>
-                                        <input type="text" name="maximumPurchaseAmount" id="maximumPurchaseAmount"
-                                            class="form-control form-control-lg" value="<%= locals.coupon.maximum_Amount %>"
-                                            style="border: 1px solid black;" />
-                                        <span id="maximumError" style="color: red;"></span>
-                                    </div>
-        
-                                    <div>
-                                        <label for="expiryDate" class="form-label"
-                                            style="font-size: large; font-weight: 700; margin-top: 2%;">Expiry Date</label>
-                                        <input type="text" name="expiryDate" id="expiryDate"
-                                            class="form-control form-control-lg" value="<%= locals.coupon.expiry_Date.toLocaleDateString() %>"
-                                            style="border: 1px solid black;" />
-                                        <span id="expiryError" style="color: red;"></span>
-                                    </div>
-                                    <button class="btn btn-outline-dark px-2" type="submit"
-                                        style="border-radius: 30px; font-size: medium; background-color: black; color: white; width: 200px; height: 40px; margin-left: 33%; margin-top: 3%;">
-                                        <img src="/image/edit.png"
-                                            style="width: 25px; height: 25px; padding-right: 3%;">Edit Coupon
-                                    </button>
-                                </form>
+
+                    <div class="card-body-inner">
+                        <form action="" method="post" onsubmit="return validateForm()">
+                            <div>
+                                <label for="couponName" class="form-label"
+                                    style="font-size: large; font-weight: 700;">Coupon Name</label>
+                                <input type="text" name="couponName" id="couponName"
+                                    class="form-control form-control-lg" value="<%= locals.coupon.coupon_Name %>"
+                                    style="border: 1px solid black;" />
+                                <span id="nameError" style="color: red;"></span>
                             </div>
+
+                            <div>
+                                <label for="couponCode" class="form-label"
+                                    style="font-size: large; font-weight: 700;">Coupon Code</label>
+                                <input type="text" name="couponCode" id="couponCode"
+                                    class="form-control form-control-lg" value="<%= locals.coupon.coupon_Code %>"
+                                    style="border: 1px solid black;" />
+                                <span id="codeError" style="color: red;"></span>
+                            </div>
+
+                            <div>
+                                <label for="discountAmount" class="form-label"
+                                    style="font-size: large; font-weight: 700; margin-top: 2%;">Discount Amount</label>
+                                <input type="text" name="discountAmount" id="discountAmount"
+                                    class="form-control form-control-lg" value="<%= locals.coupon.discount_Amount %>"
+                                    style="border: 1px solid black;" />
+                                <span id="priceError" style="color: red;"></span>
+                            </div>
+
+                            <div>
+                                <label for="minimumPurchaseAmount" class="form-label"
+                                    style="font-size: large; font-weight: 700; margin-top: 2%;">Minimum Purchase
+                                    Amount</label>
+                                <input type="text" name="minimumPurchaseAmount" id="minimumPurchaseAmount"
+                                    class="form-control form-control-lg" value="<%= locals.coupon.minimum_Amount %>"
+                                    style="border: 1px solid black;" />
+                                <span id="minimumError" style="color: red;"></span>
+                            </div>
+
+                            <div>
+                                <label for="maximumPurchaseAmount" class="form-label"
+                                    style="font-size: large; font-weight: 700; margin-top: 2%;">Maximum Purchase
+                                    Amount</label>
+                                <input type="text" name="maximumPurchaseAmount" id="maximumPurchaseAmount"
+                                    class="form-control form-control-lg" value="<%= locals.coupon.maximum_Amount %>"
+                                    style="border: 1px solid black;" />
+                                <span id="maximumError" style="color: red;"></span>
+                            </div>
+
+                            <div>
+                                <label for="expiryDate" class="form-label"
+                                    style="font-size: large; font-weight: 700; margin-top: 2%;">Expiry Date</label>
+                                <input type="text" name="expiryDate" id="expiryDate"
+                                    class="form-control form-control-lg"
+                                    value="<%= locals.coupon.expiry_Date.toLocaleDateString() %>"
+                                    style="border: 1px solid black;" />
+                                <span id="expiryError" style="color: red;"></span>
+                            </div>
+                            <button class="btn btn-outline-dark px-2" type="submit"
+                                style="border-radius: 30px; font-size: medium; background-color: black; color: white; width: 200px; height: 40px; margin-left: 33%; margin-top: 3%;">
+                                <img src="/image/edit.png" style="width: 25px; height: 25px; padding-right: 3%;">Edit
+                                Coupon
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
 

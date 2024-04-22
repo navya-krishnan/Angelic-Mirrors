@@ -1,5 +1,4 @@
 const Cart = require('../../model/cart');
-const User = require('../../model/user');
 const Product = require('../../model/product');
 
 const getCart = async (req, res) => {
@@ -42,12 +41,10 @@ const getCart = async (req, res) => {
 const max_product_quantity_per_person = 10;
 const min_product_quantity_per_person = 1;
 
-
 const postCart = async (req, res) => {
     try {
-        const productId = req.body.productId;
+        const { productId, quantity } = req.body;
         const userId = req.session.user._id;
-        const quantity = parseInt(req.body.quantity); 
 
         // Fetch the product from the database
         const product = await Product.findById(productId);
@@ -94,10 +91,9 @@ const postCart = async (req, res) => {
         res.redirect('/cart');
     } catch (error) {
         console.log(error);
-        res.status(500).send("Error while rendering post cart page");
+        res.status(500).send("Error while adding product to cart");
     }
 };
-
 
 
 const removeCart = async (req, res) => {

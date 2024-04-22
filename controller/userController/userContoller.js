@@ -1,15 +1,16 @@
 const userDatabase = require('../../model/user');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
-const { block } = require('../../middleware/userControl');
+// const { block } = require('../../middleware/userControl');
 
 //home
 const home = (req, res) => {
     let loggedIn = false;
+    const successMessage = req.flash('success')
     if (req.session.user) {
         loggedIn = true;
     }
-    res.render('user/home', { loggedIn });
+    res.render('user/home', { loggedIn,successMessage });
 };
 
 //login
@@ -33,7 +34,7 @@ const postLogin = async (req, res) => {
         const enteredEmail = req.body.email;
         const enteredPassword = req.body.password;
 
-        const user = await userDatabase.findOne({ email: enteredEmail, });
+        const user = await userDatabase.findOne({ email: enteredEmail });
 
         if (!user) {
             req.flash("error", "User not found.");
@@ -51,6 +52,8 @@ const postLogin = async (req, res) => {
 
         if (isPasswordValid) {
             req.session.user = user;
+
+            req.flash('success',"User logged in successfully..!")
             console.log("Login successfull");
             return res.redirect('/');
 

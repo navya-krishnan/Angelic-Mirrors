@@ -10,6 +10,8 @@ const categoryController = require('../controller/adminController/categoryContro
 const productContoller = require('../controller/adminController/productController')
 const orderController = require('../controller/adminController/orderControllerAdmin')
 const couponController = require('../controller/adminController/couponController')
+const offerController = require('../controller/adminController/offerController')
+const reportController = require('../controller/adminController/reportController')
 
 const adminSessionMiddleware = require('../middleware/admin')
 
@@ -48,5 +50,12 @@ router.post('/addCoupon',adminSessionMiddleware.isAdmin,couponController.postAdd
 router.get('/editCoupon/:couponId', adminSessionMiddleware.isAdmin,couponController.getEditCoupon)
 router.post('/editCoupon/:couponId', adminSessionMiddleware.isAdmin, couponController.postEditCoupon)
 router.get('/blockCoupon', adminSessionMiddleware.isAdmin, couponController.getBlockCoupon)
+
+router.get('/offerManagement',adminSessionMiddleware.isAdmin,offerController.getOfferManage)
+router.get('/addOffer',adminSessionMiddleware.isAdmin,offerController.getAddOffer)
+router.post('/addOffer',adminSessionMiddleware.isAdmin,offerController.postAddOffer)
+
+router.get('/salesReport',adminSessionMiddleware.isAdmin,reportController.getSalesReport)
+router.get('/salesPdf',adminSessionMiddleware.isAdmin,reportController.getGeneratePdf)
 
 module.exports = router

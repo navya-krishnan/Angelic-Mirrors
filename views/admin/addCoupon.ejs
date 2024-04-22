@@ -30,6 +30,18 @@
     <!-- Template Stylesheet -->
     <link href="/assetsAdmin/css/style.css" rel="stylesheet">
 
+    <!-- Bootstrap Datepicker CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+        rel="stylesheet">
+
+    <!-- jQuery (necessary for Bootstrap Datepicker) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Bootstrap Datepicker JS -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+
 
     <style>
         table tbody tr td {
@@ -90,10 +102,14 @@
                     <a href="/admin/couponManagement" class="nav-item nav-link active"><i
                             class="bi bi-credit-card-fill"></i>Coupon <span style="margin-left: 25%;">
                             Management</span></a>
+                    <a href="/admin/offerManagement" class="nav-item nav-link "><i class="bi bi-percent"></i>Offer <span
+                            style="margin-left: 25%;">
+                            Management</span></a>
+                    <a href="/admin/salesReport" class="nav-item nav-link"><i
+                            class="bi bi-bar-chart-line-fill"></i>Sales
+                        Report</a>
                     <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banner <span
-                            style="margin-left: 25%;"> Management</span></a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i>Sales
-                        Report</a> -->
+                                    style="margin-left: 25%;"> Management</span></a> -->
                 </div>
             </nav>
         </div>
@@ -189,8 +205,8 @@
                             <div>
                                 <label for="expiryDate" class="form-label"
                                     style="font-size: large; font-weight: 700; margin-top: 2%;">Expiry Date</label>
-                                <input type="text" name="expiryDate" id="expiryDate"
-                                    class="form-control form-control-lg" placeholder="Enter Expiry Date"
+                                <input type="date" name="expiryDate" id="expiryDate"
+                                    class="form-control form-control-lg datepicker" placeholder="Enter Expiry Date"
                                     style="border: 1px solid black;" />
                                 <span id="expiryError" style="color: red;"></span>
                             </div>
@@ -227,6 +243,75 @@
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
+
+
+    <script>
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd', // specify the format
+                autoclose: true // close the datepicker when a date is selected
+            });
+        });
+    </script>
+
+    <script>
+        function validateForm() {
+            document.getElementById('nameError').textContent = ""
+            document.getElementById('codeError').textContent = ""
+            document.getElementById('priceError').textContent = ""
+            document.getElementById('minimumError').textContent = ""
+            document.getElementById('maximumError').textContent = ""
+            document.getElementById('expiryError').textContent = ""
+
+            var couponName = document.getElementById('couponName').value.trim()
+            var couponCode = document.getElementById('couponCode').value.trim()
+            var discountAmount = document.getElementById('discountAmount').value.trim()
+            var minimumPurchaseAmount = document.getElementById('minimumPurchaseAmount').value.trim()
+            var maximumPurchaseAmount = document.getElementById('maximumPurchaseAmount').value.trim()
+            var expiryDate = document.getElementById('expiryDate').value.trim()
+
+            // Regular expression to check if the product name contains only letters
+            var lettersOnly = /^[a-zA-Z\s]+$/;
+
+
+            if (couponName === "") {
+                document.getElementById('nameError').textContent = "Coupon Name required"
+                return false
+            }
+            if (!couponName.match(lettersOnly)) {
+                document.getElementById('nameError').textContent = "Coupon name should contain only letters";
+                return false;
+            }
+
+            if (couponCode === "") {
+                document.getElementById('codeError').textContent = "Coupon Code required"
+                return false
+            }
+
+            if (discountAmount === "") {
+                document.getElementById('priceError').textContent = "Coupon Price required"
+                return false
+            }
+
+            if (minimumPurchaseAmount === "") {
+                document.getElementById('minimumError').textContent = "Minimum Amount required"
+                return false
+            }
+
+            if (maximumPurchaseAmount === "") {
+                document.getElementById('maximumError').textContent = "Maximum Amount required"
+                return false
+            }
+
+            if (expiryDate === "") {
+                document.getElementById('expiryError').textContent = "Expiry Date required"
+                return false
+            }
+
+            return true
+        }
+    </script>
+
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

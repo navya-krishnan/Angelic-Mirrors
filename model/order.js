@@ -39,9 +39,12 @@ const orderSchema = new mongoose.Schema({
     orderDate: {
         type: Date,
         default: Date.now(),
+    },
+    discountedPrice: {
+        type: Number // Add discountedPrice field to the schema
     }
-})
+});
 
-const Order = mongoose.model('orderdb', orderSchema)
+const Order = mongoose.model('orderdb', orderSchema);
 
-module.exports = Order
+module.exports = Order;

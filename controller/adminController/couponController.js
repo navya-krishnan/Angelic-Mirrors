@@ -67,7 +67,7 @@ const postAddCoupon = async (req, res) => {
                 discount_Amount: req.body.discountAmount,
                 minimum_Amount: req.body.minimumPurchaseAmount,
                 maximum_Amount: req.body.maximumPurchaseAmount,
-                expiry_Date: moment(req.body.expiryDate, "DD/MM/YYYY").toDate()
+                expiry_Date: moment(req.body.expiryDate, "YYYY-MM-DD").toDate()
             }
 
 
