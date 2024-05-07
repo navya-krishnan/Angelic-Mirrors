@@ -26,13 +26,13 @@ router.get('/otp', otpController.getsignupOtp)
 router.post('/otp', otpController.postSignupOtp)
 router.post('/postSignupOtp', otpController.postSignupOtp);
 router.get('/resendOtp', userController.getResendOtp)
+router.get('/resendForgotOtp',userController.getForgotResendOtp)
 
 router.get('/forgotPassword',userController.getForgotPassword)
 router.post('/forgotPassword',userController.postForgotPassword)
 
 router.get('/forgotOtp',otpController.getForgotOtp)
 router.post('/forgotOtp',otpController.postForgotOtp)
-router.get('/resendForgotOtp',userController.getForgotResendOtp)
 
 router.get('/newPassword',userController.getNewPassword)
 router.post('/newPassword',userController.postNewPassword)
@@ -60,7 +60,7 @@ router.get('/deleteAddress/:addressId',userBlockMiddleware.block,profileControll
 
 router.get('/checkout',userBlockMiddleware.block,checkoutController.getCheckout)
 router.post('/couponApply',userBlockMiddleware.block,checkoutController.postCouponApply)
-router.post('/razorpay',userBlockMiddleware.block,orderController.postRazorpay)
+router.post('/removeCoupon',userBlockMiddleware.block,checkoutController.postRemoveCoupon)
 
 router.get('/orderConfirm',userBlockMiddleware.block,orderController.getOrderConfirm)
 router.post('/getPlaceOrder',userBlockMiddleware.block,orderController.getPlaceOrder)
@@ -68,6 +68,8 @@ router.get('/myOrders',userBlockMiddleware.block,orderController.getMyOrders)
 router.get('/cancelOrder/:id',userBlockMiddleware.block,orderController.getCancelOrder)
 router.post('/returnOrder/:id',userBlockMiddleware.block,orderController.postReturnOrder)
 router.get('/orderDetails/:id',userBlockMiddleware.block,orderController.getOrderDetail)
-
+router.post('/razorpay',userBlockMiddleware.block,orderController.postRazorpay)
+router.get('/invoiceDownload/:id',userBlockMiddleware.block,orderController.getInvoiceDownload)
+router.get('/paymentFailed',userBlockMiddleware.block,orderController.getPaymentFailed)
 
 module.exports = router

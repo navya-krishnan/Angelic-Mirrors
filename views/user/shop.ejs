@@ -147,19 +147,27 @@
 	<!-- end breadcrumb section -->
 
 	<!-- products -->
-	<nav style="--bs-breadcrumb-divider: ''; margin-top: -20%;" aria-label="breadcrumb">
+	<nav style="--bs-breadcrumb-divider: ''; margin-top: -20%; margin-left: 5%;" aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="/">Home</a></li>
 			<li class="breadcrumb-item active" aria-current="page">Shop</li>
 		</ol>
 	</nav>
-	
+
 	<div class="product-section mt-150 mb-150">
 		<div class="container">
+			<div class="sort">
+				<label for="sortSelect">Sort By:</label>
+				<select id="sortSelect" onchange="sortProducts(this.value)">
+					<option value="select" <%= sortOption === 'select' ? 'selected' : '' %>>Select</option>
+					<option value="nameAsc" <%= sortOption === 'nameAsc' ? 'selected' : '' %>>Name (A-Z)</option>
+					<option value="nameDesc" <%= sortOption === 'nameDesc' ? 'selected' : '' %>>Name (Z-A)</option>
+				</select>
+			</div>			
 
 			<div class="row">
 				<div class="col-md-12">
-					<div class="product-filters" style="margin-top: 9%;">
+					<div class="product-filters" style="margin-top: 3%;">
 						<ul>
 							<li class="active" data-filter="*">All</li>
 							<li data-filter=".WallMirror">Wall Mirrors</li>
@@ -171,13 +179,13 @@
 			</div>
 
 			<div class="row product-lists">
-				<%products.forEach((product,i)=>{%>
+				<% products.forEach((product,i)=> { %>
 					<div
 						class="col-lg-4 col-md-6 text-center <%= product.product_category.category_name.replace(/\s+/g, '') %>">
 						<div class="single-product-item">
 							<div class="product-image">
 								<a href="/singleProduct/<%= product._id %>">
-									<img src="/image/<%= product.product_image[0]%>" alt="Product image">
+									<img src="/image/<%= product.product_image[0] %>" alt="Product image">
 								</a>
 							</div>
 							<h3>
@@ -187,22 +195,20 @@
 								<%= product.product_category.category_name %>
 							</h4>
 							<div class="price-container">
-								<% if (product.offerPrice == null) { %>
-									<!-- Display regular price if no offer -->
-									<p class="product-price" style="font-weight: 200; font-size: medium;">Rs.<%= product.product_price.toFixed(2) %>/-</p>
+								<% if (product.discount_Amount !== null) { %>
+									<h5><span class="actual-price" style="text-decoration: line-through;">₹<%= product.product_price %></span></h5>
+									<h4>₹<%= product.discount_Amount %></h4>
+									<% console.log(product.discount_Amount,"discount") %>
 								<% } else { %>
-									<!-- Display offer price if available -->
-									<p class="product-price" style="font-weight: 200; font-size: medium; text-decoration: line-through;">Rs.<%= product.product_price.toFixed(2) %>/-</p>
-									<p class="product-price" style="font-weight: 200; font-size: medium;">Offer Price: Rs.<%= product.offerPrice.toFixed(2) %>/-</p>
+									<h4>₹<%= product.product_price %></h4>
 								<% } %>
 							</div>
-						
 							<div>
-								<%if(product.product_stock <=0 ){%>
+								<% if (product.product_stock <=0) { %>
 									<h4 style="color: red;">Out of Stock</h4>
-									<%}else{%>
-										<h4 style="color: green;">Only <%= product.product_stock%> left</h4>
-										<%}%>
+									<% } else { %>
+										<h4 style="color: green;">Only <%= product.product_stock %> left</h4>
+										<% } %>
 							</div>
 
 							<a href="/singleProduct/<%= product._id %>" class="cart-btn" style="margin-top: 4%;">View
@@ -350,6 +356,14 @@
 				}
 			});
 		});
+
+		function sortProducts(sortOption) {
+        // Redirect to the current page URL with the sortOption query parameter
+        const currentUrl = window.location.href.split('?')[0];
+        window.location.href = `${currentUrl}?sortOption=${sortOption}`;
+		console.log("sorting works");
+    }
+
 	</script>
 
 

@@ -9,10 +9,12 @@ const getCart = async (req, res) => {
 
         const userId = req.session.user._id;
 
-        let cart = await Cart.findOne({ userId }).populate("products.product");
+        let cart = await Cart.findOne({ userId }).populate("products.product").populate("products.category");
 
         if (!cart) {
-            return res.render('user/cart', { cart });
+            // If cart is not found, create an empty cart
+            cart = new Cart({ userId, products: [] });
+            await cart.save();
         }
 
         let cartTotal = 0;
@@ -47,7 +49,7 @@ const postCart = async (req, res) => {
         const userId = req.session.user._id;
 
         // Fetch the product from the database
-        const product = await Product.findById(productId);
+        const product = await Product.findById(productId).populate('product_category');
 
         if (!product) {
             return res.status(404).send("Product not found");
@@ -63,11 +65,14 @@ const postCart = async (req, res) => {
             return res.status(400).send("Product out of stock");
         }
 
+        // Extract category from the product
+        const category = product.product_category;
+
         // Create or update the cart
         let cart = await Cart.findOne({ userId });
 
         if (!cart) {
-            cart = new Cart({ userId, products: [{ product: productId, quantity }] });
+            cart = new Cart({ userId, products: [{ product: productId, quantity, category }] });
         } else {
             // Check if the product already exists in the cart
             const existingProductIndex = cart.products.findIndex(item =>
@@ -79,7 +84,7 @@ const postCart = async (req, res) => {
                 cart.products[existingProductIndex].quantity += quantity;
             } else {
                 // Product does not exist in the cart, add it
-                cart.products.push({ product: productId, quantity });
+                cart.products.push({ product: productId, quantity, category });
             }
         }
 
@@ -94,7 +99,6 @@ const postCart = async (req, res) => {
         res.status(500).send("Error while adding product to cart");
     }
 };
-
 
 const removeCart = async (req, res) => {
     try {

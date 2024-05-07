@@ -123,8 +123,7 @@
                                 <thead>
                                     <tr style="color: black;text-align: center;">
                                         <th class="product-index">No.</th>
-                                        <th class="product-name">Product Name</th>
-                                        <th class="product-price">Category Name</th>
+                                        <th class="product-name">Product / Category</th>
                                         <th class="product-date">Discount</th>
                                         <th class="product-edit">Expiry Date</th>
                                         <th class="product-status">Actions</th>
@@ -137,11 +136,12 @@
                                                 <%= i + 1 %>
                                             </td>
                                             <td>
-                                                <%= offer.product_name?.product_name %>
-                                            </td>
-                                            <td>
-                                                <%= offer.category_name?.category_name %>
-                                            </td>
+                                                <% if (offer.product_name) { %>
+                                                    <%= offer.product_name.product_name %>
+                                                <% } else if (offer.category_name) { %>
+                                                    <%= offer.category_name.category_name %>
+                                                <% } %>
+                                            </td>                                            
                                             <td>
                                                 <%= offer.discount_Amount %>
                                             </td>

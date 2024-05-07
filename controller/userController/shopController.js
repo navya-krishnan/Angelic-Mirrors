@@ -32,21 +32,28 @@ const getShop = async (req, res) => {
 
             const startIndex = (page - 1) * perPage;
             const endIndex = Math.min(startIndex + perPage, products.length);
-            const currentProducts = products.slice(startIndex, endIndex);
+            let currentProducts = products.slice(startIndex, endIndex);
 
             const sortOption = req.query.sortOption || null;
             const categorie = req.query.category || null;
             const search = req.query.search || null;
 
+            // Sort products based on the sortOption
+            if (sortOption === 'nameAsc') {
+                currentProducts.sort((a, b) => a.product_name.localeCompare(b.product_name));
+            } else if (sortOption === 'nameDesc') {
+                currentProducts.sort((a, b) => b.product_name.localeCompare(a.product_name));
+            }
+
             const cart = await cartCollection.findOne({ userId: req.session.user._id });
             const cartQuantity = cart?.products?.length || 0;
 
             //applying offer to products
-            products = await Promise.all(products.map(async (product) => {
+            currentProducts = await Promise.all(currentProducts.map(async (product) => {
                 const productOffer = await offerCollection.findOne({ product: product._id, unlist: true });
-                console.log(productOffer, "productOffer for product:", product.product_name);
+                // console.log(productOffer, "productOffer for product:", product.product_name);
                 const categoryOffer = await offerCollection.findOne({ category: product.product_category.length > 0 ? product.product_category[0]._id : null, unlist: true });
-                console.log(categoryOffer, "categoryOffer for product:", product.product_name);
+                // console.log(categoryOffer, "categoryOffer for product:", product.product_name);
             
                 if (productOffer && typeof productOffer.discount === 'number') {
                     product.offerPrice = product.price - (product.price * (productOffer.discount / 100));
@@ -56,12 +63,12 @@ const getShop = async (req, res) => {
                     product.offerPrice = null;
                 }
                 
-                
-                console.log("Offer price for product:", product.product_name, "is", product.offerPrice);
+                // console.log("Offer price for product:", product.product_name, "is", product.offerPrice);
             
                 return product;
             }));
-            
+
+
             res.render('user/shop', {
                 products: currentProducts,
                 page,
@@ -80,6 +87,7 @@ const getShop = async (req, res) => {
         res.status(500).send("Error occurred");
     }
 };
+
 
 const getSingleProduct = async (req, res) => {
     try {

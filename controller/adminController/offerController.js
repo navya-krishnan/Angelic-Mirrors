@@ -9,18 +9,19 @@ const getOfferManage = async (req, res) => {
         if (req.session.admin) {
             const offers = await offerDatabase
                 .find()
-                .populate('product_name', 'product_name') // Populate product_name with product_name field only
-                .populate('category_name', 'category_name'); // Populate category_name with category_name field only
-            // console.log(offers, "offers");
-            res.render('admin/offerManagement', {
-                offers
-            });
+                .populate('product_name', 'product_name')
+                .populate('category_name', 'category_name');
+                
+            res.render('admin/offerManagement', { offers }); // Pass the offers data to the template
+        } else {
+            res.redirect('/admin/offerManagement');
         }
     } catch (error) {
         console.log(error);
         res.status(500).send("Error occurred during rendering get offer management");
     }
 };
+
 
 
 //add offer
@@ -58,6 +59,7 @@ const postAddOffer = async (req, res) => {
                 discount_Amount: req.body.discount,
                 expiryDate: req.body.expiryDate
             });
+            console.log(newOffer,"offernew");
 
             await newOffer.save();
 

@@ -105,9 +105,10 @@ const postCouponApply = async (req, res) => {
         const total = cartTotal - discountAmount;
 
         // Update user's coupon information
-        await userDatabase.findByIdAndUpdate(userId, {
-            $push: { couponApplied: couponId }
-        });
+        await userDatabase.updateOne(
+            { _id: userId },
+            { $push: { couponApplied: couponId } }
+        );
 
         console.log("Coupon applied");
 
@@ -124,8 +125,30 @@ const postCouponApply = async (req, res) => {
     }
 }
 
+// removing applied coupon
+const postRemoveCoupon = async (req, res) => {
+    try {
+        const userSession = req.session.user
+        const userId = userSession._id
+
+        const remove = await userDatabase.findByIdAndUpdate(userId, {
+            couponApplied: []
+        });
+
+        console.log(remove, "remove");
+
+        console.log("Coupon removed successfully");
+
+        return res.send({ message: "Coupon removed successfully" });
+
+    } catch (error) {
+        console.log("Error in postRemoveCoupon:", error);
+        return res.status(500).send("Error occurred during post Remove Coupon");
+    }
+}
 
 module.exports = {
     getCheckout,
-    postCouponApply
+    postCouponApply,
+    postRemoveCoupon
 };

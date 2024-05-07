@@ -369,7 +369,7 @@
 
 	<script>
 		document.getElementById('addToCartButton').addEventListener('click', function () {
-			var qtyValue = 1
+			
 			console.log('fetchhhhhhh');
 
 			fetch('/cart', {
@@ -380,7 +380,8 @@
 				body: JSON.stringify({
 					userId: '<%= userId %>',
 					productId: '<%= productId %>',
-					quantity: qtyValue
+					quantity: 1,
+					
 				})
 			})
 				.then(response => {

@@ -202,15 +202,13 @@
                                                                                     <br><br>
                                                                                     <% }); %>
                                                     </td>
-
                                                     <td>
-                                                        <% if (totalDiscount> 0) { %>
-                                                            <p>Rs.<%= totalDiscount.toFixed(2) %>
-                                                            </p>
-                                                            <% } else { %>
-                                                                <p>No discount applied</p>
-                                                                <% } %>
-                                                    </td>
+                                                        <% if (orders.some(order => order.couponApplied)) { %>
+                                                            <p>Discount applied</p>
+                                                        <% } else { %>
+                                                            <p>No discount applied</p>
+                                                        <% } %>
+                                                    </td>                                                    
 
                                                     <td>
                                                         <% cartTotal=0; %>

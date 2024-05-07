@@ -5,19 +5,24 @@ const orderDatabase = require('../../model/order');
 const addressDatabase = require('../../model/address')
 const couponDatabase = require('../../model/coupon')
 const Razorpay = require("razorpay");
+const pdfDoc = require("pdfkit-table");
+
 
 //route for placing order
 const getPlaceOrder = async (req, res) => {
     try {
         const { userId, productId, paymentMethod } = req.body;
-        console.log(productId, "user");
+        console.log("User ID:", userId);
+        console.log("Product ID:", productId);
+        console.log("Payment Method:", paymentMethod);
 
         // Fetch coupon information here
         const coupon = await couponDatabase.findOne({ userId: userId });
-        console.log(coupon, "coupon");
+        console.log("Coupon:", coupon);
 
-        // Extract discountAmount from the coupon if it exists
+        // Verify if coupon exists and extract discountAmount
         const discountAmount = coupon ? coupon.discount_Amount : 0;
+        console.log("Discount Amount:", discountAmount);
 
         const cart = await cartDatabase.findOne({ userId: userId }).populate("products.product");
 
@@ -30,7 +35,7 @@ const getPlaceOrder = async (req, res) => {
         const shippingAddress = await addressDatabase.findOne({ userId: userId });
         const orderDate = new Date();
 
-        //inserting order
+        // Inserting order
         const order = await orderDatabase.create({
             userId,
             products: productsInCart,
@@ -42,14 +47,14 @@ const getPlaceOrder = async (req, res) => {
 
         console.log(order, "order");
 
-        //adding coupon to user database
+        // Adding coupon to user database if provided in query
         if (req.query.couponId && req.query.couponId !== undefined) {
             console.log("Coupon ID:", req.query.couponId);
             try {
-                const coupon = await userCollection.findByIdAndUpdate(userId, {
+                const updatedUser = await userCollection.findByIdAndUpdate(userId, {
                     $push: { appliedCoupons: req.query.couponId }
                 });
-                if (!coupon) {
+                if (!updatedUser) {
                     console.log("User not found or coupon not applied.");
                 } else {
                     console.log("Coupon applied successfully.");
@@ -59,16 +64,13 @@ const getPlaceOrder = async (req, res) => {
             }
         }
 
-
-        //removing purchased products from cart
+        // Removing purchased products from cart
         const updateCart = await cartDatabase.updateOne(
             { userId: userId },
             { $pull: { products: { product: { $in: productsInCart.map(product => product.product) } } } }
-        )
+        );
 
-        res.redirect('/orderConfirm')
-
-
+        res.redirect('/orderConfirm');
     } catch (error) {
         console.log("Error in getOrderConfirm:", error);
         return res.status(500).send("Error occurred during get order place");
@@ -84,11 +86,11 @@ const getOrderConfirm = async (req, res) => {
 
             const loggedIn = true;
             const productId = req.body.productId
-            const orders = await orderDatabase.findOne({ userId: req.session.user._id }).populate('products.product')
+            const order = await orderDatabase.findOne({ userId: req.session.user._id }).sort({ orderDate: -1 }).limit(1)
 
 
             const product = await productDatabase.findOne({ productId: productId })
-            res.render('user/orderConfirm', { orders, loggedIn, product });
+            res.render('user/orderConfirm', { order, loggedIn, product });
         } else {
             throw new Error("User session not found");
         }
@@ -102,11 +104,28 @@ const getOrderConfirm = async (req, res) => {
 const getMyOrders = async (req, res) => {
     try {
         if (req.session.user) {
+            
             const loggedIn = true;
             const user = req.session.user
             const userId = user._id
 
-            const orders = await orderDatabase.find({ userId: userId }).populate("products.product")
+            const page = parseInt(req.query.page) || 1;
+            const perPage = 6;
+
+            const startIndex = (page - 1) * perPage;
+
+            const orders = await orderDatabase
+                .find({ userId: userId })
+                .populate("products.product")
+                .skip(startIndex)
+                .limit(perPage);
+
+            const totalOrders = await orderDatabase.countDocuments();
+            const totalPages = Math.ceil(totalOrders / perPage);
+
+            const sortOption = req.query.sortOption || null;
+            const order = req.query.order || null;
+            const search = req.query.search || null;
 
             // Calculate expected delivery date
             const deliveryDurationInDays = 7;
@@ -115,7 +134,18 @@ const getMyOrders = async (req, res) => {
 
             const orderId = req.params.id
 
-            res.render('user/myOrders', { loggedIn, orders, expectedDeliveryDate, orderId })
+            res.render('user/myOrders',
+                {
+                    loggedIn,
+                    orders,
+                    expectedDeliveryDate,
+                    orderId,
+                    page,
+                    totalPages,
+                    sortOption,
+                    order,
+                    search
+                })
         }
     } catch (error) {
         console.log("Error in getOrderConfirm:", error);
@@ -130,7 +160,11 @@ const getCancelOrder = async (req, res) => {
             const orderId = req.params.id;
             const updateOrder = await orderDatabase.findByIdAndUpdate(orderId,
                 { $set: { status: "Cancelled" } });
-            console.log(updateOrder, "update");
+
+            // Update the payment status to "cancelled"
+            const updatedOrder = await orderDatabase.findByIdAndUpdate(orderId,
+                { $set: { paymentStatus: "Refunded" } });
+
             res.redirect('/myOrders');
         } else {
             throw new Error("User session not found  for cancel");
@@ -146,9 +180,18 @@ const postReturnOrder = async (req, res) => {
     try {
         if (req.session.user) {
             const orderId = req.params.id;
+
             const orderUpdate = await orderDatabase.findByIdAndUpdate(orderId,
                 { $set: { status: "Returned" } })
+
             console.log(orderUpdate, "orderupdate");
+
+            // Update the payment status to "Refunded"
+            const updatedOrder = await orderDatabase.findByIdAndUpdate(orderId,
+                { $set: { paymentStatus: "Refunded" } });
+
+
+            console.log(updatedOrder, "updatedOrder");
             res.sendStatus(200);
         } else {
             throw new Error("User session not found for return");
@@ -168,6 +211,8 @@ const getOrderDetail = async (req, res) => {
             const order = await orderDatabase.findById(orderId)
                 .populate('products.product')
                 .populate('shippingAddress');
+
+
 
             if (!order) {
                 throw new Error("Order not found");
@@ -228,6 +273,17 @@ const postRazorpay = async (req, res) => {
                 return res.status(500).json({ error: "Error creating order", details: err });
             }
 
+            // Update order status to "Paid" if payment method is "Online"
+            if (req.session && req.session.user && req.session.user.paymentMethod === "Online") {
+                orderDatabase.findByIdAndUpdate(order.id, { $set: { status: "Paid" } })
+                    .then(() => {
+                        console.log("Order status updated to Paid");
+                    })
+                    .catch((error) => {
+                        console.error("Error updating order status:", error);
+                    });
+            }
+
             console.log("Order created successfully:", order);
             res.status(200).json({ orderId: order.id });
         });
@@ -237,6 +293,84 @@ const postRazorpay = async (req, res) => {
     }
 };
 
+// invoice download
+const getInvoiceDownload = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+
+        console.log("order id:", orderId);
+        const order = await orderDatabase.findById(orderId)
+            .populate('userId')
+            .populate({
+                path: 'products.product',
+                select: 'productName'
+            });;
+        console.log("order:", order);
+
+        const doc = new pdfDoc({ margin: 50 });
+
+        doc.fontSize(18).text('TAX INVOICE', { align: 'center' });
+        doc.moveDown();
+        doc.lineCap('butt').moveTo(50, doc.y).lineTo(550, doc.y).stroke();
+
+        doc.moveDown();
+        doc.fontSize(16).text('ORDER DETAILS', { underline: true });
+        doc.moveDown();
+
+        doc.fontSize(12).text(`Name: ${order.userId.username}`);
+        doc.text(`Purchase email: ${order.userId.email}`);
+        doc.text(`Date of Delivery: ${order.orderDate.toLocaleDateString()}`);
+        doc.text(`Payment Method: ${order.paymentMethod}`);
+        doc.text(`Order Status: ${order.status}`);
+
+        // Iterate through products and add details
+        doc.moveDown();
+        doc.lineCap('butt').moveTo(50, doc.y).lineTo(550, doc.y).stroke();
+        doc.moveDown();
+        doc.fontSize(16).text('PRODUCT DETAILS', { underline: true });
+
+        order.products.forEach((product, index) => {
+            doc.moveDown();
+            doc.fontSize(12).text(`Product:${index + 1}`, { underline: true });
+            doc.text(`Product Name: ${product.productName}`);
+            doc.text(`Price: ${product.totalPrice / product.quantity}`);
+            doc.text(`Quantity: ${product.quantity}`);
+            doc.text(`Subtotal: ${product.totalPrice}`);
+            doc.text(`Delivery Charge: ${product}`)
+        });
+
+        // Calculate and display the total price of all products
+        const productsTotal = order.products.reduce((total, product) => total + product.totalPrice, 0);
+        doc.fontSize(14).text(`Total Price: Rs.${productsTotal}/-`, { align: 'right' });
+
+        doc.moveDown();
+        doc.lineCap('butt').moveTo(50, doc.y).lineTo(550, doc.y).stroke();
+        doc.moveDown();
+        doc.fontSize(14).text('Thank you for shopping with us!', { align: 'center' });
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename=Invoice_${order._id}.pdf`);
+
+        doc.pipe(res);
+        doc.end();
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error generating the PDF invoice');
+    }
+};
+
+// payment failed page
+const getPaymentFailed = async (req, res) => {
+    try {
+        const loggedIn = true;
+
+        res.render('user/paymentFailed', { loggedIn })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error generating the payment failed page');
+    }
+}
+
 module.exports = {
     getOrderConfirm,
     getPlaceOrder,
@@ -244,5 +378,7 @@ module.exports = {
     getCancelOrder,
     postReturnOrder,
     getOrderDetail,
-    postRazorpay
+    postRazorpay,
+    getInvoiceDownload,
+    getPaymentFailed
 };

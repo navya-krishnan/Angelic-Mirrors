@@ -255,7 +255,7 @@
 
 								</tr>
 								<tr class="total-data">
-									<td><strong>Shipping: </strong></td>
+									<td><strong>Delivery Charge: </strong></td>
 									<td>Rs. 100</td>
 								</tr>
 								<tr class="total-data">
@@ -385,15 +385,17 @@
 				});
 			});
 
-			async function updateQuantity(productId, quantity) {
+			async function updateQuantity(productId, quantity, category) {
+
+				
 				try {
 					const response = await fetch('/updateCart', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({ productId, quantity }),
-					});
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ productId, quantity, category }), // Include category here
+        });
 
 					if (response.ok) {
 						const text = await response.text();

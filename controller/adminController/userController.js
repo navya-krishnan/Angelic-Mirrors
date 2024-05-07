@@ -1,9 +1,10 @@
+const { isAdmin } = require('../../middleware/admin');
 const userDatabase = require('../../model/user')
 
 //get user
 const getUserManage = async (req, res) => {
     try {
-        if (req.session.admin) {
+        if (isAdmin) {
             const page = parseInt(req.query.page) || 1;
             const perPage = 6;
 
@@ -18,7 +19,6 @@ const getUserManage = async (req, res) => {
             const sortOption = req.query.sortOption || null;
             const user = req.query.user || null;
             const search = req.query.search || null;
-
 
             res.render('admin/userManagement', { 
                 users : currentUsers,

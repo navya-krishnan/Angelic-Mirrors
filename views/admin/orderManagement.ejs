@@ -115,6 +115,7 @@
                                         <th class="product-date">Order Date</th>
                                         <th class="product-status">Status</th>
                                         <th class="product-edit">Edit Status</th>
+                                        <th class="product-payStatus">Payment Status</th>
                                         <th class="product-status">Order Details</th>
                                     </tr>
                                 </thead>
@@ -167,8 +168,7 @@
                                                         <%= order.status %>
                                                     </td>
                                                     <td>
-                                                        <% if (order.status !=='Returned' && order.status !=='Cancelled'
-                                                            ) { %>
+                                                        <% if (order.status !== 'Returned' && order.status !== 'Cancelled' && order.status !== 'Delivered') { %>
                                                             <div class="dropdown">
                                                                 <button class="btn btn-danger dropdown-toggle"
                                                                     type="button" id="statusDropdown"
@@ -178,7 +178,6 @@
                                                                 <ul class="dropdown-menu"
                                                                     aria-labelledby="statusDropdown">
                                                                     <li>
-                                                                        <!-- Pass the order ID to the JavaScript function -->
                                                                         <a class="dropdown-item" href="#"
                                                                             onclick="confirmCancellation('<%= order._id %>')">Cancelled</a>
                                                                     </li>
@@ -189,17 +188,26 @@
                                                                     </li>
                                                                 </ul>
                                                             </div>
-                                                            <% } else { %>
-                                                                <button class="btn btn-grey" type="button"
-                                                                    aria-expanded="true" style="border: 2px solid #000;"
-                                                                    disabled>
-                                                                    <% if (order.status==='Cancelled' ) { %>
-                                                                        Cancelled
-                                                                        <% } else if (order.status==='Returned' ) { %>
-                                                                            Returned
-                                                                            <% } %>
-                                                                </button>
+                                                        <% } else { %>
+                                                            <button class="btn btn-grey" type="button"
+                                                                aria-expanded="true"
+                                                                style="border: 2px solid #000000;" disabled>
+                                                                <% if (order.status === 'Cancelled') { %>
+                                                                    Cancelled
+                                                                <% } else if (order.status === 'Returned') { %>
+                                                                    Returned
+                                                                <% } else if (order.status === 'Delivered') { %>
+                                                                    Delivered
                                                                 <% } %>
+                                                            </button>
+                                                        <% } %>
+                                                    </td>                                                    
+                                                    <td>
+                                                        <% if (order.paymentMethod === 'Online') { %>
+                                                            Paid
+                                                        <% } else { %>
+                                                            <%= order.paymentStatus %>
+                                                        <% } %>
                                                     </td>
                                                     <td>
                                                         <button class="btn btn-info"

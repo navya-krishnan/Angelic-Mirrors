@@ -18,6 +18,9 @@ const orderSchema = new mongoose.Schema({
             },
             totalPrice: {
                 type: Number
+            },
+            category: {
+                type: String
             }
         }
     ],
@@ -29,8 +32,8 @@ const orderSchema = new mongoose.Schema({
         type: String,
         default: "COD"
     },
-    discountAmount:{
-        type : Number
+    discountAmount: {
+        type: Number
     },
     status: {
         type: String,
@@ -40,8 +43,20 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
+    paymentStatus: {
+        type: String,
+        default: "Pending"
+    },
     discountedPrice: {
         type: Number // Add discountedPrice field to the schema
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    couponApplied: {
+        type: Boolean,
+        default:false
     }
 });
 

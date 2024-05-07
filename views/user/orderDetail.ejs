@@ -37,7 +37,7 @@
             text-decoration: underline;
         }
 
-        .p-element{
+        .p-element {
             color: black;
             font-weight: 400;
             margin-left: 8%;
@@ -67,6 +67,11 @@
             border: 2px solid black;
             display: inline-block;
             margin-bottom: 20px;
+        }
+
+        .invoice {
+            margin-left: 70%;
+            margin-top: 5%;
         }
     </style>
 
@@ -137,12 +142,13 @@
 
                                 <li>
                                     <div class="header-icons">
-                                        <a href="/wishlist"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-											fill="currentColor" class="bi bi-balloon-heart" viewBox="0 0 16 16">
-											<path fill-rule="evenodd"
-												d="m8 2.42-.717-.737c-1.13-1.161-3.243-.777-4.01.72-.35.685-.451 1.707.236 3.062C4.16 6.753 5.52 8.32 8 10.042c2.479-1.723 3.839-3.29 4.491-4.577.687-1.355.587-2.377.236-3.061-.767-1.498-2.88-1.882-4.01-.721zm-.49 8.5c-10.78-7.44-3-13.155.359-10.063q.068.062.132.129.065-.067.132-.129c3.36-3.092 11.137 2.624.357 10.063l.235.468a.25.25 0 1 1-.448.224l-.008-.017c.008.11.02.202.037.29.054.27.161.488.419 1.003.288.578.235 1.15.076 1.629-.157.469-.422.867-.588 1.115l-.004.007a.25.25 0 1 1-.416-.278c.168-.252.4-.6.533-1.003.133-.396.163-.824-.049-1.246l-.013-.028c-.24-.48-.38-.758-.448-1.102a3 3 0 0 1-.052-.45l-.04.08a.25.25 0 1 1-.447-.224l.235-.468ZM6.013 2.06c-.649-.18-1.483.083-1.85.798-.131.258-.245.689-.08 1.335.063.244.414.198.487-.043.21-.697.627-1.447 1.359-1.692.217-.073.304-.337.084-.398" />
-										</svg></a>
-                                        
+                                        <a href="/wishlist"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                height="16" fill="currentColor" class="bi bi-balloon-heart"
+                                                viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd"
+                                                    d="m8 2.42-.717-.737c-1.13-1.161-3.243-.777-4.01.72-.35.685-.451 1.707.236 3.062C4.16 6.753 5.52 8.32 8 10.042c2.479-1.723 3.839-3.29 4.491-4.577.687-1.355.587-2.377.236-3.061-.767-1.498-2.88-1.882-4.01-.721zm-.49 8.5c-10.78-7.44-3-13.155.359-10.063q.068.062.132.129.065-.067.132-.129c3.36-3.092 11.137 2.624.357 10.063l.235.468a.25.25 0 1 1-.448.224l-.008-.017c.008.11.02.202.037.29.054.27.161.488.419 1.003.288.578.235 1.15.076 1.629-.157.469-.422.867-.588 1.115l-.004.007a.25.25 0 1 1-.416-.278c.168-.252.4-.6.533-1.003.133-.396.163-.824-.049-1.246l-.013-.028c-.24-.48-.38-.758-.448-1.102a3 3 0 0 1-.052-.45l-.04.08a.25.25 0 1 1-.447-.224l.235-.468ZM6.013 2.06c-.649-.18-1.483.083-1.85.798-.131.258-.245.689-.08 1.335.063.244.414.198.487-.043.21-.697.627-1.447 1.359-1.692.217-.073.304-.337.084-.398" />
+                                            </svg></a>
+
                                         <a class="shopping-cart" href="/cart"><i class="fas fa-shopping-cart"></i></a>
                                         <!-- <a class="mobile-hide search-bar-icon" href="#"><i
 												class="fas fa-search"></i></a> -->
@@ -196,25 +202,6 @@
     </div>
     <!-- end header -->
 
-    <!-- search area -->
-    <!-- <div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-						<div class="search-bar-tablecell">
-							<h3>Search For:</h3>
-							<input type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> -->
-    <!-- end search arewa -->
-
     <!-- breadcrumb-section -->
     <div class="breadcrumb-section breadcrumb-bg">
         <div class="container">
@@ -224,106 +211,119 @@
 
     <!-- Order detail start -->
     <div class="order-list">
-        <h3 class="orderhead">Order Details</h3>
+        <h3 class="orderhead" style="margin-top: 5%;">Order Details</h3>
     </div>
 
     <div class="content-border">
         <% order.products.forEach(product=> { %>
-            <div class="order-details">
-                <h4 class="h4-element">
-                    <%= product.product.product_name %>
-                </h4>
-                <p class="p-element">Price :
-                    <%= product.product.product_price %>
-                </p>
-                <p class="p-element">Quantity :
-                    <%= product.quantity %>
-                </p>
-                <p class="p-element" style="margin-left: 8%;">Total Price :
-                    <% let cartTotal=0; %>
-                        <% const total=product.product.product_price * product.quantity;%>
-                            <span class="product-total">
-                                <%= total %>
-                            </span>
-                            <% cartTotal +=total; %>
-                </p>
-            </div>
-            <% }) %>
-                <h6 class="h6-element">Order Details</h6>
-                <div class="common-details">
-                    <p class="p-element">Order Date :
-                        <% if (order.orderDate) { %>
-                            <%= order.orderDate.toLocaleDateString() %>
-                                <% } else { %>
-                                    Date Not Available
-                                    <% } %>
-                    </p>
-                    <p class="p-element">Expected Date :
-                        <% if(order.orderDate) { %>
-                            <% const deliveryDurationInDays=7; %>
-                                <% const orderDate=new Date(order.orderDate); %>
-                                    <% const expectedDeliveryDate=new Date(orderDate.getTime() +
-                                        deliveryDurationInDays * 24 * 60 * 60 * 1000); %>
-                                        <%= expectedDeliveryDate.toLocaleDateString() %>
+            <% if(order.status==="Delivered" ){ %>
+                <a href="/invoiceDownload/<%= order._id %>">
+                    <button class="invoice"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            fill="currentColor" class="bi bi-cloud-download" viewBox="0 0 16 16">
+                            <path
+                                d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383" />
+                            <path
+                                d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708z" />
+                        </svg> Download Invoice</button>
+                </a>
+                <%}%>
+                    <div class="order-details">
+
+                        <h4 class="h4-element">
+                            <%= product.product.product_name %>
+                        </h4>
+                        <p class="p-element">Price :
+                            <%= product.product.product_price %>
+                        </p>
+                        <p class="p-element">Quantity :
+                            <%= product.quantity %>
+                        </p>
+                        <p class="p-element" style="margin-left: 8%;">Total Price :
+                            <% let cartTotal=0; %>
+                                <% const total=product.product.product_price * product.quantity;%>
+                                    <span class="product-total">
+                                        <%= total %>
+                                    </span>
+                                    <% cartTotal +=total; %>
+                        </p>
+                    </div>
+                    <% }) %>
+                        <h6 class="h6-element">Order Details</h6>
+                        <div class="common-details">
+                            <p class="p-element">Order Date :
+                                <% if (order.orderDate) { %>
+                                    <%= order.orderDate.toLocaleDateString() %>
+                                        <% } else { %>
+                                            Date Not Available
                                             <% } %>
-                    </p>
-                    <p class="p-element">Order Status :
-                        <%= order.status %>
-                    </p>
-                    <p class="p-element">Payment Method :
-                        <%= order.paymentMethod %>
-                    </p>
-                    <p class="p-element">Sub Total :
-                        <% let subtotal=0; %>
-                            <% order.products.forEach((product)=> { %>
-                                <% const productTotal=product.product.product_price * product.quantity; %>
-                                    <% subtotal +=productTotal; %>
-                                        <% }); %>
-                                            Rs. <%= subtotal %>
-                    </p>
-                    <p class="p-element">Amount to be paid :
-                        <% const shippingCost=100; %>
-                            Rs. <%= subtotal + shippingCost %>
-                    </p>
-                    <p class="p-element">Address :
-                    <% if (order && order.shippingAddress) { %>
-                        <div class="shipping-address">
-                            <p class="p-element">
-                                <%= order.shippingAddress.name %>
                             </p>
-                            <p class="p-element">
-                                <%= order.shippingAddress.address %>, <%= order.shippingAddress.district %>, <%=
-                                            order.shippingAddress.state %>, <%= order.shippingAddress.country %>
+                            <p class="p-element">Expected Date :
+                                <% if(order.orderDate) { %>
+                                    <% const deliveryDurationInDays=7; %>
+                                        <% const orderDate=new Date(order.orderDate); %>
+                                            <% const expectedDeliveryDate=new Date(orderDate.getTime() +
+                                                deliveryDurationInDays * 24 * 60 * 60 * 1000); %>
+                                                <%= expectedDeliveryDate.toLocaleDateString() %>
+                                                    <% } %>
                             </p>
-                            <p class="p-element">
-                                <%= order.shippingAddress.pincode %>
+                            <p class="p-element">Order Status :
+                                <%= order.status %>
                             </p>
-                            <p class="p-element" style="margin-left: 8%;">
-                                <%= order.shippingAddress.phone %>
+                            <p class="p-element">Payment Method :
+                                <%= order.paymentMethod %>
                             </p>
+                            <p class="p-element">Payment Status :
+                                <% if (order.paymentMethod === 'Online') { %>
+                                    Paid
+                                <% } else { %>
+                                    <%= order.paymentStatus %>
+                                <% } %>
+                            </p>
+                            <p class="p-element">Sub Total :
+                                <% let subtotal=0; %>
+                                    <% order.products.forEach((product)=> { %>
+                                        <% const productTotal=product.product.product_price * product.quantity; %>
+                                            <% subtotal +=productTotal; %>
+                                                <% }); %>
+                                                    Rs. <%= subtotal %>
+                            </p>
+                            <p class="p-element">Amount to be paid :
+                                <% const shippingCost=100; %>
+                                    Rs. <%= subtotal + shippingCost %>
+                            </p>
+                            <p class="p-element">Address :
+                                <% if (order && order.shippingAddress) { %>
+                                    <div class="shipping-address">
+                                        <p class="p-element">
+                                            <%= order.shippingAddress.name %>
+                                        </p>
+                                        <p class="p-element">
+                                            <%= order.shippingAddress.address %>, <%= order.shippingAddress.district %>,
+                                                    <%= order.shippingAddress.state %>, <%=
+                                                            order.shippingAddress.country %>
+                                        </p>
+                                        <p class="p-element">
+                                            <%= order.shippingAddress.pincode %>
+                                        </p>
+                                        <p class="p-element" style="margin-left: 8%;">
+                                            <%= order.shippingAddress.phone %>
+                                        </p>
+                                    </div>
+                                    <% } else { %>
+                                        <p class="p-element">Shipping Address Not Available</p>
+                                        <% } %>
+
+                            </p>
+
+
                         </div>
-                        <% } else { %>
-                            <p class="p-element">Shipping Address Not Available</p>
-                            <% } %>
 
-                                </p>
-
-
-                </div>
-                <!-- <div class="image" style="margin-top: 10%;">
-                    <% order.products.forEach(product=> { %>
-                        <div class="image-container">
-                            <img src="/image/<%= product?.product.product_image[0] %>" style="height: 100px;">
-                        </div>
-                        <br> <br> <br> <br> <br>
-
-                        <% }) %>
-                </div> -->
-
+                        <a href="/shop" style="margin-left: 39%; text-decoration: underline;">Continue Shopping<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+                          </svg></a>
 
     </div>
     <!-- order detail end -->
-
 
 
     <!-- footer -->

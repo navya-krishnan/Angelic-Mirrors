@@ -90,11 +90,12 @@
 
                                 <li>
                                     <div class="header-icons">
-                                        <a href="/wishlist"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-											fill="currentColor" class="bi bi-balloon-heart" viewBox="0 0 16 16">
-											<path fill-rule="evenodd"
-												d="m8 2.42-.717-.737c-1.13-1.161-3.243-.777-4.01.72-.35.685-.451 1.707.236 3.062C4.16 6.753 5.52 8.32 8 10.042c2.479-1.723 3.839-3.29 4.491-4.577.687-1.355.587-2.377.236-3.061-.767-1.498-2.88-1.882-4.01-.721zm-.49 8.5c-10.78-7.44-3-13.155.359-10.063q.068.062.132.129.065-.067.132-.129c3.36-3.092 11.137 2.624.357 10.063l.235.468a.25.25 0 1 1-.448.224l-.008-.017c.008.11.02.202.037.29.054.27.161.488.419 1.003.288.578.235 1.15.076 1.629-.157.469-.422.867-.588 1.115l-.004.007a.25.25 0 1 1-.416-.278c.168-.252.4-.6.533-1.003.133-.396.163-.824-.049-1.246l-.013-.028c-.24-.48-.38-.758-.448-1.102a3 3 0 0 1-.052-.45l-.04.08a.25.25 0 1 1-.447-.224l.235-.468ZM6.013 2.06c-.649-.18-1.483.083-1.85.798-.131.258-.245.689-.08 1.335.063.244.414.198.487-.043.21-.697.627-1.447 1.359-1.692.217-.073.304-.337.084-.398" />
-										</svg></a>
+                                        <a href="/wishlist"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                height="16" fill="currentColor" class="bi bi-balloon-heart"
+                                                viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd"
+                                                    d="m8 2.42-.717-.737c-1.13-1.161-3.243-.777-4.01.72-.35.685-.451 1.707.236 3.062C4.16 6.753 5.52 8.32 8 10.042c2.479-1.723 3.839-3.29 4.491-4.577.687-1.355.587-2.377.236-3.061-.767-1.498-2.88-1.882-4.01-.721zm-.49 8.5c-10.78-7.44-3-13.155.359-10.063q.068.062.132.129.065-.067.132-.129c3.36-3.092 11.137 2.624.357 10.063l.235.468a.25.25 0 1 1-.448.224l-.008-.017c.008.11.02.202.037.29.054.27.161.488.419 1.003.288.578.235 1.15.076 1.629-.157.469-.422.867-.588 1.115l-.004.007a.25.25 0 1 1-.416-.278c.168-.252.4-.6.533-1.003.133-.396.163-.824-.049-1.246l-.013-.028c-.24-.48-.38-.758-.448-1.102a3 3 0 0 1-.052-.45l-.04.08a.25.25 0 1 1-.447-.224l.235-.468ZM6.013 2.06c-.649-.18-1.483.083-1.85.798-.131.258-.245.689-.08 1.335.063.244.414.198.487-.043.21-.697.627-1.447 1.359-1.692.217-.073.304-.337.084-.398" />
+                                            </svg></a>
 
                                         <a class="shopping-cart" href="/cart"><i class="fas fa-shopping-cart"></i></a>
                                         <!-- <a class="mobile-hide search-bar-icon" href="#"><i
@@ -264,22 +265,24 @@
                                                                     </td>
                                             </tr>
                                             <% const shippingCost=100; %>
-                                            <tr>
-                                                <td>Cart Total</td>
-                                                <td id="cartTotal">Rs. <%= subtotal + shippingCost %></td>
-                                            </tr>
-                                            <% if (coupon && coupon.discountAmount) { %>
                                                 <tr>
-                                                    <td>Coupon Amount</td>
-                                                    <td id="discountAmount">Rs. <%= coupon.discountAmount.toFixed(2) %>
+                                                    <td>Cart Total</td>
+                                                    <td id="cartTotal">Rs. <%= subtotal + shippingCost %>
                                                     </td>
                                                 </tr>
-                                                <% } else { %>
+                                                <% if (coupon && coupon.discountAmount) { %>
                                                     <tr>
-                                                        <td>Coupon Amount</td>
-                                                        <td id="discountAmount">Rs. 0</td>
+                                                        <td>Discount Amount</td>
+                                                        <td id="discountAmount">Rs. <%= coupon.discountAmount.toFixed(2)
+                                                                %>
+                                                        </td>
                                                     </tr>
-                                                    <% } %>
+                                                    <% } else { %>
+                                                        <tr>
+                                                            <td>Discount Amount</td>
+                                                            <td id="discountAmount">Rs. 0</td>
+                                                        </tr>
+                                                        <% } %>
 
                                                             <% const totalBeforeDiscount=subtotal + shippingCost; %>
                                                                 <% const totalAfterDiscount=totalBeforeDiscount -
@@ -297,21 +300,42 @@
 
                         <form action="#" class="form-inline" style="margin-top: 5%;">
                             <div class="form-group mx-sm-3 mb-2">
-                                <label for="inputPassword2" class="sr-only">Coupon</label>
-                                <input type="text" class="form-control" id="couponCode" placeholder="Enter Coupon Code">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="couponCode"
+                                        placeholder="Enter Coupon Code">
+                                    <div class="input-group-append">
+                                        <button type="button" id="removeCouponButton" class="btn btn-danger">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <button type="submit" id="applyCouponButton" class="btn btn-primary mb-2">Apply
-                                Coupon</button>
+                            <button type="submit" id="applyCouponButton" class="btn btn-primary mb-2"
+                                style="width: 25%;">Apply</button>
                         </form>
+
                         <div class="payment" style="margin-top: 10%;">
-                            <div>
-                                <input type="radio" id="cod" class="paymentMethod" name="payment" value="cod">
-                                <label for="cod">COD</label>
-                            </div>
-                            <div>
-                                <input type="radio" id="online" class="paymentMethod" name="payment" value="online">
-                                <label for="cod">Online</label>
-                            </div>
+                            <% if(totalAfterDiscount>1000 ){ %>
+                                <div>
+                                    <input type="radio" id="cod" class="paymentMethod" name="payment" value="cod"
+                                        disabled>
+                                    <label for="cod">COD not available for orders above 1000</label>
+                                </div>
+                                <% }else{ %>
+                                    <div>
+                                        <input type="radio" id="cod" class="paymentMethod" name="payment" value="cod">
+                                        <label for="cod">COD</label>
+                                    </div>
+                                    <% } %>
+                                        <div>
+                                            <input type="radio" id="online" class="paymentMethod" name="payment"
+                                                value="online">
+                                            <label for="cod">Online</label>
+                                        </div>
                         </div>
 
                         <% if (addresses && addresses.length> 0) { %>
@@ -331,12 +355,12 @@
                             <div class="col-md-4 mb-3">
                                 <div class="card">
                                     <div class="card-header bg-dark text-white">
-                                        <input type="radio" name="selectedAddress" value="<%= index %>">
+                                        <input type="radio" name="selectedAddress" id="address_<%= index %>"
+                                            value="<%= index %>">
                                         <label for="address_<%= index %>">
                                             <span class="ml-2">Address <%= index + 1 %></span>
                                         </label>
                                     </div>
-
                                     <div class="card-body">
                                         <% if (address && address.name) { %>
                                             <p id="address_<%= index %>">
@@ -403,7 +427,6 @@
                                 <% } else { %>
                                     <p>No Coupon available</p>
                                     <% } %>
-
             </div>
         </div>
     </div>
@@ -491,13 +514,17 @@
         document.addEventListener('DOMContentLoaded', function () {
             // Add event listener for the placeOrderButton
             var placeOrderButton = document.getElementById('placeOrderButton');
-            if (placeOrderButton) {
+            var codRadioButton = document.getElementById('cod');
+            if (placeOrderButton && codRadioButton) {
                 placeOrderButton.addEventListener('click', function (event) {
                     event.preventDefault();
 
                     // Check if COD is selected
-                    var codSelected = document.getElementById('cod').checked;
+                    var codSelected = codRadioButton.checked;
                     var onlineSelected = document.getElementById('online').checked;
+
+                    // Get the total order amount
+                    var totalPrice = parseFloat(document.getElementById('totalPrice').innerText.replace("Rs. ", ""));
 
                     // If any payment method is selected, proceed with placing the order
                     if (codSelected || onlineSelected) {
@@ -512,92 +539,99 @@
                     }
                 });
             } else {
-                console.error("Element with ID 'placeOrderButton' not found.");
+                console.error("Element with ID 'placeOrderButton' or 'cod' not found.");
             }
 
-           
-        async function initiateRazorpayPayment() {
-            console.log("initiated");
-            let totalPrice = document.getElementById('totalPrice').innerText;
-            totalPrice = (totalPrice.replace("Rs. ", ""));
-            console.log(totalPrice);
+            async function initiateRazorpayPayment() {
+                console.log("initiated");
+                let totalPrice = document.getElementById('totalPrice').innerText;
+                totalPrice = (totalPrice.replace("Rs. ", ""));
+                console.log(totalPrice);
 
-            // Check which payment method is selected
-            var paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+                // Check which payment method is selected
+                var paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
-            if (paymentMethod === 'online') {
-                fetch('/razorpay', {
-                    method: 'POST',
+                if (paymentMethod === 'online') {
+                    fetch('/razorpay', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            totalPrice: Math.round(Number(totalPrice) * 100)
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(order => {
+                            var options = {
+                                "key": "rzp_test_lSbwNbIgtUL14w",
+                                "amount": Number(totalPrice) * 100,
+                                "currency": "INR",
+                                "name": "Angelic Mirrors",
+                                "description": "Payment for your order",
+                                "image": "",
+                                "order_id": order.id,
+                                "handler": function (response) {
+                                    console.log(response);
+                                    placeOrder('Online'); // Call function to place order after successful payment
+                                },
+                                "prefill": {
+                                    "name": "Customer Name",
+                                    "email": "customer@example.com",
+                                    "contact": "9999999999"
+                                },
+                                "theme": {
+                                    "color": "#3399cc"
+                                }
+                            };
+                            var rzp1 = new Razorpay(options);
+                            rzp1.on('payment.failed', function (response) {
+                                console.error('Payment failed:', response.error);
+                                // Redirect to the payment failed page
+                                window.location.href = '/paymentFailed';
+                            });
+                            rzp1.open();
+                        })
+                        .catch(function (error) {
+                            console.error('Payment failed', error);
+                            console.log("failed");
+                            // Redirect to the payment failed page
+                            window.location.href = '/paymentFailed';
+                        });
+                }
+            }
+
+            function placeOrder(paymentMethod) {
+                // Fetch request to your server to place the order
+                fetch('/getPlaceOrder', {
+                    method: 'post',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        totalPrice: Math.round(Number(totalPrice) * 100)
+                        userId: '<%= userId %>',
+                        productId: '<%= productId %>',
+                        paymentMethod: paymentMethod
                     })
                 })
-                    .then(response => response.json())
-                    .then(order => {
-                        var options = {
-                            "key": "rzp_test_lSbwNbIgtUL14w",
-                            "amount": Number(totalPrice) * 100,
-                            "currency": "INR",
-                            "name": "Angelic Mirrors",
-                            "description": "Payment for your order",
-                            "image": "",
-                            "order_id": order.id,
-                            "handler": function (response) {
-                                console.log(response);
-                                placeOrder('Online'); // Call function to place order after successful payment
-                            },
-                            "prefill": {
-                                "name": "Customer Name",
-                                "email": "customer@example.com",
-                                "contact": "9999999999"
-                            },
-                            "theme": {
-                                "color": "#3399cc"
-                            }
-                        };
-                        var rzp1 = new Razorpay(options);
-                        rzp1.open();
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Order confirmed');
+                            window.location.href = '/orderConfirm';
+                        } else {
+                            console.log('Failed to confirm order');
+                            alert('Failed to confirm order. Please try again later.');
+                        }
                     })
-                    .catch(function (error) {
-                        console.error('Payment failed', error);
+                    .catch((error) => {
+                        console.log(error);
+                        alert('An error occurred. Please try again later.');
                     });
             }
-        }
-
-        function placeOrder(paymentMethod) {
-            // Fetch request to your server to place the order
-            fetch('/getPlaceOrder', {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    userId: '<%= userId %>',
-                    productId: '<%= productId %>',
-                    paymentMethod: paymentMethod
-                })
-            })
-                .then(response => {
-                    if (response.ok) {
-                        console.log('Order confirmed');
-                        window.location.href = '/orderConfirm';
-                    } else {
-                        console.log('Failed to confirm order');
-                        alert('Failed to confirm order. Please try again later.');
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    alert('An error occurred. Please try again later.');
-                });
-        }
 
 
-         // Add event listener for the applyCouponButton
-         var applyCouponButton = document.getElementById('applyCouponButton');
+            // Add event listener for the applyCouponButton
+            var applyCouponButton = document.getElementById('applyCouponButton');
             if (applyCouponButton) {
                 applyCouponButton.addEventListener('click', function () {
                     let couponCode = document.getElementById('couponCode').value;
@@ -637,7 +671,7 @@
                                 } else {
                                     console.error("Element with ID 'discountAmount' not found.");
                                 }
-                                console.log(discountAmountElement,"discount");
+                                console.log(discountAmountElement, "discount");
                             } else {
                                 console.error("Invalid discount amount data:", data.discountAmount);
                             }
@@ -647,7 +681,7 @@
                                 data.total = Number(data.total);
 
                                 const total = document.getElementById('totalPrice');
-                                console.log(total,'to');
+                                console.log(total, 'to');
                                 total.textContent = `Rs. ${data.total.toFixed(2)}`;
                             }
 
@@ -662,7 +696,71 @@
                 console.error("Element with ID 'applyCouponButton' not found.");
             }
         });
-        
+
+        // Add event listener for the removeCouponButton
+        var removeCouponButton = document.getElementById('removeCouponButton');
+        if (removeCouponButton) {
+            removeCouponButton.addEventListener('click', function () {
+                let disc = document.getElementById('discountAmount').innerText
+
+                // Send an asynchronous request to remove the applied coupon
+                fetch('/removeCoupon', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: '<%= userId %>',
+                    }),
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Coupon removed successfully');
+                            const discountAmountElement = document.getElementById('discountAmount');
+                            if (discountAmountElement) {
+                                discountAmountElement.textContent = 'Rs. 0';
+                            } else {
+                                console.error("Element with ID 'discountAmount' not found.");
+                            }
+
+                            const totalElement = document.getElementById('totalPrice');
+                            if (totalElement) {
+                                // Update total price if necessary
+                                const totalPriceText = totalElement.innerText;
+                                const totalPrice = parseFloat(totalPriceText.replace('Rs. ', ''));
+                                const discountPrice = parseFloat(disc.replace('Rs. ', ''));
+                                if (!isNaN(totalPrice)) {
+                                    totalElement.textContent = `Rs. ${Number(totalPrice.toFixed(2)) + Number(discountPrice.toFixed(2))}`;
+                                }
+                            } else {
+                                console.error("Element with ID 'totalPrice' not found.");
+                            }
+                        } else {
+                            console.log('Failed to remove coupon');
+                            alert('Failed to remove coupon. Please try again later.');
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        alert('An error occurred. Please try again later.');
+                    });
+            });
+        } else {
+            console.error("Element with ID 'removeCouponButton' not found.");
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add event listener to handle address selection
+            var addressRadios = document.querySelectorAll('input[name="selectedAddress"]');
+            addressRadios.forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    var selectedAddressIndex = this.value;
+                    var selectedAddressDetails = document.getElementById('address_' + selectedAddressIndex).textContent;
+                    console.log('Selected Address Details:', selectedAddressDetails);
+                });
+            });
+        });
+
     </script>
 
     <!-- jquery -->

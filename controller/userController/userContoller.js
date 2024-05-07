@@ -10,7 +10,7 @@ const home = (req, res) => {
     if (req.session.user) {
         loggedIn = true;
     }
-    res.render('user/home', { loggedIn,successMessage });
+    res.render('user/home', { loggedIn, successMessage });
 };
 
 //login
@@ -21,7 +21,7 @@ const userLogin = async (req, res) => {
         if (req.session.user) {
             res.redirect('/');
         } else {
-            res.render('user/userLogin', { successMessage: successMessage, errorMessage: errorMessage});
+            res.render('user/userLogin', { successMessage: successMessage, errorMessage: errorMessage });
         }
     } catch (error) {
         console.log(error);
@@ -41,7 +41,7 @@ const postLogin = async (req, res) => {
             return res.redirect('/userLogin');
         }
 
-        if(user.blocked){
+        if (user.blocked) {
             console.log("user is blocked");
             req.flash("error", "User is blocked. Please contact support for assistance.");
             return res.redirect('/userLogin');
@@ -53,11 +53,11 @@ const postLogin = async (req, res) => {
         if (isPasswordValid) {
             req.session.user = user;
 
-            req.flash('success',"User logged in successfully..!")
+            req.flash('success', "User logged in successfully..!")
             console.log("Login successfull");
             return res.redirect('/');
 
-        } else{
+        } else {
             req.flash("error", "Invalid password.");
             return res.redirect('/userLogin');
         }
@@ -113,7 +113,7 @@ const postSignup = async (req, res) => {
             const otp = generateOTP();
             console.log('Generated OTP:', otp);
 
-           await sendOTPByEmail(email, otp);
+            await sendOTPByEmail(email, otp);
 
             req.session.userDetails = {
                 username,
@@ -181,7 +181,7 @@ const getResendOtp = async (req, res) => {
 
         // Generate a new OTP
         const otp = generateOTP();
-        console.log(otp,"resend otp");
+        console.log(otp, "resend otp");
 
         // Send OTP via email
         await sendOTPByEmail(email, otp);
@@ -269,8 +269,26 @@ const postForgotPassword = async (req, res) => {
 //to resend otp for forgot password
 const getForgotResendOtp = async (req, res) => {
     try {
-        const email = req.body.email;
-        console.log(email, "email");
+        if (!req.session.email) {
+            return res.redirect('/forgotOtp');
+        }
+
+        const email = req.session.email;
+        console.log(email, "resend email");
+
+        // Generate a new OTP
+        const otp = generateOTP();
+        console.log(otp, "forgot resend otp");
+
+        // Send OTP via email
+        await sendOTPByEmail(email, otp);
+
+        // Update session with new OTP and expiration time
+        req.session.otp = otp;
+        req.session.expireTime = new Date(Date.now() + 5 * 60000); // 5 minutes expiry
+
+        console.log("Redirecting to OTP page");
+        return res.redirect('/forgotOtp');
     } catch (error) {
         console.log("Error in getResendOtp:", error);
         req.flash("error", "Error occurred during resend OTP");
@@ -282,7 +300,11 @@ const getForgotResendOtp = async (req, res) => {
 //to get the new password page
 const getNewPassword = async (req, res) => {
     try {
-        res.render('user/newPassword')
+        if (req.session.otp) {
+            res.render('user/newPassword');
+        } else {
+            res.redirect('/');
+        }
     } catch (error) {
         console.log("Error in getResendOtp:", error);
         return res.status(500).send("Error occurred during get new password");
@@ -294,8 +316,6 @@ const postNewPassword = async (req, res) => {
         // Extract email and new password from request
         let newPassword = req.body.password;
         const email = req.session.email;
-
-
 
         // Ensure newPassword is a string
         if (typeof newPassword !== 'string') {

@@ -177,7 +177,7 @@
 
     <!-- Order list start -->
     <div class="order-list">
-        <h3 class="orderhead">My Orders</h3>
+        <h3 class="orderhead" style="margin-top:5% ;">My Orders</h3>
     </div>
 
     <div class="order-border" style="margin-top: 5%;">
@@ -189,6 +189,7 @@
                         <th class="product-name">Price</th>
                         <th class="product-price">Expected Date</th>
                         <th class="product-quantity">Satus</th>
+                        <th class="product-payment">Payment Status</th>
                         <th class="product-total">Actions</th>
                     </tr>
                 </thead>
@@ -231,6 +232,13 @@
                                         <%= order.status %>
                                     </td>
                                     <td>
+                                        <% if (order.paymentMethod === 'Online') { %>
+                                            Paid
+                                        <% } else { %>
+                                            <%= order.paymentStatus %>
+                                        <% } %>
+                                    </td>
+                                    <td>
                                         <% if (order.status==='Delivered' ) { %>
                                             <a href="#" class="boxed-btn return-btn"
                                                 onclick="returnOrder('<%= order._id %>')"
@@ -255,7 +263,43 @@
                         <% } %>
 
             </table>
+            
         </div>
+         <!-- pagination -->
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <div class="pagination-wrap">
+            <ul class="pagination" style="justify-content: center;">
+                <li class="page-item <%= page == 1 ? 'disabled' : '' %>">
+                    <a class="page-link"
+                        href="?page=<%= page - 1 %>&sortOption=<%= sortOption %>&order=<%= order %>&search=<%= search %>"
+                        aria-label="Previous">
+                        <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                    </a>
+                </li>
+
+                <% for (let i=1; i <= totalPages; i++) { %>
+                <li class="page-item <%= page == i ? 'active' : '' %>">
+                    <a class="page-link"
+                        href="?page=<%= i %>&sortOption=<%= sortOption %>&order=<%= order %>&search=<%= search %>">
+                        <%= i %>
+                    </a>
+                </li>
+                <% } %>
+
+                <li class="page-item <%= page == totalPages ? 'disabled' : '' %>">
+                    <a class="page-link"
+                        href="?page=<%= page + 1 %>&sortOption=<%= sortOption %>&order=<%= order %>&search=<%= search %>"
+                        aria-label="Next">
+                        Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- end of pagination -->
+
     </div>
 
 
