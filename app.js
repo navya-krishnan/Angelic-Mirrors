@@ -53,7 +53,7 @@ app.use(express.static('public'))
 app.use('/admin', adminRouter)
 app.use('/', userRouter)
 
-app.listen(5000, () => {
+app.listen(3000, () => {
     console.log("Connected")
 })
 
