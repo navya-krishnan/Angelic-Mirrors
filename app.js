@@ -31,7 +31,7 @@ app.use(flash());
 
 
 // Connecting to MongoDB
-mongoose.connect("mongodb://127.0.0.1:27017/angelicMirror")
+mongoose.connect("mongodb+srv://navyakrishnanplr2002:navya2002@cluster0.qsezkxw.mongodb.net/angelicMirrors?retryWrites=true&w=majority&appName=Cluster0")
     .then(() => {
         console.log("MongoDB is connected properly");
     }).catch((err) => {
