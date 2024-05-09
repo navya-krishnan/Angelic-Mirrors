@@ -25,6 +25,19 @@ const getShop = async (req, res) => {
             const allProducts = await productsQuery.exec();
             let products = allProducts.filter(product => product.product_category && product.product_category.blocked && product.unlist);
 
+            // Retrieve category offers
+            const categoryOffers = await offerCollection.find({ category_name: { $exists: true } });
+
+            // Apply category offers to products
+            products = products.map(product => {
+                const matchingCategoryOffer = categoryOffers.find(offer => product.product_category._id.equals(offer.category_name));
+                if (matchingCategoryOffer) {
+                    const discountAmount = matchingCategoryOffer.discount_Amount;
+                    product.offerPrice = product.price - (product.price * (discountAmount / 100));
+                }
+                return product;
+            });
+
             const allCategories = await categoryCollection.find();
             const category = allCategories.filter(category => category.blocked);
 
@@ -48,27 +61,6 @@ const getShop = async (req, res) => {
             const cart = await cartCollection.findOne({ userId: req.session.user._id });
             const cartQuantity = cart?.products?.length || 0;
 
-            //applying offer to products
-            currentProducts = await Promise.all(currentProducts.map(async (product) => {
-                const productOffer = await offerCollection.findOne({ product: product._id, unlist: true });
-                // console.log(productOffer, "productOffer for product:", product.product_name);
-                const categoryOffer = await offerCollection.findOne({ category: product.product_category.length > 0 ? product.product_category[0]._id : null, unlist: true });
-                // console.log(categoryOffer, "categoryOffer for product:", product.product_name);
-            
-                if (productOffer && typeof productOffer.discount === 'number') {
-                    product.offerPrice = product.price - (product.price * (productOffer.discount / 100));
-                } else if (categoryOffer && typeof categoryOffer.discount === 'number') {
-                    product.offerPrice = product.price - (product.price * (categoryOffer.discount / 100));
-                } else {
-                    product.offerPrice = null;
-                }
-                
-                // console.log("Offer price for product:", product.product_name, "is", product.offerPrice);
-            
-                return product;
-            }));
-
-
             res.render('user/shop', {
                 products: currentProducts,
                 page,
@@ -81,6 +73,7 @@ const getShop = async (req, res) => {
             });
         } else {
             console.log("Shop is not correct");
+            res.redirect('/login'); // Redirect to login page if user is not logged in
         }
     } catch (error) {
         console.log(error);
