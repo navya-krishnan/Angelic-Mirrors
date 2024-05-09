@@ -192,11 +192,13 @@
 							<div class="price-container">
 								<% if (product.offerPrice !== null) { %>
 									<h4 style="text-decoration: line-through; color: red;">₹<%= product.product_price %></h4>
-									<h4 style="color: green;">Offer Price: ₹<%= product.offerPrice %></h4>
+									<h4 style="color: green;">Offer Price: ₹<%= product.discount_Amount %></h4>
 								<% } else { %>
 									<h4>₹<%= product.product_price %></h4>
+									<p>No offers available</p>
 								<% } %>
-							</div>  
+							</div>
+													  
 							<div>
 								<% if (product.product_stock <= 0) { %>
 									<h4 style="color: red;">Out of Stock</h4>

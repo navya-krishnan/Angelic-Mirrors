@@ -27,16 +27,48 @@ const getShop = async (req, res) => {
 
             // Retrieve category offers
             const categoryOffers = await offerCollection.find({ category_name: { $exists: true } });
-
-            // Apply category offers to products
+            console.log(categoryOffers, "catoff");
+            
+            const productOffers = await offerCollection.find({ product_name: { $exists: true } })
+            console.log(productOffers, "prooff");
+            
+            // Define discountPercentage outside the loop
+            let discountPercentage = 0; // Default value
+            
+            // Apply offers to products
             products = products.map(product => {
+                // Check for matching category offer
                 const matchingCategoryOffer = categoryOffers.find(offer => product.product_category._id.equals(offer.category_name));
-                if (matchingCategoryOffer) {
-                    const discountAmount = matchingCategoryOffer.discount_Amount;
-                    product.offerPrice = product.price - (product.price * (discountAmount / 100));
+                // Check for matching product offer
+                const matchingProductOffer = productOffers.find(offer => product._id.equals(offer.product_name));
+            
+                if (matchingCategoryOffer && matchingProductOffer) {
+                    // If both category and product offers exist, choose the one with the highest discount
+                    if (matchingCategoryOffer.discount_Amount > matchingProductOffer.discount_Amount) {
+                        discountPercentage = matchingCategoryOffer.discount_Amount;
+                    } else {
+                        discountPercentage = matchingProductOffer.discount_Amount;
+                    }
+                } else if (matchingCategoryOffer) {
+                    // If only category offer exists
+                    discountPercentage = matchingCategoryOffer.discount_Amount;
+                } else if (matchingProductOffer) {
+                    // If only product offer exists
+                    discountPercentage = matchingProductOffer.discount_Amount;
+                } else {
+                    // If no offer exists
+                    discountPercentage = 0;
                 }
+                
+                // Calculate offer price
+                product.offerPrice = discountPercentage > 0 ? product.price - (product.price * (discountPercentage / 100)) : null;
+                
+                // Assign discountPercentage to product for template rendering
+                product.discountPercentage = discountPercentage;
+            
                 return product;
             });
+            
 
             const allCategories = await categoryCollection.find();
             const category = allCategories.filter(category => category.blocked);
@@ -65,11 +97,12 @@ const getShop = async (req, res) => {
                 products: currentProducts,
                 page,
                 totalPages,
-                category,
+                category: [],
                 cartQuantity,
                 sortOption,
                 categorie,
-                search
+                search,
+                discountPercentage
             });
         } else {
             console.log("Shop is not correct");
@@ -104,7 +137,7 @@ const getSingleProduct = async (req, res) => {
         console.log(error);
         res.status(500).send("Error occurred");
     }
-};
+};5
 
 
 module.exports = {
