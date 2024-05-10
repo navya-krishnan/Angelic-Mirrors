@@ -162,7 +162,13 @@
 												<%= product.product.product_name %>
 											</td>
 											<td>
-												<%= product.product.product_price %>
+												<% if (product.offerPrice !==null) { %>
+													<span> Rs.<%= product.product.discount_Amount %>
+													</span>
+													<% } else { %>
+														<span>Rs.<%= product.product.product_price %>
+														</span>
+														<% } %>
 											</td>
 											<td>
 												<a href="/singleProduct/<%= product.product._id %>" style="margin-top: 4%;">

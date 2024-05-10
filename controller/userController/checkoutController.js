@@ -2,6 +2,7 @@ const cartDatabase = require('../../model/cart');
 const addressDatabase = require('../../model/address');
 const couponDatabase = require('../../model/coupon');
 const userDatabase = require('../../model/user')
+const offerCollection = require('../../model/offer')
 
 const getCheckout = async (req, res) => {
     try {
@@ -18,9 +19,47 @@ const getCheckout = async (req, res) => {
 
             const addresses = await addressDatabase.find({ userId: userId });
 
+            // Retrieve the relevant product information
             const productId = cart.products[0].product._id;
+            const product = cart.products[0].product;
 
             const coupon = await couponDatabase.find()
+
+            // Retrieve category offers
+            const categoryOffers = await offerCollection.find({ category_name: { $exists: true } });
+
+            const productOffers = await offerCollection.find({ product_name: { $exists: true } })
+
+            let discountPercentage = 0;
+            let discount_Amount = 0
+
+            // Check for matching category and product offer
+            const matchingCategoryOffer = categoryOffers.find(offer => product.product_category._id.equals(offer.category_name));
+            const matchingProductOffer = productOffers.find(offer => product._id.equals(offer.product_name));
+
+            if (matchingCategoryOffer && matchingProductOffer) {
+                // If both category and product offers exist, choose the one with the highest discount
+                if (matchingCategoryOffer.discount_Amount > matchingProductOffer.discount_Amount) {
+                    discountPercentage = matchingCategoryOffer.discount_Amount;
+                } else {
+                    discountPercentage = matchingProductOffer.discount_Amount;
+                }
+            } else if (matchingCategoryOffer) {
+                discountPercentage = matchingCategoryOffer.discount_Amount;
+            } else if (matchingProductOffer) {
+                discountPercentage = matchingProductOffer.discount_Amount;
+            } else {
+                discountPercentage = 0;
+            }
+
+            // Calculate offer price
+            product.offerPrice = discountPercentage > 0 ? product.price - (product.price * (discountPercentage / 100)) : null;
+
+            // Assign discountPercentage to product for template rendering
+            product.discountPercentage = discountPercentage;
+            discount_Amount = product.product_price - (product.product_price * (discountPercentage / 100))
+
+            product.discount_Amount = discount_Amount
 
             // Pass the data to the template
             res.render('user/checkout', {
@@ -32,7 +71,8 @@ const getCheckout = async (req, res) => {
                 loggedIn,
                 productId,
                 userId,
-                coupon
+                coupon,
+                discountPercentage
             });
         } else {
             res.redirect('/userLogin');
@@ -42,6 +82,7 @@ const getCheckout = async (req, res) => {
         return res.status(500).send("Error occurred during get checkout page");
     }
 };
+
 
 //coupon apply
 const postCouponApply = async (req, res) => {

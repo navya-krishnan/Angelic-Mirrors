@@ -1,5 +1,6 @@
 const Cart = require('../../model/cart');
 const Product = require('../../model/product');
+const offerCollection = require('../../model/offer')
 
 const getCart = async (req, res) => {
     try {
@@ -27,6 +28,44 @@ const getCart = async (req, res) => {
             await cart.save()
         }
 
+          // Retrieve category offers
+        const categoryOffers = await offerCollection.find({ category_name: { $exists: true } });
+
+        const productOffers = await offerCollection.find({ product_name: { $exists: true } })
+
+        // Apply offers to products in the cart
+        for (const cartItem of cart.products) {
+            let discountPercentage = 0;
+            let discount_Amount = 0;
+
+            // Check for matching category and product offer
+            const matchingCategoryOffer = categoryOffers.find(offer => cartItem.product.product_category._id.equals(offer.category_name));
+            const matchingProductOffer = productOffers.find(offer => cartItem.product._id.equals(offer.product_name));
+
+            if (matchingCategoryOffer && matchingProductOffer) {
+                // If both category and product offers exist, choose the one with the highest discount
+                if (matchingCategoryOffer.discount_Amount > matchingProductOffer.discount_Amount) {
+                    discountPercentage = matchingCategoryOffer.discount_Amount;
+                } else {
+                    discountPercentage = matchingProductOffer.discount_Amount;
+                }
+            } else if (matchingCategoryOffer) {
+                discountPercentage = matchingCategoryOffer.discount_Amount;
+            } else if (matchingProductOffer) {
+                discountPercentage = matchingProductOffer.discount_Amount;
+            } else {
+                discountPercentage = 0;
+            }
+
+            // Calculate offer price
+            cartItem.offerPrice = discountPercentage > 0 ? cartItem.product.product_price - (cartItem.product.product_price * (discountPercentage / 100)) : null;
+
+            // Assign discountPercentage to product for template rendering
+            cartItem.product.discountPercentage = discountPercentage;
+            discount_Amount = cartItem.product.product_price - (cartItem.product.product_price * (discountPercentage / 100))
+
+            cartItem.product.discount_Amount = discount_Amount;
+        }
         // Check if maximum quantity limit is reached
         const cartQuantity = cart.products.reduce((total, product) => total + product.quantity, 0);
         const maxQuantityError = cartQuantity >= max_product_quantity_per_person;

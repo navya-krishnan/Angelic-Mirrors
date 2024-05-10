@@ -1,5 +1,6 @@
 const Wishlist = require('../../model/wishlist')
 const productDatabase = require('../../model/product')
+const offerCollection = require('../../model/offer')
 
 //to display wishlist page
 const getWishlist = async (req, res) => {
@@ -16,7 +17,46 @@ const getWishlist = async (req, res) => {
             return res.render('user/wishlist', { wishlist });
         }
 
-        res.render('user/wishlist', { wishlist, userId});
+         // Retrieve category offers
+         const categoryOffers = await offerCollection.find({ category_name: { $exists: true } });
+
+         const productOffers = await offerCollection.find({ product_name: { $exists: true } })
+ 
+         // Apply offers to products in the wishlist
+         for (const wishlistItem of wishlist.products) {
+             let discountPercentage = 0;
+             let discount_Amount = 0;
+ 
+             // Check for matching category and product offer
+             const matchingCategoryOffer = categoryOffers.find(offer => wishlistItem.product.product_category._id.equals(offer.category_name));
+             const matchingProductOffer = productOffers.find(offer => wishlistItem.product._id.equals(offer.product_name));
+ 
+             if (matchingCategoryOffer && matchingProductOffer) {
+                 // If both category and product offers exist, choose the one with the highest discount
+                 if (matchingCategoryOffer.discount_Amount > matchingProductOffer.discount_Amount) {
+                     discountPercentage = matchingCategoryOffer.discount_Amount;
+                 } else {
+                     discountPercentage = matchingProductOffer.discount_Amount;
+                 }
+             } else if (matchingCategoryOffer) {
+                 discountPercentage = matchingCategoryOffer.discount_Amount;
+             } else if (matchingProductOffer) {
+                 discountPercentage = matchingProductOffer.discount_Amount;
+             } else {
+                 discountPercentage = 0;
+             }
+ 
+             // Calculate offer price
+             wishlistItem.offerPrice = discountPercentage > 0 ? wishlistItem.product.product_price - (wishlistItem.product.product_price * (discountPercentage / 100)) : null;
+ 
+             // Assign discountPercentage to product for template rendering
+             wishlistItem.product.discountPercentage = discountPercentage;
+             discount_Amount = wishlistItem.product.product_price - (wishlistItem.product.product_price * (discountPercentage / 100))
+ 
+             wishlistItem.product.discount_Amount = discount_Amount;
+         }
+
+        res.render('user/wishlist', { wishlist, userId });
 
     } catch (error) {
         console.log(error);
@@ -59,6 +99,7 @@ const postWishlist = async (req, res) => {
         }
 
         await Promise.all([wishlist.save(), product.save()]);
+
 
         res.redirect('/singleProduct/' + productId);
 

@@ -187,8 +187,18 @@
 						<p>
 							<%= product.product_category.category_description%>
 						</p>
-						<h4>Rs.<%= product.product_price%>/-</h4>
-
+						<div class="price-container">
+							<% if (product.offerPrice !==null) { %>
+								<h4 style="text-decoration: line-through; color: red;">Rs. <%= product.product_price %>
+										/-</h4>
+								<h4 style="color: green;">Offer Price: ₹<%= product.discount_Amount %>
+								</h4>
+								<% } else { %>
+									<h4>₹<%= product.product_price %>
+									</h4>
+									<p>No offers available</p>
+									<% } %>
+						</div>
 						<div class="single-product-form">
 							<% if(product.product_stock> 0){ %>
 								<h4 style="color: green;">Only <%= product.product_stock %> left</h4>
@@ -369,7 +379,7 @@
 
 	<script>
 		document.getElementById('addToCartButton').addEventListener('click', function () {
-			
+
 			console.log('fetchhhhhhh');
 
 			fetch('/cart', {
@@ -381,7 +391,7 @@
 					userId: '<%= userId %>',
 					productId: '<%= productId %>',
 					quantity: 1,
-					
+
 				})
 			})
 				.then(response => {

@@ -249,20 +249,30 @@
                                                 <%= product.product.product_name %>
                                             </td>
                                             <td style="color: rgb(156, 6, 6);">
-                                                <%= product.product.product_price %>
+                                                <div class="price-container">
+                                                    <% if (product.offerPrice !==null) { %>
+                                                        <span> Rs.<%= product.product.discount_Amount %>
+                                                        </span>
+                                                        <% } else { %>
+                                                            <h4>₹<%= product.product_price %>
+                                                            </h4>
+                                                            <% } %>
+                                                </div>
                                             </td>
                                         </tr>
                                         <% }) %>
                                             <tr>
-                                                <% let subtotal=0; %>
-                                                    <% cart.products.forEach((product)=> { %>
-                                                        <% const productTotal=product.product.product_price *
-                                                            product.quantity; %>
-                                                            <% subtotal +=productTotal; %>
-                                                                <% }); %>
-                                                                    <td>Subtotal</td>
-                                                                    <td>Rs. <%= subtotal %>
-                                                                    </td>
+                                                <% let subtotal = 0; %>
+									<% cart.products.forEach((product) => { %>
+										<% const productTotal = product.offerPrice !== null ? product.product.discount_Amount * product.quantity : product.product.product_price * product.quantity; %>
+										<% subtotal += productTotal; %>
+									<% }); %>
+									<td>Subtotal: </td>
+									<td>
+										<span class="product-total">
+											Rs. <%= subtotal %>
+										</span>
+									</td>
                                             </tr>
                                             <% const shippingCost=100; %>
                                                 <tr>

@@ -5,7 +5,8 @@ const escapeRegex = (text) => {
 const categoryCollection = require('../../model/category');
 const productCollection = require('../../model/product');
 const cartCollection = require('../../model/cart')
-const offerCollection = require('../../model/offer')
+const offerCollection = require('../../model/offer');
+const Product = require('../../model/product');
 
 // shop
 const getShop = async (req, res) => {
@@ -27,21 +28,18 @@ const getShop = async (req, res) => {
 
             // Retrieve category offers
             const categoryOffers = await offerCollection.find({ category_name: { $exists: true } });
-            console.log(categoryOffers, "catoff");
-            
+
             const productOffers = await offerCollection.find({ product_name: { $exists: true } })
-            console.log(productOffers, "prooff");
-            
-            // Define discountPercentage outside the loop
-            let discountPercentage = 0; // Default value
-            
+
+            let discountPercentage = 0;
+            let discount_Amount = 0
+
             // Apply offers to products
             products = products.map(product => {
-                // Check for matching category offer
+                // Check for matching category and product offer
                 const matchingCategoryOffer = categoryOffers.find(offer => product.product_category._id.equals(offer.category_name));
-                // Check for matching product offer
                 const matchingProductOffer = productOffers.find(offer => product._id.equals(offer.product_name));
-            
+
                 if (matchingCategoryOffer && matchingProductOffer) {
                     // If both category and product offers exist, choose the one with the highest discount
                     if (matchingCategoryOffer.discount_Amount > matchingProductOffer.discount_Amount) {
@@ -50,25 +48,25 @@ const getShop = async (req, res) => {
                         discountPercentage = matchingProductOffer.discount_Amount;
                     }
                 } else if (matchingCategoryOffer) {
-                    // If only category offer exists
                     discountPercentage = matchingCategoryOffer.discount_Amount;
                 } else if (matchingProductOffer) {
-                    // If only product offer exists
                     discountPercentage = matchingProductOffer.discount_Amount;
                 } else {
-                    // If no offer exists
                     discountPercentage = 0;
                 }
-                
+
                 // Calculate offer price
                 product.offerPrice = discountPercentage > 0 ? product.price - (product.price * (discountPercentage / 100)) : null;
-                
+
                 // Assign discountPercentage to product for template rendering
                 product.discountPercentage = discountPercentage;
-            
+                discount_Amount = product.product_price - (product.product_price * (discountPercentage / 100))
+
+                product.discount_Amount = discount_Amount
+
                 return product;
             });
-            
+
 
             const allCategories = await categoryCollection.find();
             const category = allCategories.filter(category => category.blocked);
@@ -106,7 +104,7 @@ const getShop = async (req, res) => {
             });
         } else {
             console.log("Shop is not correct");
-            res.redirect('/login'); // Redirect to login page if user is not logged in
+            res.redirect('/login');
         }
     } catch (error) {
         console.log(error);
@@ -128,7 +126,45 @@ const getSingleProduct = async (req, res) => {
 
             const similarProducts = await productCollection.find({ product_category: product.product_category }).populate('product_category');
 
-            res.render('user/singleProduct', { product, similarProducts, userId: req.session.user._id, productId: proId });
+            // Retrieve category offers
+            const categoryOffers = await offerCollection.find({ category_name: { $exists: true } });
+
+            const productOffers = await offerCollection.find({ product_name: { $exists: true } })
+
+            let discountPercentage = 0;
+            let discount_Amount = 0
+
+
+            // Check for matching category and product offer
+            const matchingCategoryOffer = categoryOffers.find(offer => product.product_category._id.equals(offer.category_name));
+            const matchingProductOffer = productOffers.find(offer => product._id.equals(offer.product_name));
+
+            if (matchingCategoryOffer && matchingProductOffer) {
+                // If both category and product offers exist, choose the one with the highest discount
+                if (matchingCategoryOffer.discount_Amount > matchingProductOffer.discount_Amount) {
+                    discountPercentage = matchingCategoryOffer.discount_Amount;
+                } else {
+                    discountPercentage = matchingProductOffer.discount_Amount;
+                }
+            } else if (matchingCategoryOffer) {
+                discountPercentage = matchingCategoryOffer.discount_Amount;
+            } else if (matchingProductOffer) {
+                discountPercentage = matchingProductOffer.discount_Amount;
+            } else {
+                discountPercentage = 0;
+            }
+
+            // Calculate offer price
+            product.offerPrice = discountPercentage > 0 ? product.price - (product.price * (discountPercentage / 100)) : null;
+
+            // Assign discountPercentage to product for template rendering
+            product.discountPercentage = discountPercentage;
+            discount_Amount = product.product_price - (product.product_price * (discountPercentage / 100))
+
+            product.discount_Amount = discount_Amount
+
+            // Render the single product page
+            res.render('user/singleProduct', { product, similarProducts, userId: req.session.user._id, productId: proId, discountPercentage });
 
         } else {
             console.log("Cannot get single product");
@@ -137,7 +173,7 @@ const getSingleProduct = async (req, res) => {
         console.log(error);
         res.status(500).send("Error occurred");
     }
-};5
+};
 
 
 module.exports = {
