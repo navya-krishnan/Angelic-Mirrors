@@ -20,6 +20,8 @@ const getProfile = async (req, res) => {
                 res.render('user/profile/profile', { user, addresses });
             }
 
+        }else{
+            res.redirect('/userLogin')
         }
     } catch (error) {
         console.log(error);

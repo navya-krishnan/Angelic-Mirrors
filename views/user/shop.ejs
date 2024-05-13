@@ -11,6 +11,8 @@
 	<!-- title -->
 	<title>Angelic Mirrors</title>
 
+	<!-- favicon -->
+	<link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png">
 	<!-- google font -->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
@@ -68,27 +70,8 @@
 							<ul>
 								<li class="current-list-item"><a href="/">Home</a>
 								</li>
-								<!-- <li><a href="about.html">About</a></li>
-								<li><a href="#">Pages</a>
-									<ul class="sub-menu">
-										<li><a href="404.html">404 page</a></li>
-										<li><a href="about.html">About</a></li>
-										<li><a href="cart.html">Cart</a></li>
-										<li><a href="checkout.html">Check Out</a></li>
-										<li><a href="contact.html">Contact</a></li>
-										<li><a href="news.html">News</a></li>
-										<li><a href="shop.html">Shop</a></li>
-									</ul>
-								</li> -->
 
-								<!-- <li><a href="contact.html">Contact</a></li> -->
 								<li><a href="/shop">Shop</a>
-									<!-- <ul class="sub-menu">
-										<li><a href="shop.html">Shop</a></li>
-										<li><a href="checkout.html">Check Out</a></li>
-										<li><a href="single-product.html">Single Product</a></li>
-										<li><a href="cart.html">Cart</a></li>
-									</ul> -->
 								</li>
 								<li>
 									<div class="header-icons" style="display: flex;">
@@ -116,16 +99,30 @@
 											</svg>
 										</a>
 
-										<a href="/logout">
-											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-												fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16"
-												style="color: white;">
-												<path fill-rule="evenodd"
-													d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
-												<path fill-rule="evenodd"
-													d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
-											</svg>
-										</a>
+										<% if(loggedIn){%>
+											<a href="/logout">
+													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+														fill="currentColor" class="bi bi-box-arrow-right"
+														viewBox="0 0 16 16" style="color: white;">
+														<path fill-rule="evenodd"
+															d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
+														<path fill-rule="evenodd"
+															d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+													</svg>
+											</a>
+													<%}else{%>
+														<a href="/userLogin">
+														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+															fill="currentColor" class="bi bi-box-arrow-in-right"
+															viewBox="0 0 16 16">
+															<path fill-rule="evenodd"
+																d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0z" />
+															<path fill-rule="evenodd"
+																d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+														</svg>
+														</a>
+														<%}%>
+											</a>
 									</div>
 								</li>
 							</ul>
@@ -159,11 +156,11 @@
 			<div class="sort">
 				<label for="sortSelect">Sort By:</label>
 				<select id="sortSelect" onchange="sortProducts(this.value)">
-					<option value="select" <%= sortOption === 'select' ? 'selected' : '' %>>Select</option>
-					<option value="nameAsc" <%= sortOption === 'nameAsc' ? 'selected' : '' %>>Name (A-Z)</option>
-					<option value="nameDesc" <%= sortOption === 'nameDesc' ? 'selected' : '' %>>Name (Z-A)</option>
+					<option value="select" <%=sortOption==='select' ? 'selected' : '' %>>Select</option>
+					<option value="nameAsc" <%=sortOption==='nameAsc' ? 'selected' : '' %>>Name (A-Z)</option>
+					<option value="nameDesc" <%=sortOption==='nameDesc' ? 'selected' : '' %>>Name (Z-A)</option>
 				</select>
-			</div>			
+			</div>
 
 			<div class="row">
 				<div class="col-md-12">
@@ -180,36 +177,45 @@
 
 			<div class="row product-lists">
 				<% products.forEach((product,i)=> { %>
-					<div class="col-lg-4 col-md-6 text-center <%= product.product_category.category_name.replace(/\s+/g, '') %>">
+					<div
+						class="col-lg-4 col-md-6 text-center <%= product.product_category.category_name.replace(/\s+/g, '') %>">
 						<div class="single-product-item">
 							<div class="product-image">
 								<a href="/singleProduct/<%= product._id %>">
 									<img src="/image/<%= product.product_image[0] %>" alt="Product image">
 								</a>
 							</div>
-							<h3><%= product.product_name %></h3>
-							<h4><%= product.product_category.category_name %></h4>
+							<h3>
+								<%= product.product_name %>
+							</h3>
+							<h4>
+								<%= product.product_category.category_name %>
+							</h4>
 							<div class="price-container">
-								<% if (product.offerPrice !== null) { %>
-									<h4 style="text-decoration: line-through; color: red;">₹<%= product.product_price %></h4>
-									<h4 style="color: green;">Offer Price: ₹<%= product.discount_Amount %></h4>
-								<% } else { %>
-									<h4>₹<%= product.product_price %></h4>
-									<p>No offers available</p>
-								<% } %>
-							</div>				  
-							<div>
-								<% if (product.product_stock <= 0) { %>
-									<h4 style="color: red;">Out of Stock</h4>
-								<% } else { %>
-									<h4 style="color: green;">Only <%= product.product_stock %> left</h4>
-								<% } %>
+								<% if (product.offerPrice !==null) { %>
+									<h4 style="text-decoration: line-through; color: red;">₹<%= product.product_price %>
+									</h4>
+									<h4 style="color: green;">Offer Price: ₹<%= product.discount_Amount %>
+									</h4>
+									<% } else { %>
+										<h4>₹<%= product.product_price %>
+										</h4>
+										<p>No offers available</p>
+										<% } %>
 							</div>
-							<a href="/singleProduct/<%= product._id %>" class="cart-btn" style="margin-top: 4%;">View Product</a>
+							<div>
+								<% if (product.product_stock <=0) { %>
+									<h4 style="color: red;">Out of Stock</h4>
+									<% } else { %>
+										<h4 style="color: green;">Only <%= product.product_stock %> left</h4>
+										<% } %>
+							</div>
+							<a href="/singleProduct/<%= product._id %>" class="cart-btn" style="margin-top: 4%;">View
+								Product</a>
 						</div>
 					</div>
-				<% }); %>
-			</div> 				
+					<% }); %>
+			</div>
 
 			<!-- pagination -->
 			<div class="row">
@@ -351,11 +357,11 @@
 		});
 
 		function sortProducts(sortOption) {
-        // Redirect to the current page URL with the sortOption query parameter
-        const currentUrl = window.location.href.split('?')[0];
-        window.location.href = `${currentUrl}?sortOption=${sortOption}`;
-		console.log("sorting works");
-    }
+			// Redirect to the current page URL with the sortOption query parameter
+			const currentUrl = window.location.href.split('?')[0];
+			window.location.href = `${currentUrl}?sortOption=${sortOption}`;
+			console.log("sorting works");
+		}
 
 	</script>
 

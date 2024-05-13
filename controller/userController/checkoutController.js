@@ -20,46 +20,46 @@ const getCheckout = async (req, res) => {
             const addresses = await addressDatabase.find({ userId: userId });
 
             // Retrieve the relevant product information
-            const productId = cart.products[0].product._id;
-            const product = cart.products[0].product;
-
-            const coupon = await couponDatabase.find()
+            const products = cart.products.map(item => item.product);
+            
+            const coupon = await couponDatabase.find();
 
             // Retrieve category offers
             const categoryOffers = await offerCollection.find({ category_name: { $exists: true } });
 
-            const productOffers = await offerCollection.find({ product_name: { $exists: true } })
+            const productOffers = await offerCollection.find({ product_name: { $exists: true } });
 
+            // Initialize discount variables
             let discountPercentage = 0;
-            let discount_Amount = 0
 
-            // Check for matching category and product offer
-            const matchingCategoryOffer = categoryOffers.find(offer => product.product_category._id.equals(offer.category_name));
-            const matchingProductOffer = productOffers.find(offer => product._id.equals(offer.product_name));
+            // Loop through each product in the cart
+            for (const product of products) {
+                let productDiscountPercentage = 0;
+                let productDiscountAmount = 0;
 
-            if (matchingCategoryOffer && matchingProductOffer) {
-                // If both category and product offers exist, choose the one with the highest discount
-                if (matchingCategoryOffer.discount_Amount > matchingProductOffer.discount_Amount) {
-                    discountPercentage = matchingCategoryOffer.discount_Amount;
-                } else {
-                    discountPercentage = matchingProductOffer.discount_Amount;
+                // Check for matching category and product offers
+                const matchingCategoryOffer = categoryOffers.find(offer => product.product_category && offer.category_name && product.product_category._id.equals(offer.category_name));
+                const matchingProductOffer = productOffers.find(offer => product._id && offer.product_name && product._id.equals(offer.product_name));
+
+                // Determine the highest discount
+                if (matchingCategoryOffer) {
+                    productDiscountPercentage = matchingCategoryOffer.discount_Amount;
                 }
-            } else if (matchingCategoryOffer) {
-                discountPercentage = matchingCategoryOffer.discount_Amount;
-            } else if (matchingProductOffer) {
-                discountPercentage = matchingProductOffer.discount_Amount;
-            } else {
-                discountPercentage = 0;
+                if (matchingProductOffer && matchingProductOffer.discount_Amount > productDiscountPercentage) {
+                    productDiscountPercentage = matchingProductOffer.discount_Amount;
+                }
+
+                // Calculate offer price and discount amount for the product
+                product.offerPrice = productDiscountPercentage > 0 ? product.product_price - (product.product_price * (productDiscountPercentage / 100)) : null;
+                product.discountPercentage = productDiscountPercentage;
+                productDiscountAmount = product.product_price - product.offerPrice;
+                product.discount_Amount = productDiscountAmount;
+
+                // Accumulate discount for all products
+                if (productDiscountPercentage > discountPercentage) {
+                    discountPercentage = productDiscountPercentage;
+                }
             }
-
-            // Calculate offer price
-            product.offerPrice = discountPercentage > 0 ? product.price - (product.price * (discountPercentage / 100)) : null;
-
-            // Assign discountPercentage to product for template rendering
-            product.discountPercentage = discountPercentage;
-            discount_Amount = product.product_price - (product.product_price * (discountPercentage / 100))
-
-            product.discount_Amount = discount_Amount
 
             // Pass the data to the template
             res.render('user/checkout', {
@@ -69,7 +69,7 @@ const getCheckout = async (req, res) => {
                 addresses,
                 cartQuantity,
                 loggedIn,
-                productId,
+                products,
                 userId,
                 coupon,
                 discountPercentage

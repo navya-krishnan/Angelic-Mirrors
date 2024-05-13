@@ -11,6 +11,8 @@
 	<!-- title -->
 	<title>Angelic Mirrors</title>
 
+	<!-- favicon -->
+	<link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png">
 	<!-- google font -->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
@@ -62,20 +64,8 @@
 							<ul>
 								<li class="current-list-item"><a href="/">Home</a>
 								</li>
-								<!-- <li><a href="about.html">About</a></li> -->
-								<!-- <li><a href="#">Pages</a>
-									<ul class="sub-menu">
-										<li><a href="404.html">404 page</a></li>
-										<li><a href="about.html">About</a></li>
-										<li><a href="cart.html">Cart</a></li>
-										<li><a href="checkout.html">Check Out</a></li>
-										<li><a href="contact.html">Contact</a></li>
-										<li><a href="news.html">News</a></li>
-										<li><a href="/user/shop.ejs">Shop</a></li>
-									</ul>
-								</li> -->
-								<li><a href="/shop">Shop</a>
-
+								<li>
+									<a href="/shop">Shop</a>
 								<li>
 
 									<div class="header-icons">
@@ -94,8 +84,6 @@
 												<i class="fas fa-shopping-cart"></i>
 												<%}%>
 										</a>
-										<!-- <a class="mobile-hide search-bar-icon" href="#"><i
-												class="fas fa-search"></i></a> -->
 
 										<a href="/profile">
 											<% if(loggedIn){%>
@@ -110,7 +98,6 @@
 
 										<a href="/logout">
 											<% if(loggedIn){%>
-
 												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
 													fill="currentColor" class="bi bi-box-arrow-right"
 													viewBox="0 0 16 16" style="color: white;">
@@ -119,11 +106,9 @@
 													<path fill-rule="evenodd"
 														d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
 												</svg>
-
 												<%}%>
-
-
 										</a>
+										
 									</div>
 								</li>
 							</ul>
@@ -138,25 +123,6 @@
 	</div>
 	<!-- end header -->
 
-	<!-- search area -->
-	<!-- <div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-						<div class="search-bar-tablecell">
-							<h3>Search For:</h3>
-							<input type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> -->
-	<!-- end search area -->
-
 	<!-- hero area -->
 	<div class="hero-area hero-bg">
 		<div class="container">
@@ -166,13 +132,6 @@
 						<div class="hero-text-tablecell">
 							<p class="subtitle">Decor your home</p>
 							<h1>Angelic Mirrors</h1>
-							<div class="hero-btns">
-								<% if(loggedIn){%>
-									<a href="/shop" class="boxed-btn">Shop</a>
-									<%}else{%>
-										<a href="/userLogin" class="boxed-btn">Login</a>
-										<%}%>
-							</div>
 						</div>
 					</div>
 				</div>

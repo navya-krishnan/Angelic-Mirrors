@@ -119,7 +119,8 @@
                                     <input type="password" name="confirmPassword" id="confirmPassword"
                                         class="form-control form-control-lg"
                                         placeholder="Confirm your password here..!" />
-                                    <span id="confirmPasswordError" class="error" style="color:  rgb(114, 2, 2);"></span>
+                                    <span id="confirmPasswordError" class="error"
+                                        style="color:  rgb(114, 2, 2);"></span>
                                 </div>
 
                                 <button class="btn btn-outline-dark btn-lg px-5 " type="submit"
@@ -145,19 +146,20 @@
             const confirmPassword = document.getElementById("confirmPassword").value.trim();
 
             if (username === "") {
-                document.getElementById("usernameError").textContent = "Username cannot be empty..!";
+                document.getElementById("usernameError").textContent = "Name cannot be empty..!";
                 return false
             }
 
             if (username.length < 4) {
-                document.getElementById("usernameError").textContent = "Username should contain atleast 4 characters..!";
+                document.getElementById("usernameError").textContent = "Name should contain atleast 4 characters..!";
                 return false
             }
 
-            if (!/^[a-zA-Z]+$/.test(username)) {
-                document.getElementById("usernameError").textContent = "Username cannot contain symbols or numbers..!";
-                return false
+            if (!/^[a-zA-Z ]+$/.test(username)) {
+                document.getElementById("usernameError").textContent = "Name cannot contain symbols or numbers..!";
+                return false;
             }
+
 
             if (email === "") {
                 document.getElementById("emailError").textContent = "Email cannot be empty..!";

@@ -23,6 +23,9 @@
             margin-left: 5%;
         }
     </style>
+
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png">
     <!-- google font -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
@@ -74,18 +77,6 @@
                             <ul>
                                 <li class="current-list-item"><a href="/">Home</a>
                                 </li>
-                                <!-- <li><a href="about.html">About</a></li>
-                                <li><a href="#">Pages</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="404.html">404 page</a></li>
-										<li><a href="about.html">About</a></li>
-										<li><a href="cart.html">Cart</a></li>
-										<li><a href="checkout.html">Check Out</a></li>
-										<li><a href="contact.html">Contact</a></li>
-										<li><a href="news.html">News</a></li>
-                                        <li><a href="/user/shop.ejs">Shop</a></li>
-                                    </ul>
-                                </li> -->
                                 <li><a href="/shop">Shop</a>
 
                                 <li>
@@ -98,9 +89,6 @@
                                             </svg></a>
 
                                         <a class="shopping-cart" href="/cart"><i class="fas fa-shopping-cart"></i></a>
-                                        <!-- <a class="mobile-hide search-bar-icon" href="#"><i
-												class="fas fa-search"></i></a> -->
-
                                         <a href="/profile">
                                             <% if(loggedIn){%>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -141,25 +129,6 @@
         </div>
     </div>
     <!-- end header -->
-
-    <!-- search area -->
-    <!-- <div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-						<div class="search-bar-tablecell">
-							<h3>Search For:</h3>
-							<input type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> -->
-    <!-- end search arewa -->
 
     <!-- breadcrumb-section -->
     <div class="breadcrumb-section breadcrumb-bg">
@@ -254,7 +223,7 @@
                                                         <span> Rs.<%= product.product.discount_Amount %>
                                                         </span>
                                                         <% } else { %>
-                                                            <h4>₹<%= product.product_price %>
+                                                            <h4>₹<%= product.product.product_price %>
                                                             </h4>
                                                             <% } %>
                                                 </div>
@@ -262,22 +231,26 @@
                                         </tr>
                                         <% }) %>
                                             <tr>
-                                                <% let subtotal = 0; %>
-									<% cart.products.forEach((product) => { %>
-										<% const productTotal = product.offerPrice !== null ? product.product.discount_Amount * product.quantity : product.product.product_price * product.quantity; %>
-										<% subtotal += productTotal; %>
-									<% }); %>
-									<td>Subtotal: </td>
-									<td>
-										<span class="product-total">
-											Rs. <%= subtotal %>
-										</span>
-									</td>
+                                                <% let subtotal=0; %>
+                                                    <% cart.products.forEach((product)=> { %>
+                                                        <% const productTotal=product.offerPrice !==null ?
+                                                            product.product.discount_Amount * product.quantity :
+                                                            product.product.product_price * product.quantity; %>
+                                                            <% subtotal +=productTotal; %>
+                                                                <% }); %>
+                                                                    <td>Subtotal: </td>
+                                                                    <td>
+                                                                        <span class="product-total">
+                                                                            Rs. <%= subtotal %>
+                                                                                <% console.log(subtotal,"sub") %>
+                                                                        </span>
+                                                                    </td>
                                             </tr>
                                             <% const shippingCost=100; %>
                                                 <tr>
                                                     <td>Cart Total</td>
                                                     <td id="cartTotal">Rs. <%= subtotal + shippingCost %>
+                                                            <% console.log(subtotal + shippingCost,"cart") %>
                                                     </td>
                                                 </tr>
                                                 <% if (coupon && coupon.discountAmount) { %>
@@ -620,7 +593,6 @@
                     },
                     body: JSON.stringify({
                         userId: '<%= userId %>',
-                        productId: '<%= productId %>',
                         paymentMethod: paymentMethod
                     })
                 })

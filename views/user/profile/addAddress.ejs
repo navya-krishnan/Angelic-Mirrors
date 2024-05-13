@@ -12,7 +12,7 @@
     <title>Angelic Mirrors</title>
 
     <!-- favicon -->
-    <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
+    <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png">
     <!-- google font -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
@@ -320,12 +320,12 @@
             const phone = document.getElementById("phone").value.trim();
 
             if (username === "") {
-                document.getElementById("nameError").textContent = "Username cannot be empty..!";
+                document.getElementById("nameError").textContent = "Name cannot be empty..!";
                 return false;
             }
 
             if (username.length < 4) {
-                document.getElementById("nameError").textContent = "Username should contain at least 4 characters..!";
+                document.getElementById("nameError").textContent = "Name should contain at least 4 characters..!";
                 return false;
             }
 
@@ -359,7 +359,7 @@
                 return false;
             }
 
-            if (!/^[a-zA-Z]+$/.test(street)) {
+            if (!/^[a-zA-Z ]+$/.test(street)) {
                 document.getElementById("streetError").textContent = "Enter valid street name..!";
                 return false;
             }

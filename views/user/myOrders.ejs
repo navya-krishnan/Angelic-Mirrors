@@ -37,6 +37,8 @@
         }
     </style>
 
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png">
     <!-- google font -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
@@ -232,11 +234,11 @@
                                         <%= order.status %>
                                     </td>
                                     <td>
-                                        <% if (order.paymentMethod === 'Online') { %>
+                                        <% if (order.paymentMethod==='Online' ) { %>
                                             Paid
-                                        <% } else { %>
-                                            <%= order.paymentStatus %>
-                                        <% } %>
+                                            <% } else { %>
+                                                <%= order.paymentStatus %>
+                                                    <% } %>
                                     </td>
                                     <td>
                                         <% if (order.status==='Delivered' ) { %>
@@ -263,42 +265,42 @@
                         <% } %>
 
             </table>
-            
-        </div>
-         <!-- pagination -->
-<div class="row">
-    <div class="col-lg-12 text-center">
-        <div class="pagination-wrap">
-            <ul class="pagination" style="justify-content: center;">
-                <li class="page-item <%= page == 1 ? 'disabled' : '' %>">
-                    <a class="page-link"
-                        href="?page=<%= page - 1 %>&sortOption=<%= sortOption %>&order=<%= order %>&search=<%= search %>"
-                        aria-label="Previous">
-                        <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
-                    </a>
-                </li>
 
-                <% for (let i=1; i <= totalPages; i++) { %>
-                <li class="page-item <%= page == i ? 'active' : '' %>">
-                    <a class="page-link"
-                        href="?page=<%= i %>&sortOption=<%= sortOption %>&order=<%= order %>&search=<%= search %>">
-                        <%= i %>
-                    </a>
-                </li>
-                <% } %>
-
-                <li class="page-item <%= page == totalPages ? 'disabled' : '' %>">
-                    <a class="page-link"
-                        href="?page=<%= page + 1 %>&sortOption=<%= sortOption %>&order=<%= order %>&search=<%= search %>"
-                        aria-label="Next">
-                        Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
-                    </a>
-                </li>
-            </ul>
         </div>
-    </div>
-</div>
-<!-- end of pagination -->
+        <!-- pagination -->
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="pagination-wrap">
+                    <ul class="pagination" style="justify-content: center;">
+                        <li class="page-item <%= page == 1 ? 'disabled' : '' %>">
+                            <a class="page-link"
+                                href="?page=<%= page - 1 %>&sortOption=<%= sortOption %>&order=<%= order %>&search=<%= search %>"
+                                aria-label="Previous">
+                                <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                            </a>
+                        </li>
+
+                        <% for (let i=1; i <=totalPages; i++) { %>
+                            <li class="page-item <%= page == i ? 'active' : '' %>">
+                                <a class="page-link"
+                                    href="?page=<%= i %>&sortOption=<%= sortOption %>&order=<%= order %>&search=<%= search %>">
+                                    <%= i %>
+                                </a>
+                            </li>
+                            <% } %>
+
+                                <li class="page-item <%= page == totalPages ? 'disabled' : '' %>">
+                                    <a class="page-link"
+                                        href="?page=<%= page + 1 %>&sortOption=<%= sortOption %>&order=<%= order %>&search=<%= search %>"
+                                        aria-label="Next">
+                                        Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+                                    </a>
+                                </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- end of pagination -->
 
     </div>
 
@@ -385,7 +387,7 @@
         function confirmCancelOrder(orderId) {
             // Prompt the user for the reason of cancellation
             var reason = prompt("Please enter the reason for cancelling this order:");
-    
+
             // If the user provides a reason and confirms the cancellation
             if (reason !== null && confirm("Are you sure you want to cancel this order?")) {
                 // Redirect to the route with orderId and reason parameters
@@ -393,7 +395,7 @@
             }
         }
     </script>
-    
+
 
     <script>
         function returnOrder(orderId) {

@@ -4,6 +4,7 @@ const cartDatabase = require('../../model/cart');
 const orderDatabase = require('../../model/order');
 const addressDatabase = require('../../model/address')
 const couponDatabase = require('../../model/coupon')
+const offerCollection = require('../../model/offer')
 const Razorpay = require("razorpay");
 const pdfDoc = require("pdfkit-table");
 
@@ -212,24 +213,55 @@ const getOrderDetail = async (req, res) => {
                 .populate('products.product')
                 .populate('shippingAddress');
 
-
-
             if (!order) {
                 throw new Error("Order not found");
             }
 
-            const cart = await cartDatabase.findOne({ userId: req.session.user._id });
+            // Iterate over products in the order to apply offers
+            for (const orderItem of order.products) {
+                let discountPercentage = 0;
+                let discount_Amount = 0;
 
-            if (!cart) {
-                throw new Error("Cart not found");
+                // Retrieve category offers
+                const categoryOffers = await offerCollection.find({ category_name: { $exists: true } });
+                const productOffers = await offerCollection.find({ product_name: { $exists: true } });
+
+                // Check for matching category and product offer
+                const matchingCategoryOffer = categoryOffers.find(offer => orderItem.product.product_category._id.equals(offer.category_name));
+                const matchingProductOffer = productOffers.find(offer => orderItem.product._id.equals(offer.product_name));
+
+                if (matchingCategoryOffer && matchingProductOffer) {
+                    // If both category and product offers exist, choose the one with the highest discount
+                    if (matchingCategoryOffer.discount_Amount > matchingProductOffer.discount_Amount) {
+                        discountPercentage = matchingCategoryOffer.discount_Amount;
+                    } else {
+                        discountPercentage = matchingProductOffer.discount_Amount;
+                    }
+                } else if (matchingCategoryOffer) {
+                    discountPercentage = matchingCategoryOffer.discount_Amount;
+                } else if (matchingProductOffer) {
+                    discountPercentage = matchingProductOffer.discount_Amount;
+                } else {
+                    discountPercentage = 0;
+                }
+
+                // Calculate offer price
+                orderItem.offerPrice = discountPercentage > 0 ? orderItem.product.price - (orderItem.product.price * (discountPercentage / 100)) : null;
+
+                // Assign discountPercentage to product for template rendering
+                orderItem.product.discountPercentage = discountPercentage;
+                discount_Amount = orderItem.product.product_price - (orderItem.product.product_price * (discountPercentage / 100))
+
+                orderItem.product.discount_Amount = discount_Amount;
             }
 
-            const cartQty = cart.products.length;
+            // If you don't need cart data, you can remove the following line
+            // const cartQty = cart.products.length;
 
             res.render('user/orderDetail', {
                 order,
-                cartQty,
                 loggedIn
+                // If you removed the cartQty variable, make sure to remove it here as well
             });
         } else {
             throw new Error("User session not found or order ID missing");

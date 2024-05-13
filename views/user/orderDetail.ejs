@@ -233,18 +233,33 @@
                             <%= product.product.product_name %>
                         </h4>
                         <p class="p-element">Price :
-                            <%= product.product.product_price %>
+                            <% if (product.offerPrice !==null) { %>
+                                <span> Rs.<%= product.product.discount_Amount %>
+                                </span>
+                                <% } else { %>
+                                    <h4>₹<%= product.product_price %>
+                                    </h4>
+                                    <% } %>
                         </p>
                         <p class="p-element">Quantity :
                             <%= product.quantity %>
                         </p>
                         <p class="p-element" style="margin-left: 8%;">Total Price :
-                            <% let cartTotal=0; %>
-                                <% const total=product.product.product_price * product.quantity;%>
-                                    <span class="product-total">
-                                        <%= total %>
-                                    </span>
-                                    <% cartTotal +=total; %>
+                            <% if (product.offerPrice !==null) { %>
+                                <% let cartTotal=0; %>
+                                    <% const total=product.product.discount_Amount * product.quantity;%>
+                                        <span class="product-total">
+                                            <%= total %>
+                                        </span>
+                                        <% cartTotal +=total; %>
+                                            <% } else { %>
+                                                <% let cartTotal=0; %>
+                                                    <% const total=product.product.product_price * product.quantity;%>
+                                                        <span class="product-total">
+                                                            <%= total %>
+                                                        </span>
+                                                        <% cartTotal +=total; %>
+                                                            <% } %>
                         </p>
                     </div>
                     <% }) %>
@@ -273,20 +288,20 @@
                                 <%= order.paymentMethod %>
                             </p>
                             <p class="p-element">Payment Status :
-                                <% if (order.paymentMethod === 'Online') { %>
+                                <% if (order.paymentMethod==='Online' ) { %>
                                     Paid
-                                <% } else { %>
-                                    <%= order.paymentStatus %>
-                                <% } %>
+                                    <% } else { %>
+                                        <%= order.paymentStatus %>
+                                            <% } %>
                             </p>
-                            <p class="p-element">Sub Total :
-                                <% let subtotal=0; %>
-                                    <% order.products.forEach((product)=> { %>
-                                        <% const productTotal=product.product.product_price * product.quantity; %>
-                                            <% subtotal +=productTotal; %>
-                                                <% }); %>
-                                                    Rs. <%= subtotal %>
-                            </p>
+                            <p class="p-element">Sub Total:
+                                <% let subtotal = 0; %>
+                                <% order.products.forEach((product) => { %>
+                                    <% const productTotal = product.product.product_price * product.quantity; %>
+                                    <% subtotal += productTotal; %>
+                                <% }); %>
+                                Rs. <%= subtotal %>
+                            </p>                            
                             <p class="p-element">Amount to be paid :
                                 <% const shippingCost=100; %>
                                     Rs. <%= subtotal + shippingCost %>
@@ -318,9 +333,12 @@
 
                         </div>
 
-                        <a href="/shop" style="margin-left: 39%; text-decoration: underline;">Continue Shopping<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
-                          </svg></a>
+                        <a href="/shop" style="margin-left: 39%; text-decoration: underline;">Continue Shopping<svg
+                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+                            </svg></a>
 
     </div>
     <!-- order detail end -->
