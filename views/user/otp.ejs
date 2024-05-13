@@ -103,7 +103,7 @@
                                         <input class="m-2 text-center form-control rounded" type="text" id="sixth"
                                             name="digit6" maxlength="1" style="border-color: black; width: 35px;" />
                                     </div>
-                                    <div id="countdowntimer">00:30</div>
+                                    <div id="countdowntimer">00:60</div>
                                     <button id="verifyBtn" class="btn btn-outline-dark btn-lg px-5" type="submit"
                                         style="border-radius: 30px; background-color: white; font-size: medium; font-weight: bold;">Verify
                                         OTP</button>
@@ -129,7 +129,7 @@
 
         <script>
             // Initialize timeleft with the total number of seconds for the timer
-            var timeleft = 1 / 2 * 60; // For 30 minutes
+            var timeleft = 1  * 60; // For 30 minutes
         
             var downloadTimer = setInterval(function () {
                 var minutes = Math.floor(timeleft / 60);
