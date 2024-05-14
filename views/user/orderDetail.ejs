@@ -228,7 +228,6 @@
                 </a>
                 <%}%>
                     <div class="order-details">
-
                         <h4 class="h4-element">
                             <%= product.product.product_name %>
                         </h4>
@@ -237,8 +236,8 @@
                                 <span> Rs.<%= product.product.discount_Amount %>
                                 </span>
                                 <% } else { %>
-                                    <h4>₹<%= product.product_price %>
-                                    </h4>
+                                    <span>Rs.<%= product.product.product_price %>
+                                    </span>
                                     <% } %>
                         </p>
                         <p class="p-element">Quantity :
@@ -295,13 +294,14 @@
                                             <% } %>
                             </p>
                             <p class="p-element">Sub Total:
-                                <% let subtotal = 0; %>
-                                <% order.products.forEach((product) => { %>
-                                    <% const productTotal = product.product.product_price * product.quantity; %>
-                                    <% subtotal += productTotal; %>
-                                <% }); %>
-                                Rs. <%= subtotal %>
-                            </p>                            
+                                <% let subtotal=0; %>
+                                    <% order.products.forEach((product)=> { %>
+                                        <% const productTotal=(product.offerPrice !==null) ?
+                                            product.product.discount_Amount : product.product.product_price; %>
+                                            <% subtotal +=productTotal * product.quantity; %>
+                                                <% }); %>
+                                                    Rs. <%= subtotal %>
+                            </p>
                             <p class="p-element">Amount to be paid :
                                 <% const shippingCost=100; %>
                                     Rs. <%= subtotal + shippingCost %>
@@ -313,9 +313,10 @@
                                             <%= order.shippingAddress.name %>
                                         </p>
                                         <p class="p-element">
-                                            <%= order.shippingAddress.address %>, <%= order.shippingAddress.district %>,
-                                                    <%= order.shippingAddress.state %>, <%=
-                                                            order.shippingAddress.country %>
+                                            <%= order.shippingAddress.address %>,<%= order.shippingAddress.street %>,
+                                                    <%= order.shippingAddress.district %>,
+                                                        <%= order.shippingAddress.state %>, <%=
+                                                                order.shippingAddress.country %>
                                         </p>
                                         <p class="p-element">
                                             <%= order.shippingAddress.pincode %>
